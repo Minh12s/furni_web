@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <title>Title</title>
+</head>
+<body>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li>Admin</li>
+      <li>Customer</li>
+    </ul>
+  </div>
+</section>
+
+<section class="is-hero-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title">
+      List of customers
+    </h1>
+  </div>
+</section>
+
+<section class="section main-section">
+  <div class="card has-table">
+    <div class="card-content">
+      <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+        <thead>
+        <tr>
+          <th width="10"><input type="checkbox" id="all"></th>
+          <th>UserId</th>
+          <th>Username</th>
+          <th>Thumbnail</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>PhoneNumber</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td width="10"><input type="checkbox" name="check1" value="1"></td>
+          <td>1</td>
+          <td>john_doe</td>
+          <td><img src="/images/sample1.jpg" width="100" height="100" /></td>
+          <td>john@example.com</td>
+          <td>123 Main St, Anytown, USA</td>
+          <td>(555) 123-4567</td>
+          <td>
+            <a href="/OrderUser/1" class="btn btn-primary" style="background-color:green; color:white;">Order</a>
+          </td>
+        </tr>
+        <tr>
+          <td width="10"><input type="checkbox" name="check1" value="1"></td>
+          <td>2</td>
+          <td>jane_doe</td>
+          <td><img src="/images/sample2.jpg" width="100" height="100" /></td>
+          <td>jane@example.com</td>
+          <td>456 Elm St, Othertown, USA</td>
+          <td>(555) 765-4321</td>
+          <td>
+            <a href="/OrderUser/2" class="btn btn-primary" style="background-color:green; color:white;">Order</a>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <a href="@Url.Action("Customer", new { page = 1 })" class="page-link">1</a>
+            <a href="@Url.Action("Customer", new { page = 2 })" class="page-link">2</a>
+            <a href="@Url.Action("Customer", new { page = 3 })" class="page-link">3</a>
+          </div>
+          <small>Page 1 of 3</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .btn-primary {
+    color: rgb(245 157 57);
+    background-color: rgb(251 226 197);
+    border-color: none;
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 5px 20px;
+  }
+
+  .page-link {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 5px;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .page-link:hover {
+    background-color: #f0f0f0;
+  }
+</style>
+<div th:insert="/include/fragmentsAdmin :: script"></div>
+
+</body>
+</html>

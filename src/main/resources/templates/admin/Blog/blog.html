@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <ul>
+            <li>Admin</li>
+            <li>Blog</li>
+        </ul>
+
+    </div>
+</section>
+<section class="is-hero-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <h1 class="title">
+            List of blogs
+        </h1>
+    </div>
+</section>
+<section class="section main-section">
+
+    <div class="card has-table">
+
+        <div class="card-content">
+            <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+                <thead>
+                <tr>
+                    <th width="10"><input type="checkbox" id="all"></th>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>BlogDate</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
+                    <td>1</td>
+                    <td>Sample Title 1</td>
+                    <td>Sample Content 1</td>
+                    <td>2024-03-20</td>
+
+                    <td>
+                        <a href="#" class="btn btn-primary" style="background-color:green; color:white;">Details</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
+                    <td>2</td>
+                    <td>Sample Title 2</td>
+                    <td>Sample Content 2</td>
+                    <td>2024-03-21</td>
+
+                    <td>
+                        <a href="#" class="btn btn-primary" style="background-color:green; color:white;">Details</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="table-pagination">
+                <div class="flex items-center justify-between">
+                    <div class="buttons">
+                        <button type="button" class="button active">1</button>
+                        <button type="button" class="button">2</button>
+                        <button type="button" class="button">3</button>
+                    </div>
+                    <small>Page 1 of 3</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<style>
+    .btn-primary {
+        color: rgb(245 157 57);
+        background-color: rgb(251 226 197);
+        border-color: none;
+        /* border-top-left-radius: 10px !important; */
+        /* border-bottom-right-radius: 10px !important; */
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 5px 20px; /* Điều chỉnh kích thước theo ý muốn */
+    }
+</style>
+<div th:insert="/include/fragmentsAdmin :: script"></div>
+
+</body>
+</html>

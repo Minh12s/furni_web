@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <title>Title</title>
+</head>
+<body>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li>Admin</li>
+      <li>Product</li>
+    </ul>
+  </div>
+</section>
+
+<section class="is-hero-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0"></div>
+  <div class="col-sm-2">
+    <a class="btn btn-add" asp-controller="Admin" asp-action="addProduct" title="Thêm">
+      <i class="fas fa-plus"></i>
+      Add Product
+    </a>
+  </div>
+</section>
+
+<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" asp-action="Product" asp-controller="Admin" method="get">
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px; margin-left: 30px;">
+    <select value="" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px;" name="CategoryId" class="form-control">
+      <option value="">Filter by category</option>
+      @foreach (var category in ViewBag.Categories)
+      {
+      <option value="@category.CategoryId">@category.CategoryName</option>
+      }
+    </select>
+  </div>
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px;">
+    <select value="" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px;" name="BrandId" class="form-control">
+      <option value="">Filter by brand</option>
+      @foreach (var brand in ViewBag.brands)
+      {
+      <option value="@brand.BrandId">@brand.BrandName</option>
+      }
+    </select>
+  </div>
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px;">
+    <select value="" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px;" name="GoldAgeId" class="form-control">
+      <option value="">Filter by goldAge</option>
+      @foreach (var goldAge in ViewBag.goldAges)
+      {
+      <option value="@goldAge.GoldAgeId">@goldAge.Age</option>
+      }
+    </select>
+  </div>
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px;">
+    <input value="" class="form-control" type="number" name="Price_from" placeholder="Price From" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px;" />
+  </div>
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px;">
+    <input value="" class="form-control" type="number" name="Price_to" placeholder="Price To" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px;" />
+  </div>
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px;">
+    <input value="" class="form-control" type="number" name="TotalWeight_from" placeholder="TotalWeight from" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px;" />
+  </div>
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px;">
+    <input value="" class="form-control" type="number" name="TotalWeight_to" placeholder="TotalWeight to" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px;" />
+  </div>
+  <div class="input-group input-group-sm" style="flex-grow: 1; margin-right: 10px; margin-bottom: 10px;">
+    <input value="" class="form-control" type="text" name="StoneType" placeholder="Stone Type" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-right: 10px; margin-bottom: 10px; margin-left: 27px;">
+    <input value="" class="form-control" type="text" name="Color" placeholder="Color" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-right: 10px; margin-bottom: 10px; margin-left: 27px;">
+    <input value="" class="form-control" type="text" name="Size" placeholder="Size" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left:-22px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-right: 10px; margin-bottom: 10px; margin-left: 27px;">
+    <input value="" class="form-control" type="text" name="Material" placeholder="Material" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left:-22px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-right: 10px; margin-bottom: 10px; margin-left: 27px;">
+    <input value="" type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:-22px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: 27px; margin-left: -5px;">
+    <button style="height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+      <i class="mdi mdi-magnify" style="padding: 10px;"></i>
+    </button>
+  </div>
+</form>
+
+<section class="section main-section">
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">Product</p>
+      <a href="#" class="card-header-icon">
+        <span class="icon"><i class="mdi mdi-reload"></i></span>
+      </a>
+    </header>
+    <div class="card-content">
+      <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+        <thead>
+        <tr>
+          <th width="10"><input type="checkbox" id="all"></th>
+          <th>ProductId</th>
+          <th>Thumbnail</th>
+          <th>ProductName</th>
+          <th>Price</th>
+          <th>qty</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Dữ liệu mẫu -->
+        <tr>
+          <td width="10"><input type="checkbox" name="check1" value="1"></td>
+          <td>1</td>
+          <td><img src="/images/sample1.jpg" alt="Thumbnail" width="100" height="100"></td>
+          <td>Sample Product 1</td>
+          <td>$10</td>
+          <td>5</td>
+          <td>
+            <div class="button-group">
+              <a style="background-color:green; color:white;" class="btn btn-primary" asp-controller="Admin" asp-action="detailsProduct" asp-route-ProductId="1">
+                <i class="fas fa-info-circle"></i> Details
+              </a>
+              <a class="btn btn-primary" asp-controller="Admin" asp-action="editProduct" asp-route-id="1">
+                <i class="fas fa-edit"></i> Edit
+              </a>
+              <form asp-controller="Admin" asp-action="deleteProduct" asp-route-id="1" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
+                <button class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="10"><input type="checkbox" name="check1" value="2"></td>
+          <td>2</td>
+          <td><img src="/images/sample2.jpg" alt="Thumbnail" width="100" height="100"></td>
+          <td>Sample Product 2</td>
+          <td>$20</td>
+          <td>10</td>
+          <td>
+            <div class="button-group">
+              <a style="background-color:green; color:white;" class="btn btn-primary" asp-controller="Admin" asp-action="detailsProduct" asp-route-ProductId="2">
+                <i class="fas fa-info-circle"></i> Details
+              </a>
+              <a class="btn btn-primary" asp-controller="Admin" asp-action="editProduct" asp-route-id="2">
+                <i class="fas fa-edit"></i> Edit
+              </a>
+              <form asp-controller="Admin" asp-action="deleteProduct" asp-route-id="2" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
+                <button class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button active">1</button>
+            <button type="button" class="button">2</button>
+            <button type="button" class="button">3</button>
+          </div>
+          <small>Page 1 of 3</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<style>
+  .btn-primary {
+    color: rgb(245 157 57);
+    background-color: rgb(251 226 197);
+    border-color: none;
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 5px 20px;
+  }
+
+  .btn-add {
+    color: white;
+    background-color: black;
+    border-color: none;
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px;
+  }
+
+  .btn-danger {
+    color: #FFF;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    border-color: none;
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 5px 20px;
+  }
+
+  .btn-danger:hover {
+    color: #FFF;
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+  .btn-danger:focus, .btn-danger.focus {
+    -webkit-box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+  }
+
+  .btn-danger.disabled, .btn-danger:disabled {
+    color: #FFF;
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+
+  .button-group {
+    display: flex;
+  }
+
+  .button-group > * {
+    margin-right: 10px;
+  }
+</style>
+<div th:insert="/include/fragmentsAdmin :: script"></div>
+
+</body>
+</html>
