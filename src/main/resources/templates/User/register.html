@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="/include/fragments :: head"></div>
+
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f2f2f2;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .login-box {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 450px;
+        margin: 20px;
+    }
+
+    .login-box h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 8px;
+        padding-left: 30px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .input-group .input-icon {
+        position: absolute;
+        left: 8px;
+        top: 60%;
+    }
+
+    .remember-password {
+        font-size: 14px;
+        font-weight: 500;
+        margin: -15px 0 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .remember-password label input {
+        accent-color: #fff;
+        margin-right: 3px;
+    }
+
+    .remember-password a {
+        text-decoration: none;
+    }
+
+    .remember-password a:hover {
+        text-decoration: underline;
+    }
+
+    .create-account {
+        font-size: 14.5px;
+        text-align: center;
+        margin: 25px;
+    }
+
+    .create-account p a {
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .create-account p a:hover {
+        text-decoration: underline;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+<body class="goto-here">
+<div class="py-1 bg-black">
+    <div class="container">
+        <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+            <div class="col-lg-12 d-block">
+                <div class="row d-flex">
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+                        <span class="text">+ 1235 2355 98</span>
+                    </div>
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+                        <span class="text">youremail@email.com</span>
+                    </div>
+                    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+                        <span class="text">3-5 Business days delivery &amp; Free Returns</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="/include/fragments :: navbar"></div>
+<!-- END nav -->
+
+<div class="login-container">
+    <div class="login-box">
+        <h2>Sign up</h2>
+
+        <form action="/Page/Register" method="post">
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="username" name="username">
+            </div>
+            <div style="margin-left:-167px;">
+                <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Username -->
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="text" id="email" name="email">
+            </div>
+            <div style="margin-left:-200px;">
+                <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Email -->
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="password" name="password">
+            </div>
+            <div style="margin-left:-167px;">
+                <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Password -->
+            </div>
+
+            <div style="margin-top:20px;" class="remember-password">
+                <label><input type="checkbox">Remember Me</label>
+                <a href="#">Forget Password</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary py-3 px-5">Register</button>
+
+            <div class="create-account">
+                <p>Create A New Account? <a style="color:#FFA45C;" href="/Page/Login" class="register-link">Sign in</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:insert="/include/fragments :: footer"></div>
+
+
+
+<!-- loader -->
+<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+<div th:insert="/include/fragments :: script"></div>
+
+</body>
+</html>

@@ -41,5 +41,8 @@ public class AdminController {
         return "admin/Blog/blog";
     }
 
-
+    @GetMapping("/login")
+    public String Login(){
+        return "admin/login";
+    }
 }

@@ -48,4 +48,13 @@ public class HomeController {
     public String Thankyou(){
         return "User/thankyou";
     }
+
+    @GetMapping("/login")
+    public String Login(){
+        return "User/login";
+    }
+    @GetMapping("/register")
+    public String Register(){
+        return "User/register";
+    }
 }
