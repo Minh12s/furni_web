@@ -1,4 +1,4 @@
-package com.example.furni.controllers.entity;
+package com.example.furni.entity;
 import jakarta.persistence.*;
 
 @Entity
