@@ -68,73 +68,54 @@
 
         </ul>
     </div>
+
     <div class="content">
-        <div class="content-top">
-            <div class="content-top-title">
-                <p style="color: black">My order </p>
+        <div style="border-bottom: 1px solid #DDE1EF;" class="content-top">
+            <p style="color: black">Do you want to return your product? Please tell us why</p>
+        </div>
+        <form action="/MyOrder/RequestRefund" method="post" enctype="multipart/form-data">
+            <div style="margin-top:20px;">
+                <input type="hidden" name="OrderId" value="12345" />
+                <input type="hidden" name="ProductId" value="67890" />
+
+                <div class="cancel-reason">
+                    <label for="reason">Reason for cancellation:</label>
+                    <select style="width:310px;" id="reason" name="Reason">
+                        <option value="Missing quantity/accessories">Missing quantity/accessories</option>
+                        <option value="Seller sent wrong item">Seller sent wrong item</option>
+                        <option value="The product cannot be used">The product cannot be used</option>
+                        <option value="Different from description">Different from description</option>
+                        <option value="Counterfeit goods, imitation goods">Counterfeit goods, imitation goods</option>
+                        <option value="The goods are intact but no longer needed">The goods are intact but no longer needed</option>
+                    </select>
+                </div>
+
+                <div class="cancel-reason">
+                    <label for="description">Description:</label><br>
+                    <textarea id="description" name="Description">This is a sample description of the issue.</textarea>
+                </div>
+
+                <div class="cancel-reason">
+                    <div class="Q0r6sy">
+                        <div>Thêm Hình ảnh</div>
+                        <div id="image-counter">(0/4)</div>
+                    </div>
+                    <input type="file" multiple accept="image/*" style="display: none;" id="image-upload" name="ImagePath">
+                    <div id="image-preview"></div>
+                </div>
+
+                <div class="cancel-reason">
+                    <label for="refundAmount" class="refund-label">Refund Amount:</label>
+                    <input style="border: none; font-size: 20px; font-weight: bold;" type="text" name="RefundAmount" id="refundAmount" class="refund-value" value="50.00" />
+                    <br>
+                    <span class="refund-description">Refund to : Furni Account Balance</span>
+                </div>
             </div>
-            <div class="content-top-title">
-                <p style="color: black"> 0 order </p>
-            </div>
-        </div>
-        <style>
-        </style>
-        <div class="content-top1 d-flex">
-            <a style="color:#FFA45C; font-weight: bold" href="/MyAccount/MyOrder" class="btn">All</a>
-            <a href="/MyOrder/OrderPending" class="btn">Pending</a>
-            <a href="/MyOrder/OrderConfirmed" class="btn">Confirmed</a>
-            <a href="/MyOrder/OrderShipping" class="btn">Shipping</a>
-            <a href="/MyOrder/OrderShipped" class="btn">Shipped</a>
-            <a href="/MyOrder/OrderComplete" class="btn">Complete</a>
-            <a type="button" href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
-        </div>
-
-
-        <table class="order-table">
-            <thead>
-            <tr>
-                <th>ID </th>
-                <th>Created At</th>
-                <th>Grand Total</th>
-                <th>Full Name</th>
-                <th>Shipping Method</th>
-                <th>Payment Method</th>
-                <th>Paid</th>
-                <th>Status</th>
-                <th width="60">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr>
-
-                <td>s</td>
-                <td>sss</td>
-                <td>jjj</td>
-
-                <td>aaa</td>
-
-                <td>g</td>
-
-                <td>paa</td>
-                <td>sssd</td>
-                <td>j</td>
-                <td>
-
-                    <button href="/MyOrder/OrderDetail" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" href="/MyOrder/OrderDetail">Detail</a>
-                    </button>
-                </td>
-
-            </tr>
-
-            </tbody>
-
-        </table>
-        <div>
-        </div>
-
+            <button style="margin-left:25px;" type="submit" class="btn btn-primary py-3 px-5">Submit</button>
+        </form>
     </div>
+</div>
+
 </div>
 
 <div th:insert="/include/fragments :: footer"></div>
@@ -147,6 +128,36 @@
 <div th:insert="/include/fragments :: script"></div>
 
 <style>
+    .cancel-reason {
+        margin-left: 25px;
+        margin-bottom: 10px;
+    }
+
+    .refund-label,
+    .refund-value {
+        display: inline-block;
+    }
+
+    .refund-amount {
+        display: flex;
+        align-items: center;
+    }
+
+
+    .refund-description {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+
+    #description {
+        width: 900px;
+        height: 100px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
 
     .content-top1 {
         border-top: 1px solid #FFA45C;
@@ -169,8 +180,8 @@
 
     .site-btn {
         font-size: 13px;
-        background: #FFA45C;
-        border: 2px solid #FFA45C;
+        background: #7fad39;
+        border: 2px solid #7fad39;
         border-radius: 5px;
         display: inline-block;
         padding: 3px 3px;
@@ -294,9 +305,40 @@
         border-bottom: 1px solid #DDE1EF;
         border-top: 1px solid #DDE1EF;
         font-weight: 1000;
-        color: #FFA45C;
+        color: #7fad39;
+    }
+    .image-item {
+        display: inline-block; /* Hiển thị các ảnh trên cùng một dòng */
+        margin-right: 10px; /* Khoảng cách giữa các ảnh */
     }
 </style>
+<script>document.querySelector('#image-upload').addEventListener('change', function (event) {
+    const files = event.target.files;
+    displayImages(files);
+});
 
+document.querySelector('.Q0r6sy').addEventListener('click', function () {
+    document.querySelector('#image-upload').click();
+});
+
+function displayImages(files) {
+    const imagePreview = document.getElementById('image-preview');
+    const counter = document.getElementById('image-counter');
+    imagePreview.innerHTML = '';
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.width = 100;
+            img.height = 100;
+            img.classList.add('image-item'); // Thêm class image-item để tạo margin giữa các ảnh
+            imagePreview.appendChild(img);
+        }
+        reader.readAsDataURL(file);
+    }
+    counter.textContent = '(' + files.length + '/4)';
+}</script>
 </body>
 </html>

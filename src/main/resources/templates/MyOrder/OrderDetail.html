@@ -71,70 +71,66 @@
     <div class="content">
         <div class="content-top">
             <div class="content-top-title">
-                <p style="color: black">My order </p>
+                <p style="color: black">My order</p>
             </div>
             <div class="content-top-title">
-                <p style="color: black"> 0 order </p>
+                <p style="color: black">order</p>
             </div>
         </div>
-        <style>
-        </style>
-        <div class="content-top1 d-flex">
-            <a style="color:#FFA45C; font-weight: bold" href="/MyAccount/MyOrder" class="btn">All</a>
-            <a href="/MyOrder/OrderPending" class="btn">Pending</a>
-            <a href="/MyOrder/OrderConfirmed" class="btn">Confirmed</a>
-            <a href="/MyOrder/OrderShipping" class="btn">Shipping</a>
-            <a href="/MyOrder/OrderShipped" class="btn">Shipped</a>
-            <a href="/MyOrder/OrderComplete" class="btn">Complete</a>
-            <a type="button" href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
-        </div>
-
-
         <table class="order-table">
             <thead>
             <tr>
-                <th>ID </th>
-                <th>Created At</th>
-                <th>Grand Total</th>
-                <th>Full Name</th>
-                <th>Shipping Method</th>
-                <th>Payment Method</th>
-                <th>Paid</th>
-                <th>Status</th>
-                <th width="60">Action</th>
+                <th style="width: 10%;">ID</th>
+                <th style="width: 15%;">Thumbnail</th>
+                <th style="width: 15%;">Name</th>
+                <th style="width: 10%;">Price</th>
+                <th style="width: 10%;">Quantity</th>
+                <th style="width: 15%;">Total</th>
+                <th style="width: 10%;"></th>
+                <th style="width: 15%;"></th>
             </tr>
             </thead>
             <tbody>
-
             <tr>
-
-                <td>s</td>
-                <td>sss</td>
-                <td>jjj</td>
-
-                <td>aaa</td>
-
-                <td>g</td>
-
-                <td>paa</td>
-                <td>sssd</td>
-                <td>j</td>
+                <td>1</td>
+                <td><img src="/images/product1.jpg" width="120" /></td>
+                <td>Product 1</td>
+                <td>$50.00</td>
+                <td>2</td>
+                <td>$100.00</td>
                 <td>
-
-                    <button href="/MyOrder/OrderDetail" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" href="/MyOrder/OrderDetail">Detail</a>
-                    </button>
+                    <div class="col-sm-2">
+                        <a class="btn btn-dark" href="/MyOrder/Review">Review</a>
+                    </div>
                 </td>
-
+                <td>
+                    <div class="col-sm-2">
+                        <a style="color:white; width:100px;" class="btn btn-warning" href="/MyOrder/RequestRefund">Request a refund</a>
+                    </div>
+                </td>
             </tr>
-
+            <!-- Add more rows as needed -->
             </tbody>
-
         </table>
-        <div>
-        </div>
-
+        <div></div>
     </div>
+    <input type="hidden" id="returnUrl" name="returnUrl" value="/MyOrder/MyOrder" />
+    <div style="float:right; display: flex; gap: 10px;">
+        <div>
+            <a href="/MyOrder/MyOrder" class="btn btn-warning">Back</a>
+        </div>
+        <div>
+            <form method="post" action="/MyOrder/UpdateStatus/1?status=complete&returnUrl=/MyOrder/MyOrder">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning">Complete</button>
+            </form>
+        </div>
+        <div>
+            <button onclick="cancelOrder()" class="btn btn-danger">Cancel</button>
+        </div>
+    </div>
+</div>
+
 </div>
 
 <div th:insert="/include/fragments :: footer"></div>
@@ -147,6 +143,25 @@
 <div th:insert="/include/fragments :: script"></div>
 
 <style>
+    .alert {
+        text-align: center;
+        margin: 20px auto;
+        width: 100%; /* Điều chỉnh độ rộng của thông báo tùy theo nhu cầu */
+    }
+
+    .alert.error {
+        background-color: red;
+        color: white;
+    }
+
+    .alert.success {
+        background-color: green;
+        color: white;
+    }
+
+    footer {
+        margin: 30px;
+    }
 
     .content-top1 {
         border-top: 1px solid #FFA45C;
@@ -297,6 +312,7 @@
         color: #FFA45C;
     }
 </style>
+
 
 </body>
 </html>

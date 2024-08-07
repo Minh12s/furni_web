@@ -69,72 +69,44 @@
         </ul>
     </div>
     <div class="content">
-        <div class="content-top">
-            <div class="content-top-title">
-                <p style="color: black">My order </p>
+        <div style="border-bottom: 1px solid #DDE1EF;" class="content-top">
+            <p style="color: black">Do you want to cancel your order? Please tell us why</p>
+        </div>
+        <form action="/MyOrder/ReasonCancel" method="post">
+            <div style="margin-top:20px;">
+                <!-- Các checkbox và lý do huỷ đơn hàng -->
+                <div class="cancel-reason">
+                    <input type="checkbox" id="reason1" name="Reason" value="Order takes a long time to confirm">
+                    <label for="reason1">Order takes a long time to confirm</label><br>
+                </div>
+                <div class="cancel-reason">
+                    <input type="checkbox" id="reason2" name="Reason" value="I don't need to buy anymore">
+                    <label for="reason2">I don't need to buy anymore</label><br>
+                </div>
+                <div class="cancel-reason">
+                    <input type="checkbox" id="reason3" name="Reason" value="I want to update my shipping address">
+                    <label for="reason3">I want to update my shipping address</label><br>
+                </div>
+                <div class="cancel-reason">
+                    <input type="checkbox" id="reason4" name="Reason" value="I found a better place to buy (Cheaper, more reputable, faster delivery...)">
+                    <label for="reason4">I found a better place to buy (Cheaper, more reputable, faster delivery...)</label><br>
+                </div>
+                <div class="cancel-reason">
+                    <input type="checkbox" id="reason5" name="Reason" value="I don't have enough money to buy it">
+                    <label for="reason5">I don't have enough money to buy it</label><br>
+                </div>
+                <div class="cancel-reason">
+                    <input type="checkbox" id="reason6" onchange="toggleOtherReason()">
+                    <label for="reason6">Other</label><br>
+                    <textarea type="text" id="otherReason" name="otherReason" style="display: none;"></textarea>
+                </div>
             </div>
-            <div class="content-top-title">
-                <p style="color: black"> 0 order </p>
-            </div>
-        </div>
-        <style>
-        </style>
-        <div class="content-top1 d-flex">
-            <a style="color:#FFA45C; font-weight: bold" href="/MyAccount/MyOrder" class="btn">All</a>
-            <a href="/MyOrder/OrderPending" class="btn">Pending</a>
-            <a href="/MyOrder/OrderConfirmed" class="btn">Confirmed</a>
-            <a href="/MyOrder/OrderShipping" class="btn">Shipping</a>
-            <a href="/MyOrder/OrderShipped" class="btn">Shipped</a>
-            <a href="/MyOrder/OrderComplete" class="btn">Complete</a>
-            <a type="button" href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
-        </div>
-
-
-        <table class="order-table">
-            <thead>
-            <tr>
-                <th>ID </th>
-                <th>Created At</th>
-                <th>Grand Total</th>
-                <th>Full Name</th>
-                <th>Shipping Method</th>
-                <th>Payment Method</th>
-                <th>Paid</th>
-                <th>Status</th>
-                <th width="60">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr>
-
-                <td>s</td>
-                <td>sss</td>
-                <td>jjj</td>
-
-                <td>aaa</td>
-
-                <td>g</td>
-
-                <td>paa</td>
-                <td>sssd</td>
-                <td>j</td>
-                <td>
-
-                    <button href="/MyOrder/OrderDetail" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" href="/MyOrder/OrderDetail">Detail</a>
-                    </button>
-                </td>
-
-            </tr>
-
-            </tbody>
-
-        </table>
-        <div>
-        </div>
-
+            <button style="margin-left:25px;" type="submit" class="btn btn-primary py-3 px-5">Submit</button>
+        </form>
     </div>
+</div>
+
+
 </div>
 
 <div th:insert="/include/fragments :: footer"></div>
@@ -147,6 +119,19 @@
 <div th:insert="/include/fragments :: script"></div>
 
 <style>
+    .cancel-reason {
+        margin-left: 25px;
+    }
+
+
+    /* Hiển thị ô nhập lý do khác khi chọn checkbox Khác */
+    .cancel-reason textarea[type="checkbox"]:checked ~ #otherReason {
+        display: inline-block;
+    }
+    #otherReason {
+        height: 100px;
+        width:900px;
+    }
 
     .content-top1 {
         border-top: 1px solid #FFA45C;
@@ -169,8 +154,8 @@
 
     .site-btn {
         font-size: 13px;
-        background: #FFA45C;
-        border: 2px solid #FFA45C;
+        background: #7fad39;
+        border: 2px solid #7fad39;
         border-radius: 5px;
         display: inline-block;
         padding: 3px 3px;
@@ -294,9 +279,19 @@
         border-bottom: 1px solid #DDE1EF;
         border-top: 1px solid #DDE1EF;
         font-weight: 1000;
-        color: #FFA45C;
+        color: #7fad39;
     }
 </style>
+<script>function toggleOtherReason() {
+    var otherReasonInput = document.getElementById("otherReason");
+    var reason4Checkbox = document.getElementById("reason6");
+
+    if (reason4Checkbox.checked) {
+        otherReasonInput.style.display = "inline-block";
+    } else {
+        otherReasonInput.style.display = "none";
+    }
+}</script>
 
 </body>
 </html>

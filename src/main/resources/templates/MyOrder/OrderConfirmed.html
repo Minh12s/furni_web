@@ -74,26 +74,24 @@
                 <p style="color: black">My order </p>
             </div>
             <div class="content-top-title">
-                <p style="color: black"> 0 order </p>
+                <p style="color: black">3 orders</p>
             </div>
         </div>
-        <style>
-        </style>
         <div class="content-top1 d-flex">
-            <a style="color:#FFA45C; font-weight: bold" href="/MyAccount/MyOrder" class="btn">All</a>
+            <a href="/MyOrder/MyOrder" class="btn">All</a>
             <a href="/MyOrder/OrderPending" class="btn">Pending</a>
-            <a href="/MyOrder/OrderConfirmed" class="btn">Confirmed</a>
+            <a style="color:#FFA45C ;font-weight: bold" type="button" href="/MyOrder/OrderConfirmed" class="btn">Confirmed</a>
             <a href="/MyOrder/OrderShipping" class="btn">Shipping</a>
             <a href="/MyOrder/OrderShipped" class="btn">Shipped</a>
             <a href="/MyOrder/OrderComplete" class="btn">Complete</a>
-            <a type="button" href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
+            <a href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
+            <a href="/MyOrder/OrderReturn" class="btn">Return</a>
         </div>
-
 
         <table class="order-table">
             <thead>
             <tr>
-                <th>ID </th>
+                <th>ID</th>
                 <th>Created At</th>
                 <th>Grand Total</th>
                 <th>Full Name</th>
@@ -105,36 +103,69 @@
             </tr>
             </thead>
             <tbody>
-
             <tr>
-
-                <td>s</td>
-                <td>sss</td>
-                <td>jjj</td>
-
-                <td>aaa</td>
-
-                <td>g</td>
-
-                <td>paa</td>
-                <td>sssd</td>
-                <td>j</td>
+                <td>1</td>
+                <td>2024-07-01</td>
+                <td>$150.00</td>
+                <td>John Doe</td>
+                <td>Express</td>
+                <td>Credit Card</td>
+                <td>Yes</td>
+                <td>Confirmed</td>
                 <td>
-
-                    <button href="/MyOrder/OrderDetail" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" href="/MyOrder/OrderDetail">Detail</a>
+                    <button asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="1" style="padding: 7px 7px;" class="site-btn" type="submit">
+                        <a style="color: white;" asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="1">Detail</a>
                     </button>
                 </td>
-
             </tr>
-
+            <tr>
+                <td>2</td>
+                <td>2024-07-05</td>
+                <td>$250.00</td>
+                <td>Jane Smith</td>
+                <td>Standard</td>
+                <td>PayPal</td>
+                <td>No</td>
+                <td>Pending</td>
+                <td>
+                    <button asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="2" style="padding: 7px 7px;" class="site-btn" type="submit">
+                        <a style="color: white;" asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="2">Detail</a>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>2024-07-10</td>
+                <td>$75.00</td>
+                <td>Mike Johnson</td>
+                <td>Express</td>
+                <td>Bank Transfer</td>
+                <td>Yes</td>
+                <td>Shipping</td>
+                <td>
+                    <button asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="3" style="padding: 7px 7px;" class="site-btn" type="submit">
+                        <a style="color: white;" asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="3">Detail</a>
+                    </button>
+                </td>
+            </tr>
             </tbody>
-
         </table>
-        <div>
-        </div>
-
     </div>
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 20px;">
+        <ul class="pagination">
+            <li class="page-item active">
+                <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">3</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 </div>
 
 <div th:insert="/include/fragments :: footer"></div>

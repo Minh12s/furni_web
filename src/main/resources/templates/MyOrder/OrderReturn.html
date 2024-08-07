@@ -71,70 +71,67 @@
     <div class="content">
         <div class="content-top">
             <div class="content-top-title">
-                <p style="color: black">My order </p>
+                <p style="color: black">My order</p>
             </div>
             <div class="content-top-title">
-                <p style="color: black"> 0 order </p>
+                <p style="color: black"> 1 order</p>
             </div>
         </div>
-        <style>
-        </style>
         <div class="content-top1 d-flex">
-            <a style="color:#FFA45C; font-weight: bold" href="/MyAccount/MyOrder" class="btn">All</a>
+            <a href="/MyOrder/MyOrder" class="btn">All</a>
             <a href="/MyOrder/OrderPending" class="btn">Pending</a>
             <a href="/MyOrder/OrderConfirmed" class="btn">Confirmed</a>
             <a href="/MyOrder/OrderShipping" class="btn">Shipping</a>
             <a href="/MyOrder/OrderShipped" class="btn">Shipped</a>
             <a href="/MyOrder/OrderComplete" class="btn">Complete</a>
-            <a type="button" href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
+            <a href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
+            <a style="color:#FFA45C; font-weight: bold" href="/MyOrder/OrderReturn" class="btn">Return</a>
         </div>
-
-
         <table class="order-table">
             <thead>
             <tr>
-                <th>ID </th>
-                <th>Created At</th>
-                <th>Grand Total</th>
-                <th>Full Name</th>
-                <th>Shipping Method</th>
-                <th>Payment Method</th>
-                <th>Paid</th>
+                <th>Id</th>
+                <th>Product Name</th>
+                <th>Thumbnail</th>
+                <th>Return Date</th>
+                <th>Description</th>
+                <th>Reason</th>
+                <th>Refund Amount</th>
                 <th>Status</th>
-                <th width="60">Action</th>
             </tr>
             </thead>
             <tbody>
-
             <tr>
-
-                <td>s</td>
-                <td>sss</td>
-                <td>jjj</td>
-
-                <td>aaa</td>
-
-                <td>g</td>
-
-                <td>paa</td>
-                <td>sssd</td>
-                <td>j</td>
-                <td>
-
-                    <button href="/MyOrder/OrderDetail" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" href="/MyOrder/OrderDetail">Detail</a>
-                    </button>
-                </td>
-
+                <td>1</td>
+                <td>Silver Necklace</td>
+                <td><img style="width:100px; height:100px;" src="~/images/product1.jpg" alt="Product Thumbnail" /></td>
+                <td>2023-07-01</td>
+                <td>Defective product</td>
+                <td>Broken clasp</td>
+                <td>$50</td>
+                <td>Returned</td>
             </tr>
-
+            <tr>
+                <td>2</td>
+                <td>Gold Ring</td>
+                <td><img style="width:100px; height:100px;" src="~/images/product2.jpg" alt="Product Thumbnail" /></td>
+                <td>2023-07-15</td>
+                <td>Wrong size</td>
+                <td>Too small</td>
+                <td>$100</td>
+                <td>Returned</td>
+            </tr>
             </tbody>
-
         </table>
-        <div>
-        </div>
-
     </div>
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 20px;">
+        <ul class="pagination">
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+        </ul>
+    </div>
+</div>
+
 </div>
 
 <div th:insert="/include/fragments :: footer"></div>
@@ -297,6 +294,7 @@
         color: #FFA45C;
     }
 </style>
+
 
 </body>
 </html>
