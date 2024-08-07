@@ -22,6 +22,15 @@
         </h1>
     </div>
 </section>
+<section class="is-hero-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0"></div>
+    <div class="col-sm-2">
+        <a class="btn btn-add" href="/admin/addBlog"  title="Thêm">
+            <i class="fas fa-plus"></i>
+            Add Blog
+        </a>
+    </div>
+</section>
 <section class="section main-section">
 
     <div class="card has-table">
@@ -47,7 +56,7 @@
                     <td>2024-03-20</td>
 
                     <td>
-                        <a href="#" class="btn btn-primary" style="background-color:green; color:white;">Details</a>
+                        <a href="/admin/editBlog" class="btn btn-primary" style="background-color:green; color:white;">Edit</a>
                     </td>
                 </tr>
                 <tr>
@@ -58,7 +67,7 @@
                     <td>2024-03-21</td>
 
                     <td>
-                        <a href="#" class="btn btn-primary" style="background-color:green; color:white;">Details</a>
+                        <a href="/admin/editBlog" class="btn btn-primary" style="background-color:green; color:white;">Edit</a>
                     </td>
                 </tr>
                 </tbody>
@@ -82,13 +91,57 @@
     .btn-primary {
         color: rgb(245 157 57);
         background-color: rgb(251 226 197);
-        border-color: none;
-        /* border-top-left-radius: 10px !important; */
-        /* border-bottom-right-radius: 10px !important; */
+
         border-radius: .357rem;
         border: none;
         font-weight: 600;
-        padding: 5px 20px; /* Điều chỉnh kích thước theo ý muốn */
+        padding: 5px 20px;
+    }
+
+    .btn-add {
+        color: white;
+        background-color: black;
+
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-danger {
+        color: #FFF;
+        background-color: #dc3545;
+        border-color: #dc3545;
+
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 5px 20px;
+    }
+
+    .btn-danger:hover {
+        color: #FFF;
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .btn-danger:focus, .btn-danger.focus {
+        -webkit-box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+    }
+
+    .btn-danger.disabled, .btn-danger:disabled {
+        color: #FFF;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .button-group {
+        display: flex;
+    }
+
+    .button-group > * {
+        margin-right: 10px;
     }
 </style>
 <div th:insert="/include/fragmentsAdmin :: script"></div>
