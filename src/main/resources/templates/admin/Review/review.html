@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <title>Title</title>
+</head>
+<body>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li style="margin-left:-50px;">Admin</li>
+      <li>Review</li>
+    </ul>
+  </div>
+</section>
+<section class="is-hero-bar">
+  <div class="flex items-center">
+    <!-- Nút "Print PDF" -->
+    <button onclick="myApp.printTable()" class="btn btn-add ml-2">
+      <i class="fas fa-file-pdf"></i>
+      Print PDF
+    </button>
+    <!-- Nút "Export Excel" -->
+    <button onclick="exportReviewToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
+      <i class="fas fa-file-excel"></i>
+      Export Excel
+    </button>
+    <button onclick="exportExcel()" class="btn btn-add">
+      <i class="fas fa-file-excel"></i>
+      Excel Filtered
+    </button>
+  </div>
+</section>
+<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;">
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input class="form-control" type="number" name="AvgRating" step="0.1" placeholder="Avg Rating" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input class="form-control" type="number" name="Price_from" placeholder="Price From" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input class="form-control" type="number" name="Price_to" placeholder="Price To" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-left: -5px; margin-bottom: 10px;">
+    <input type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
+    <button style="margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+      <i class="mdi mdi-magnify" style="padding: 10px;"></i>
+    </button>
+  </div>
+</form>
+<section class="section main-section">
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
+        Product review
+      </p>
+      <form class="card-header-icon" onchange="this.submit()">
+        <select style="margin-left:-10px; padding: 5px 10px; border:1px solid #F1F1F1" name="PageSize">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+        <input type="hidden" name="page" value="1">
+      </form>
+    </header>
+    <div class="card-content">
+      <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+        <thead>
+        <tr>
+          <th width="10"><input type="checkbox" id="all"></th>
+          <th>Id</th>
+          <th>Thumbnail</th>
+          <th>Product Name</th>
+          <th>Price</th>
+          <th>Average number of stars</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>1</td>
+          <td><img src="/images/product-2.jpg" alt="Thumbnail" width="100" height="100"></td>
+          <td>Product A</td>
+          <td>100.00</td>
+          <td>4.5</td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a href="/admin/listreview" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-comment-text-outline"></i></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>2</td>
+          <td><img src="/images/product-50.jpg" alt="Thumbnail" width="100" height="100"></td>
+          <td>Product B</td>
+          <td>150.00</td>
+          <td>4.0</td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a href="/admin/listreview" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-comment-text-outline"></i></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        <!-- Thêm dữ liệu sản phẩm khác tại đây -->
+        </tbody>
+      </table>
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button active" onclick="location.href='#'">1</button>
+          </div>
+          <small>Page 1 of 1</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .btn-primary {
+    color: rgb(245 157 57);
+    background-color: rgb(251 226 197);
+    border-color: none;
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 5px 20px;
+  }
+  .page-link {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 5px;
+    text-decoration: none;
+    color: #333;
+  }
+  .page-link:hover {
+    background-color: #f0f0f0;
+  }
+  .btn-add {
+    color: white;
+    background-color: black;
+    border-color: none;
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px;
+  }
+</style>
+<script>
+  function exportReviewToExcel() {
+    window.location.href = '/Excel/ExportReviewToExcel';
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+<script>
+  this.exportExcel = function () {
+    var tab = document.getElementById('sampleTable');
+    var excel = new ExcelJS.Workbook();
+    var sheet = excel.addWorksheet('Sheet 1');
+    for (var i = 0; i < tab.rows.length; i++) {
+      var row = sheet.getRow(i + 1);
+      for (var j = 0; j < tab.rows[i].cells.length; j++) {
+        row.getCell(j + 1).value = tab.rows[i].cells[j].innerText;
+      }
+    }
+    excel.xlsx.writeBuffer().then(function (buffer) {
+      var blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = "reviewfiltered.xlsx";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+</script>
+<div th:insert="/include/fragmentsAdmin :: script"></div>
+
+</body>
+</html>

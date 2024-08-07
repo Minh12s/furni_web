@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <ul>
+            <li>Admin</li>
+            <li>Customer</li>
+        </ul>
+    </div>
+</section>
+
+<section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <ul>
+            List of orders
+        </ul>
+    </div>
+</section>
+<section class="is-hero-bar">
+    <h1 style="text-align:center; margin: 20px 0">Purchased order</h1>
+</section>
+<section class="section main-section">
+    <div class="card has-table">
+        <div class="card-content">
+            <table class="table table-hover table-bordered" id="sampleTable">
+                <thead>
+                <tr>
+                    <th width="10"><input type="checkbox" id="all"></th>
+                    <th>Order Id</th>
+                    <th>Customer Name</th>
+                    <th>Total amount</th>
+                    <th>Status</th>
+                    <th>IsPaid</th>
+                    <th>Order date</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td>$100.00</td>
+                    <td><span class="badge bg-success">Completed</span></td>
+                    <td><span>Yes</span></td>
+                    <td>2024-07-25</td>
+                    <td class="actions-cell">
+                        <div class="buttons right nowrap">
+                            <a class="btn btn-primary" style="background-color:green; color:white;"href="/admin/orderdetailuser" >
+                                <span class="icon"><i class="mdi mdi-eye"></i></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10"><input type="checkbox" name="check1" value="2"></td>
+                    <td>2</td>
+                    <td>Jane Smith</td>
+                    <td>$250.00</td>
+                    <td><span class="badge bg-warning">Pending</span></td>
+                    <td><span>No</span></td>
+                    <td>2024-07-26</td>
+                    <td class="actions-cell">
+                        <div class="buttons right nowrap">
+                            <a class="btn btn-primary" style="background-color:green; color:white;" href="/admin/orderdetailuser">
+                                <span class="icon"><i class="mdi mdi-eye"></i></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10"><input type="checkbox" name="check1" value="3"></td>
+                    <td>3</td>
+                    <td>Bob Johnson</td>
+                    <td>$150.00</td>
+                    <td><span class="badge bg-danger">Cancelled</span></td>
+                    <td><span>No</span></td>
+                    <td>2024-07-27</td>
+                    <td class="actions-cell">
+                        <div class="buttons right nowrap">
+                            <a class="btn btn-primary" style="background-color:green; color:white;" href="/admin/orderdetailsuer">
+                                <span class="icon"><i class="mdi mdi-eye"></i></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<div class="edit-back-links">
+    <a class="btn btn-secondary" href="/admin/customers" style="background-color:black; color:white;">Back to List</a>
+</div>
+<style>
+    .btn-primary {
+        color: rgb(245 157 57);
+        background-color: rgb(251 226 197);
+        border-color: none;
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 5px 20px;
+    }
+    .btn-secondary {
+        border-color: none;
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 10px 20px;
+        margin-left: 20px;
+    }
+</style>
+<div th:insert="/include/fragmentsAdmin :: script"></div>
+
+</body>
+</html>

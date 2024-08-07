@@ -22,9 +22,60 @@
     </h1>
   </div>
 </section>
+<section class="is-hero-bar">
+  <div class="flex items-center">
+    <!-- Nút in PDF -->
+    <button onclick="myApp.printTable()" class="btn btn-add ml-2">
+      <i class="fas fa-file-pdf"></i>
+      Print PDF
+    </button>
+    <!-- Nút xuất Excel -->
+    <button onclick="exportCustomerToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
+      <i class="fas fa-file-excel"></i>
+      Export Excel
+    </button>
+    <button onclick="exportExcel()" class="btn btn-add">
+      <i class="fas fa-file-excel"></i>
+      Excel Filtered
+    </button>
+  </div>
+</section>
+<form asp-action="Customer" asp-controller="Admin" method="get" style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;">
+  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
+    <input value="" type="text" name="userNameSearch" class="form-control" placeholder="Search by Username" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
+    <input value="" type="text" name="addressSearch" class="form-control" placeholder="Search by Address" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
+    <input value="" type="text" name="phoneNumberSearch" class="form-control" placeholder="Search by Phone Number" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
+    <input value="" type="text" name="emailSearch" class="form-control" placeholder="Search by Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  </div>
+  <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
+    <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+      <i class="mdi mdi-magnify" style="padding: 10px;"></i>
+    </button>
+  </div>
+</form>
 
 <section class="section main-section">
   <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
+        Customer
+      </p>
+      <form class="card-header-icon" asp-controller="Admin" asp-action="Customer" method="get" onchange="this.submit()">
+      <select style="margin-left:-10px; padding: 5px 10px;border:1px solid #F1F1F1 " name="PageSize">
+        <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
+        <option value="20" selected="@(ViewBag.PageSize == 20)">20</option>
+        <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
+        <option value="100" selected="@(ViewBag.PageSize == 100)">100</option>
+      </select>
+      <input type="hidden" name="page" value="@ViewBag.CurrentPage">
+      </form>
+    </header>
     <div class="card-content">
       <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
         <thead>
@@ -36,44 +87,56 @@
           <th>Email</th>
           <th>Address</th>
           <th>PhoneNumber</th>
+          <th>Account Balance</th>
           <th></th>
         </tr>
         </thead>
         <tbody>
+
         <tr>
           <td width="10"><input type="checkbox" name="check1" value="1"></td>
           <td>1</td>
-          <td>john_doe</td>
-          <td><img src="/images/sample1.jpg" width="100" height="100" /></td>
+          <td>JohnDoe</td>
+          <td><img src="/images/person_1.jpg" width="100" height="100" /></td>
           <td>john@example.com</td>
-          <td>123 Main St, Anytown, USA</td>
-          <td>(555) 123-4567</td>
-          <td>
-            <a href="/OrderUser/1" class="btn btn-primary" style="background-color:green; color:white;">Order</a>
+          <td>123 Main St</td>
+          <td>123-456-7890</td>
+          <td>$1000</td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a href="/admin/orderuser" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-cart"></i></span>
+              </a>
+            </div>
           </td>
         </tr>
         <tr>
           <td width="10"><input type="checkbox" name="check1" value="1"></td>
           <td>2</td>
-          <td>jane_doe</td>
-          <td><img src="/images/sample2.jpg" width="100" height="100" /></td>
+          <td>JaneDoe</td>
+          <td><img src="/images/person_2.jpg" width="100" height="100" /></td>
           <td>jane@example.com</td>
-          <td>456 Elm St, Othertown, USA</td>
-          <td>(555) 765-4321</td>
-          <td>
-            <a href="/OrderUser/2" class="btn btn-primary" style="background-color:green; color:white;">Order</a>
+          <td>456 Elm St</td>
+          <td>987-654-3210</td>
+          <td>$2000</td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a href="/admin/orderuser" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-cart"></i></span>
+              </a>
+            </div>
           </td>
         </tr>
 
         </tbody>
       </table>
-
       <div class="table-pagination">
         <div class="flex items-center justify-between">
           <div class="buttons">
-            <a href="@Url.Action("Customer", new { page = 1 })" class="page-link">1</a>
-            <a href="@Url.Action("Customer", new { page = 2 })" class="page-link">2</a>
-            <a href="@Url.Action("Customer", new { page = 3 })" class="page-link">3</a>
+
+            <a href="#" class="page-link">1</a>
+            <a href="#" class="page-link">2</a>
+            <a href="#" class="page-link">3</a>
           </div>
           <small>Page 1 of 3</small>
         </div>
@@ -103,6 +166,16 @@
 
   .page-link:hover {
     background-color: #f0f0f0;
+  }
+
+  .btn-add {
+    color: white;
+    background-color: black;
+    border-color: none;
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px;
   }
 </style>
 <div th:insert="/include/fragmentsAdmin :: script"></div>
