@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <ul>
+            <li>Admin</li>
+            <li>Tables</li>
+        </ul>
+        <a href="https://github.com/justboil/admin-one-tailwind" target="_blank" class="button blue">
+            <span class="icon"><i class="mdi mdi-github-circle"></i></span>
+            <span>GitHub</span>
+        </a>
+    </div>
+</section>
+<section class="section main-section">
+
+    <div class="container">
+        <div class="row order_d_inner">
+            <div class="col-lg-4">
+                <div class="details_item">
+                    <h4>Order Info</h4>
+                    <ul class="list">
+                        <li><a href="#"><span>Order id</span>: 123</a></li>
+                        <li><a href="#"><span>Date</span>: 12/01/1202</a></li>
+                        <li><a href="#"><span>Total</span>: $32</a></li>
+                        <li><a href="#"><span>Payment Method</span>: COD</a></li>
+                        <li><a href="#"><span>IsPaid</span>: IsPaid</a></li>
+                        <li><a href="#"><span>Status</span>: pending</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="details_item">
+                    <h3>Customer Information</h3>
+                    <ul class="list">
+                        <li><a href="#"><span>Full Name</span>: dung</a></li>
+                        <li><a href="#"><span>Telephone</span>: 0139009238</a></li>
+                        <li><a href="#"><span>Email</span>: user@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="details_item">
+                    <h3>Shipping</h3>
+                    <ul class="list">
+                        <li><a href="#"><span>Shipping method</span>: Express</a></li>
+                        <li><a href="#"><span>Address</span>: ha noi</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="order_details_table">
+                <h2>Order Details</h2>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width:100px;" scope="col">ID</th>
+                            <th style="width:200px;" scope="col">Thumbnail </th>
+                            <th style="width:300px;" scope="col">Name</th>
+                            <th style="width:200px;" scope="col">Price</th>
+                            <th style="width:200px;" scope="col">Quantity</th>
+                            <th style="width:200px;" scope="col">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>1</td>
+                            <td><img src="" width="120" /></td>
+                            <td>may tinh</td>
+                            <td>$123</td>
+                            <td>12</td>
+                            <td>1234</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<style>
+    .row {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    .col-lg-4 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 33.3333333333%;
+        flex: 0 0 33.3333333333%;
+        max-width: 33.3333333333%;
+    }
+</style>
+<div th:insert="/include/fragmentsAdmin :: script"></div>
+
+</body>
+</html>
