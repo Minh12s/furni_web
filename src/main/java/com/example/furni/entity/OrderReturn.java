@@ -19,13 +19,13 @@ public class OrderReturn {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "returnDate")
+    @Column(name = "return_date")
     private LocalDateTime returnDate;
     @Column(name = "status")
     private String status;
     @Column(name = "reason")
     private String reason;
-    @Column(name = "refundAmount")
+    @Column(name = "return_amount")
     private double refundAmount;
     @Column(name = "description")
     private String description;

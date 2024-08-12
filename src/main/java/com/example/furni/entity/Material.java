@@ -10,7 +10,7 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "materialName")
+    @Column(name = "material_name")
     private String materialName;
 
     // Constructor không tham số (bắt buộc)

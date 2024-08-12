@@ -17,7 +17,7 @@ public class Blog {
     @Column(name = "content")
     @Lob
     private String content;
-    @Column(name = "blogDate")
+    @Column(name = "blog_date")
     private LocalDateTime blogDate;
 
     public Blog(int id, String title, String thumbnail, String content, LocalDateTime blogDate) {

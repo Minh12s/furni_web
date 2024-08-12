@@ -6,26 +6,27 @@ import jakarta.persistence.*;
 @Table(name = "return_images")
 public class ReturnImages {
     @Id
-    private int imageId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "returnId")
+    @JoinColumn(name = "order_return_id ")
     private OrderReturn orderReturn;
-    @Column(name = "imagePath")
+    @Column(name = "image_path")
     private String imagePath;
 
-    public ReturnImages(int imageId, OrderReturn orderReturn, String imagePath) {
-        this.imageId = imageId;
+    public ReturnImages(int id, OrderReturn orderReturn, String imagePath) {
+        this.id = id;
         this.orderReturn = orderReturn;
         this.imagePath = imagePath;
     }
 
-    public int getImageId() {
-        return imageId;
+    public int getId() {
+        return id;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public OrderReturn getOrderReturn() {

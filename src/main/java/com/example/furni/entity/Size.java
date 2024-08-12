@@ -10,7 +10,7 @@ public class Size {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "sizeName")
+    @Column(name = "size_name")
     private String sizeName;
 
     // Constructor không tham số (bắt buộc)

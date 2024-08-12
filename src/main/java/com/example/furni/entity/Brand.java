@@ -10,7 +10,7 @@ public class Brand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "brandName")
+    @Column(name = "brand_name")
     private String brandName;
 
     // Constructor không tham số (bắt buộc)

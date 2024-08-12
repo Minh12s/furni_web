@@ -4,7 +4,7 @@ package com.example.furni.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "order_Cancel")
+@Table(name = "order_cancel")
 public class OrderCancel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

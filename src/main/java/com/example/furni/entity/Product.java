@@ -8,7 +8,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "productName")
+    @Column(name = "product_name")
     private String productName;
     @Column(name = "slug")
     private String slug;

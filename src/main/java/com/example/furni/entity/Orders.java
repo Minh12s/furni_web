@@ -15,13 +15,13 @@ public class Orders {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "orderDate")
+    @Column(name = "order_date")
     private LocalDateTime orderDate;
-    @Column(name = "totalAmount")
+    @Column(name = "total_amount")
     private double totalAmount;
     @Column(name = "status")
     private String status;
-    @Column(name = "isPaid")
+    @Column(name = "is_paid")
     private String isPaid;
     @Column(name = "province")
     private String province;
@@ -29,17 +29,17 @@ public class Orders {
     private String district;
     @Column(name = "ward")
     private String ward;
-    @Column(name = "addressDetail")
+    @Column(name = "address_detail")
     private String addressDetail;
-    @Column(name = "fullName")
+    @Column(name = "full_name")
     private String fullName;
     @Column(name = "email")
     private String email;
     @Column(name = "telephone")
     private String telephone;
-    @Column(name = "paymentMethod")
+    @Column(name = "payment_method")
     private String paymentMethod;
-    @Column(name = "shippingMethod")
+    @Column(name = "shipping_method")
     private String shippingMethod;
     @Column(name = "note")
     private String note;

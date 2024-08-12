@@ -24,9 +24,9 @@ public class Review {
 
     @Column(name = "status")
     private String status;
-    @Column(name = "reviewDate")
+    @Column(name = "review_date")
     private LocalDateTime reviewDate;
-    @Column(name = "ratingValue")
+    @Column(name = "rating_value")
     private int ratingValue;
 
     public Review(int id, Product product, User user, String comment, String status, LocalDateTime reviewDate, int ratingValue) {

@@ -17,7 +17,7 @@ public class Favorite {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "productName")
+    @Column(name = "product_name")
     private String productName;
     @Column(name = "thumbnail")
     private String thumbnail;

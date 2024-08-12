@@ -19,7 +19,7 @@ public class User {
     @Column(name = "thumbnail")
     private String thumbnail;
 
-    @Column(name = "phoneNumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @Column(name = "address")
