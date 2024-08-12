@@ -48,6 +48,10 @@ public class HomeController {
     public String Thankyou(){
         return "User/thankyou";
     }
+    @GetMapping("/favorite")
+    public String Favorite(){
+        return "User/favorite";
+    }
 
     @GetMapping("/login")
     public String Login(){
