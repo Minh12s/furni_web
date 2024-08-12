@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <div th:insert="/include/fragments :: head"></div>
+
+</head>
+<body class="goto-here">
+<div class="py-1 bg-black">
+  <div class="container">
+    <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+      <div class="col-lg-12 d-block">
+        <div class="row d-flex">
+          <div class="col-md pr-4 d-flex topper align-items-center">
+            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+            <span class="text">+ 1235 2355 98</span>
+          </div>
+          <div class="col-md pr-4 d-flex topper align-items-center">
+            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+            <span class="text">youremail@email.com</span>
+          </div>
+          <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+            <span class="text">3-5 Business days delivery &amp; Free Returns</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:insert="/include/fragments :: navbar"></div>
+<!-- END nav -->
+<div class="hero-wrap hero-bread" style="background-image: url('/images/anhbg1.jpg');">
+  <div class="container">
+    <div class="row no-gutters slider-text align-items-center justify-content-center">
+      <div class="col-md-9 ftco-animate text-center">
+        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Cart</span></p>
+        <h1 class="mb-0 bread">My Favorite</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<section class="ftco-section ftco-cart">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 ftco-animate">
+        @if (true)  <!-- Bạn có thể thay thế true bằng điều kiện kiểm tra khác nếu cần -->
+        {
+        <div class="cart-list">
+          <table class="table">
+            <thead class="thead-primary">
+            <tr class="text-center">
+              <th>&nbsp;</th>
+              <th>&nbsp;</th>
+              <th>Product</th>
+              <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center">
+              <td class="product-remove">
+                <form method="post" asp-controller="Favorite" asp-action="RemoveFromFavorites" asp-route-favoriteId="1">
+                  <button style="width: 30px; height: 30px; background-color: white; border: 1px solid #ccc; border-radius: 0;" type="submit" class="btn btn-danger">
+                    <span class="ion-ios-close"></span>
+                  </button>
+                </form>
+              </td>
+              <td class="image-prod">
+                <img src="/images/product-1.jpg" alt="" style="width:150px; height:150px;">
+              </td>
+              <td class="product-name">
+                <h3><a style="color:black;" href="@Url.Action("Details", "Page", new { id = 1 })">Product 1</a></h3>
+              </td>
+              <td class="price">
+                $100.00
+              </td>
+            </tr><!-- END TR-->
+
+            <tr class="text-center">
+              <td class="product-remove">
+                <form method="post" asp-controller="Favorite" asp-action="RemoveFromFavorites" asp-route-favoriteId="2">
+                  <button style="width: 30px; height: 30px; background-color: white; border: 1px solid #ccc; border-radius: 0;" type="submit" class="btn btn-danger">
+                    <span class="ion-ios-close"></span>
+                  </button>
+                </form>
+              </td>
+              <td class="image-prod">
+                <img src="/images/product-2.jpg" alt="" style="width:150px; height:150px;">
+              </td>
+              <td class="product-name">
+                <h3><a style="color:black;" href="@Url.Action("Details", "Page", new { id = 2 })">Product 2</a></h3>
+              </td>
+              <td class="price">
+                $150.00
+              </td>
+            </tr><!-- END TR-->
+
+            <tr class="text-center">
+              <td class="product-remove">
+                <form method="post" asp-controller="Favorite" asp-action="RemoveFromFavorites" asp-route-favoriteId="3">
+                  <button style="width: 30px; height: 30px; background-color: white; border: 1px solid #ccc; border-radius: 0;" type="submit" class="btn btn-danger">
+                    <span class="ion-ios-close"></span>
+                  </button>
+                </form>
+              </td>
+              <td class="image-prod">
+                <img src="/images/product-3.jpg" alt="" style="width:150px; height:150px;">
+              </td>
+              <td class="product-name">
+                <h3><a style="color:black;" href="@Url.Action("Details", "Page", new { id = 3 })">Product 3</a></h3>
+              </td>
+              <td class="price">
+                $200.00
+              </td>
+            </tr><!-- END TR-->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+    <div class="shoping__cart__btns d-flex justify-content-between">
+      <p class="mb-0">
+        <button style="border: 1px solid white; background-color:white; width:200px;" type="submit" class="primary-btn cart-btn" href="#">CONTINUE SHOPPING</button>
+      </p>
+      <form method="post" asp-controller="Favorite" asp-action="ClearFavorites">
+        <button style="border: 1px solid white; background-color:white; width:200px;" type="submit" class="primary-btn cart-btn">
+          <span class="icon_loading"></span>
+          CLEAR Favorites
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+<div th:insert="/include/fragments :: footer"></div>
+
+
+
+<div th:insert="/include/fragments :: script"></div>
+
+
+</body>
+</html>
