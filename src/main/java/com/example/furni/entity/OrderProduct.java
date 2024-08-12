@@ -1,32 +1,35 @@
 package com.example.furni.entity;
 
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "order_product")
+@IdClass(OrderProductId.class)
 public class OrderProduct {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Orders order;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(name = "price")
     private double price;
+
     @Column(name = "qty")
     private int qty;
+
     @Column(name = "status")
     private int status;
 
-    public OrderProduct(int id, Orders order, Product product, double price, int qty, int status) {
-        this.id = id;
+    // Constructors, getters, and setters
+    public OrderProduct() {}
+
+    public OrderProduct(Orders order, Product product, double price, int qty, int status) {
         this.order = order;
         this.product = product;
         this.price = price;
@@ -34,13 +37,7 @@ public class OrderProduct {
         this.status = status;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    // Getters and Setters
 
     public Orders getOrder() {
         return order;
@@ -80,8 +77,5 @@ public class OrderProduct {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-    public OrderProduct(){
-
     }
 }

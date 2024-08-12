@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class OrderCancel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderCancelId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -17,18 +17,18 @@ public class OrderCancel {
     @Column(name = "reason")
     private String reason;
 
-    public OrderCancel(int orderCancelId, Orders order, String reason) {
-        this.orderCancelId = orderCancelId;
+    public OrderCancel(int id, Orders order, String reason) {
+        this.id = id;
         this.order = order;
         this.reason = reason;
     }
 
-    public int getOrderCancelId() {
-        return orderCancelId;
+    public int getId() {
+        return id;
     }
 
-    public void setOrderCancelId(int orderCancelId) {
-        this.orderCancelId = orderCancelId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Orders getOrder() {

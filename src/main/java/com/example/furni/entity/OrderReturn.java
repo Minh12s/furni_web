@@ -9,7 +9,7 @@ public class OrderReturn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int returnId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -30,8 +30,8 @@ public class OrderReturn {
     @Column(name = "description")
     private String description;
 
-    public OrderReturn(int returnId, Orders order, User user, LocalDateTime returnDate, String status, String reason, double refundAmount, String description) {
-        this.returnId = returnId;
+    public OrderReturn(int id, Orders order, User user, LocalDateTime returnDate, String status, String reason, double refundAmount, String description) {
+        this.id = id;
         this.order = order;
         this.user = user;
         this.returnDate = returnDate;
@@ -41,12 +41,12 @@ public class OrderReturn {
         this.description = description;
     }
 
-    public int getReturnId() {
-        return returnId;
+    public int getId() {
+        return id;
     }
 
-    public void setReturnId(int returnId) {
-        this.returnId = returnId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Orders getOrder() {

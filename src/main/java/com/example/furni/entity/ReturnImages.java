@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 @Table(name = "return_images")
 public class ReturnImages {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int imageId;
 
     @ManyToOne

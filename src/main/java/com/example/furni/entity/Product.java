@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private int id;
     @Column(name = "productName")
     private String productName;
     @Column(name = "slug")
@@ -46,29 +46,12 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, String productName, String slug, double price, String thumbnail, int qty, String color, double weight, double height, double length, Category category, Brand brand, Material material, Size size) {
-        this.productId = productId;
-        this.productName = productName;
-        this.slug = slug;
-        this.price = price;
-        this.thumbnail = thumbnail;
-        this.qty = qty;
-        this.color = color;
-        this.weight = weight;
-        this.height = height;
-        this.length = length;
-        this.category = category;
-        this.brand = brand;
-        this.material = material;
-        this.size = size;
+    public int getId() {
+        return id;
     }
 
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getProductName() {
@@ -172,6 +155,23 @@ public class Product {
     }
 
     public void setSize(Size size) {
+        this.size = size;
+    }
+
+    public Product(int id, String productName, String slug, double price, String thumbnail, int qty, String color, double weight, double height, double length, Category category, Brand brand, Material material, Size size) {
+        this.id = id;
+        this.productName = productName;
+        this.slug = slug;
+        this.price = price;
+        this.thumbnail = thumbnail;
+        this.qty = qty;
+        this.color = color;
+        this.weight = weight;
+        this.height = height;
+        this.length = length;
+        this.category = category;
+        this.brand = brand;
+        this.material = material;
         this.size = size;
     }
 }
