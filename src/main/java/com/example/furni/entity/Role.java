@@ -1,30 +1,30 @@
 package com.example.furni.entity;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "roles")
 public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "role")
     private String role;
 
-    public Role(){
-
-    }
-    public int getId() {
-        return id;
+    // Constructor không tham số (bắt buộc)
+    public Role() {
     }
 
-    public void setId(int id) {
-        this.id = id;
+    // Constructor với các tham số
+    public Role(User user, String role) {
+        this.user = user;
+        this.role = role;
     }
 
+    // Getters và setters
     public User getUser() {
         return user;
     }
@@ -38,12 +38,6 @@ public class Role {
     }
 
     public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Role(int id, User user, String role) {
-        this.id = id;
-        this.user = user;
         this.role = role;
     }
 }

@@ -3,25 +3,32 @@ package com.example.furni.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Material")
+@Table(name = "material")
 public class Material {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int materialId;
+    private int id;
 
+    @Column(name = "materialName")
     private String materialName;
 
-    public Material(int materialId, String materialName) {
-        this.materialId = materialId;
+    // Constructor không tham số (bắt buộc)
+    public Material() {
+    }
+
+    // Constructor với các tham số
+    public Material(String materialName) {
         this.materialName = materialName;
     }
 
-    public int getMaterialId() {
-        return materialId;
+    // Getters và setters
+    public int getId() {
+        return id;
     }
 
-    public void setMaterialId(int materialId) {
-        this.materialId = materialId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMaterialName() {
@@ -30,9 +37,5 @@ public class Material {
 
     public void setMaterialName(String materialName) {
         this.materialName = materialName;
-    }
-
-    public Material(){
-
     }
 }

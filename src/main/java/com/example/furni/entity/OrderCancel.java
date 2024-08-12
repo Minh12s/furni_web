@@ -4,7 +4,7 @@ package com.example.furni.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Order_Cancel")
+@Table(name = "order_Cancel")
 public class OrderCancel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +14,7 @@ public class OrderCancel {
     @JoinColumn(name = "order_id")
     private Orders order;
 
+    @Column(name = "reason")
     private String reason;
 
     public OrderCancel(int orderCancelId, Orders order, String reason) {

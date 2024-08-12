@@ -4,7 +4,7 @@ package com.example.furni.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Order_product")
+@Table(name = "order_product")
 public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +18,11 @@ public class OrderProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "price")
     private double price;
+    @Column(name = "qty")
     private int qty;
+    @Column(name = "status")
     private int status;
 
     public OrderProduct(int id, Orders order, Product product, double price, int qty, int status) {

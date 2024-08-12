@@ -3,7 +3,7 @@ package com.example.furni.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Return_Images")
+@Table(name = "return_images")
 public class ReturnImages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +12,7 @@ public class ReturnImages {
     @ManyToOne
     @JoinColumn(name = "returnId")
     private OrderReturn orderReturn;
-
+    @Column(name = "imagePath")
     private String imagePath;
 
     public ReturnImages(int imageId, OrderReturn orderReturn, String imagePath) {

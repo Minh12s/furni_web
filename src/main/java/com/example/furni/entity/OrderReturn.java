@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Order_Return")
+@Table(name = "order_return")
 public class OrderReturn {
 
     @Id
@@ -19,10 +19,15 @@ public class OrderReturn {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "returnDate")
     private LocalDateTime returnDate;
+    @Column(name = "status")
     private String status;
+    @Column(name = "reason")
     private String reason;
+    @Column(name = "refundAmount")
     private double refundAmount;
+    @Column(name = "description")
     private String description;
 
     public OrderReturn(int returnId, Orders order, User user, LocalDateTime returnDate, String status, String reason, double refundAmount, String description) {

@@ -1,24 +1,48 @@
 package com.example.furni.entity;
+
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "thumbnail")
     private String thumbnail;
+
+    @Column(name = "phoneNumber")
     private String phoneNumber;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Role> roles;
+    // Constructor không tham số (bắt buộc)
+    public User() {
+    }
 
+    // Constructor với các tham số
+    public User(String name, String email, String thumbnail, String phoneNumber, String address, String password) {
+        this.name = name;
+        this.email = email;
+        this.thumbnail = thumbnail;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.password = password;
+    }
+
+    // Getters và setters
     public int getId() {
         return id;
     }
@@ -73,24 +97,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-  public User(){}
-    public User(int id, String name, String email, String thumbnail, String phoneNumber, String address, String password, Set<Role> roles) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.thumbnail = thumbnail;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.password = password;
-        this.roles = roles;
     }
 }

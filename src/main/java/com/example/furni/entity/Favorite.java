@@ -3,7 +3,7 @@ package com.example.furni.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Favorite")
+@Table(name = "favorite")
 public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +17,11 @@ public class Favorite {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "productName")
     private String productName;
+    @Column(name = "thumbnail")
     private String thumbnail;
+    @Column(name = "price")
     private double price;
 
     public Favorite(int id, Product product, User user, String productName, String thumbnail, double price) {

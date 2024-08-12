@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Review")
+@Table(name = "review")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +18,15 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "comment")
     @Lob
     private String comment;
 
+    @Column(name = "status")
     private String status;
+    @Column(name = "reviewDate")
     private LocalDateTime reviewDate;
+    @Column(name = "ratingValue")
     private int ratingValue;
 
     public Review(int id, Product product, User user, String comment, String status, LocalDateTime reviewDate, int ratingValue) {

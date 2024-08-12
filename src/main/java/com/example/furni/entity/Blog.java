@@ -4,18 +4,20 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Blog")
+@Table(name = "blog")
 public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "title")
     private String title;
+    @Column(name = "thumbnail")
     private String thumbnail;
-
+    @Column(name = "content")
     @Lob
     private String content;
-
+    @Column(name = "blogDate")
     private LocalDateTime blogDate;
 
     public Blog(int id, String title, String thumbnail, String content, LocalDateTime blogDate) {
