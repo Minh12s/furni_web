@@ -12,7 +12,7 @@ public class ReturnImages {
     @ManyToOne
     @JoinColumn(name = "order_return_id ")
     private OrderReturn orderReturn;
-    @Column(name = "image_path")
+    @Column(name = "image_path", columnDefinition = "LONGTEXT")
     private String imagePath;
 
     public ReturnImages(int id, OrderReturn orderReturn, String imagePath) {

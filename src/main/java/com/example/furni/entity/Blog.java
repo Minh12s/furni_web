@@ -10,19 +10,25 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "thumbnail")
+
+    @Column(name = "tag", length = 100)
+    private String tag;
+
+    @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
     private String thumbnail;
-    @Column(name = "content")
-    @Lob
+
+    @Column(name = "content", columnDefinition = "LONGTEXT")
     private String content;
+
     @Column(name = "blog_date")
     private LocalDateTime blogDate;
 
-    public Blog(int id, String title, String thumbnail, String content, LocalDateTime blogDate) {
+    public Blog(int id, String title, String tag, String thumbnail, String content, LocalDateTime blogDate) {
         this.id = id;
         this.title = title;
+        this.tag = tag;
         this.thumbnail = thumbnail;
         this.content = content;
         this.blogDate = blogDate;
@@ -42,6 +48,14 @@ public class Blog {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getThumbnail() {

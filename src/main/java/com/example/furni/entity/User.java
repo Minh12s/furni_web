@@ -16,7 +16,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "thumbnail")
+    @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
     private String thumbnail;
 
     @Column(name = "phone_number")

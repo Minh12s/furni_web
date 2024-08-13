@@ -19,7 +19,7 @@ public class Favorite {
 
     @Column(name = "product_name")
     private String productName;
-    @Column(name = "thumbnail")
+    @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
     private String thumbnail;
     @Column(name = "price")
     private double price;

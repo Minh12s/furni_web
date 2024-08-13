@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <div th:insert="/include/fragmentsAdmin :: head"></div>
-  <title>Title</title>
+  <title>Edit Blog</title>
 </head>
 <body>
 <div th:insert="/include/fragmentsAdmin :: navbar"></div>
@@ -84,64 +84,60 @@
       <li style="margin-left:-50px;">Admin</li>
       <li>Edit Blog</li>
     </ul>
-
   </div>
 </section>
 <section class="section main-section">
   <div class="row">
     <div class="col-md-12">
       <div class="tile">
-        <h3 class="tile-title">Edit product</h3>
+        <h3 class="tile-title">Edit Blog</h3>
         <div class="tile-body">
-          <form class="edit-product-form" asp-controller="Admin" asp-action="addBlog" method="post" enctype="multipart/form-data">
-            <!-- Thay thế Tag Helper asp-for bằng các giá trị cụ thể -->
-
-
+          <form th:action="@{/admin/editBlog/{id}(id=${blog.id})}" th:object="${blog}" method="post" enctype="multipart/form-data">
             <div class="form-group col-md-3">
               <label class="control-label">Title</label>
-              <input asp-for="Title" class="form-control" name="Title" placeholder="Title" />
+              <input th:field="*{title}" class="form-control" placeholder="Title" />
             </div>
             <div class="form-group col-md-3">
               <label class="control-label">Tag</label>
-              <input asp-for="Tag" class="form-control" name="Tag" placeholder="Tag" />
+              <input th:field="*{tag}" class="form-control" placeholder="Tag" />
             </div>
             <div class="form-group col-md-12">
               <label class="control-label">Thumbnail</label>
               <div>
-                <input asp-for="Thumbnail" type="file" name="Thumbnail" class="form-control" onchange="displayThumbnail(this);" />
-                <img id="thumbnailImage" style="display: none; max-width: 50%;" alt="Thumbnail image" />
-
+                <input type="file" name="thumbnailFile" class="form-control" onchange="displayThumbnail(this);" />
+                <img id="thumbnailImage" th:src="'data:image/jpeg;base64,' + ${blog.thumbnail}" style="display: block; max-width: 50%;" alt="Thumbnail image" />
               </div>
             </div>
             <div class="form-group col-md-6">
               <label class="control-label">Content</label>
-              <textarea asp-for="Content" class="form-control" name="Content" placeholder="Content"></textarea>
+              <textarea th:field="*{content}" class="form-control" placeholder="Content"></textarea>
             </div>
-
             <button class="btn btn-save" type="submit">Save</button>
-            <a class="btn btn-cancel" href="/Admin/Blog">Cancel</a>
+            <a class="btn btn-cancel" href="/admin/blogs">Cancel</a>
           </form>
+
         </div>
       </div>
     </div>
   </div>
 </section>
 <script src="https://cdn.tiny.cloud/1/6a4ufu188x8itoqtz2agsuahgg475yn7bxva9xzabribtvjm/tinymce/5/tinymce.min.js"></script>
-<script>tinymce.init({
-  selector: 'textarea[name="Content"]'
-});</script>
-<script>function displayThumbnail(input) {
-  var thumbnailImage = document.getElementById('thumbnailImage');
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      thumbnailImage.src = e.target.result;
-      thumbnailImage.style.display = 'block';
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}</script>
+<script>
+  tinymce.init({
+    selector: 'textarea[name="content"]'
+  });
 
+  function displayThumbnail(input) {
+    var thumbnailImage = document.getElementById('thumbnailImage');
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        thumbnailImage.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 </body>
 </html>

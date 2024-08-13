@@ -15,13 +15,7 @@
 
     </div>
 </section>
-<section class="is-hero-bar">
-    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-        <h1 class="title">
-            List of blogs
-        </h1>
-    </div>
-</section>
+
 <section class="is-hero-bar">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0"></div>
     <div class="col-sm-2">
@@ -42,33 +36,39 @@
                     <th width="10"><input type="checkbox" id="all"></th>
                     <th>Id</th>
                     <th>Title</th>
+                    <th>Thumbnail</th>
                     <th>Content</th>
+                    <th>Tag</th>
                     <th>BlogDate</th>
                     <th></th>
+
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                    <td>1</td>
-                    <td>Sample Title 1</td>
-                    <td>Sample Content 1</td>
-                    <td>2024-03-20</td>
-
+                <tr th:each="blog : ${blogsPage.content}">
+                    <td width="10"><input type="checkbox" name="check1" th:value="${blog.id}"></td>
+                    <td th:text="${blog.id}"></td>
+                    <td th:text="${blog.title}"></td>
                     <td>
-                        <a href="/admin/editBlog" class="btn btn-primary" style="background-color:green; color:white;">Edit</a>
+                        <img th:src="'data:image/jpeg;base64,' + ${blog.thumbnail}" alt="Thumbnail" width="100" height="100"/>
                     </td>
-                </tr>
-                <tr>
-                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                    <td>2</td>
-                    <td>Sample Title 2</td>
-                    <td>Sample Content 2</td>
-                    <td>2024-03-21</td>
 
+                    <td th:utext="${blog.content}"></td>
+                    <td th:utext="${blog.tag}"></td>
+                    <td th:text="${blog.blogDate}"></td>
                     <td>
-                        <a href="/admin/editBlog" class="btn btn-primary" style="background-color:green; color:white;">Edit</a>
+                        <div class="button-group">
+                        <a th:href="@{/admin/editBlog/{id}(id=${blog.id})}" class="btn btn-primary">
+                            <span class="icon"><i class="mdi mdi-pencil"></i></span>
+                        </a>
+                            <form th:action="@{/admin/deleteBlog/{id}(id=${blog.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this post?')">
+                                <button type="submit" class="btn btn-danger">
+                                    <span class="icon"><i class="mdi mdi-delete"></i></span></button>
+                            </form>
+
+                        </div>
                     </td>
+
                 </tr>
                 </tbody>
             </table>
@@ -76,13 +76,18 @@
             <div class="table-pagination">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
-                        <button type="button" class="button active">1</button>
-                        <button type="button" class="button">2</button>
-                        <button type="button" class="button">3</button>
+                        <button type="button" class="button"
+                                th:each="i : ${#numbers.sequence(0, blogsPage.totalPages - 1)}"
+                                th:classappend="${i == blogsPage.number} ? ' active' : ''"
+                                th:text="${i + 1}"
+                                th:onclick="|window.location.href='/admin/blogs?page=' + [[${i}]] + '&size=' + [[${blogsPage.size}]]|">
+                        </button>
                     </div>
-                    <small>Page 1 of 3</small>
+                    <small th:text="'Page ' + (${blogsPage.number} + 1) + ' of ' + ${blogsPage.totalPages}"></small>
                 </div>
             </div>
+
+
         </div>
     </div>
 
