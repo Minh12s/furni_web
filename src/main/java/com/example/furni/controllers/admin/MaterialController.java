@@ -21,7 +21,7 @@ public class MaterialController {
     private MaterialService materialService;
 
     @GetMapping("/materials")
-    public String showBlogs(Model model,
+    public String showMaterials(Model model,
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "5") int size) {
         Page<Material> blogsPage = materialService.getMaterialsPaginated(page, size);
