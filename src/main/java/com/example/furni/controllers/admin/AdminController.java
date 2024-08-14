@@ -12,18 +12,6 @@ public class AdminController {
     public String Dashboard(){
         return "admin/dashboard";
     }
-    @GetMapping("/category")
-    public String Category(){
-        return "admin/Category/category";
-    }
-    @GetMapping("/addCategory")
-    public String AddCategory(){
-        return "/admin/Category/addCategory";
-    }
-    @GetMapping("/editCategory")
-    public String EditCategory(){
-        return "/admin/Category/editCategory";
-    }
     @GetMapping("/customer")
     public String Customer(){
         return "admin/Customer/customer";
