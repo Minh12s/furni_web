@@ -25,6 +25,7 @@ public class Blog {
     @Column(name = "blog_date")
     private LocalDateTime blogDate;
 
+
     public Blog(int id, String title, String tag, String thumbnail, String content, LocalDateTime blogDate) {
         this.id = id;
         this.title = title;

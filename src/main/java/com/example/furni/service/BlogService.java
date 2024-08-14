@@ -27,6 +27,7 @@ public class BlogService {
         Pageable pageable = PageRequest.of(page, size);
         return blogRepository.findAll(pageable);
     }
+
     public Blog saveBlog(Blog blog) {
         return blogRepository.save(blog);
     }

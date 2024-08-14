@@ -25,10 +25,60 @@
         </a>
     </div>
 </section>
+<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" asp-action="Blog" asp-controller="Admin" method="get">
+    <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+        <input value="" class="form-control" type="text" name="Title" placeholder="Title" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+    </div>
+    <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
+        <input value="" class="form-control" type="text" name="Tag" placeholder="Tag" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
+    </div>
+    <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+        <input value="" class="form-control" type="date" name="StartDate" placeholder="Start Date" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px; margin-left: 10px;" />
+        <input value="" class="form-control" type="date" name="EndDate" placeholder="End Date" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px; margin-left: 10px;" />
+    </div>
+    <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
+        <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+            <i class="mdi mdi-magnify" style="padding: 10px;"></i>
+        </button>
+    </div>
+</form>
+
 <section class="section main-section">
 
     <div class="card has-table">
+<!--        <header class="card-header">-->
+<!--            <p class="card-header-title">-->
+<!--                @*<span class="icon"><i class="mdi mdi-shopping"></i></span>*@-->
+<!--                Blog-->
+<!--            </p>-->
 
+<!--            <form class="card-header-icon asp-controller="Admin" asp-action="Blog" method="get" onchange="this.submit()">-->
+
+<!--            <select style="margin-left:-10px; padding: 5px 10px;border:1px solid #F1F1F1 " name="PageSize">-->
+<!--                <option value="10"-->
+<!--                        selected="@(ViewBag.PageSize == 10)">-->
+<!--                    10-->
+<!--                </option>-->
+<!--                <option value="20"-->
+<!--                        selected="@(ViewBag.PageSize == 20)">-->
+<!--                    20-->
+<!--                </option>-->
+<!--                <option value="50"-->
+<!--                        selected="@(ViewBag.PageSize == 50)">-->
+<!--                    50-->
+<!--                </option>-->
+<!--                <option value="100"-->
+<!--                        selected="@(ViewBag.PageSize == 100)">-->
+<!--                    100-->
+<!--                </option>-->
+<!--            </select>-->
+
+<!--            <input type="hidden" name="page" value="@ViewBag.CurrentPage">-->
+
+<!--            @*<button style="border:1px solid white ;background-color:#FFA45C; color: white;" type="submit">filter</button>*@-->
+
+<!--            </form>-->
+<!--        </header>-->
         <div class="card-content">
             <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
                 <thead>
@@ -55,7 +105,8 @@
 
                     <td th:utext="${blog.content}"></td>
                     <td th:utext="${blog.tag}"></td>
-                    <td th:text="${blog.blogDate}"></td>
+                    <td th:text="${#temporals.format(blog.blogDate, 'dd/MM/yyyy')}"></td>
+
                     <td>
                         <div class="button-group">
                         <a th:href="@{/admin/editBlog/{id}(id=${blog.id})}" class="btn btn-primary">
