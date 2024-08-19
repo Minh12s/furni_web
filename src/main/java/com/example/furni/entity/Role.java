@@ -7,9 +7,12 @@ import jakarta.persistence.*;
 public class Role {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_name", referencedColumnName = "user_name", nullable = false)
+    private User userName;
 
     @Column(name = "role")
     private String role;
@@ -18,19 +21,26 @@ public class Role {
     public Role() {
     }
 
-    // Constructor với các tham số
-    public Role(User user, String role) {
-        this.user = user;
+    public Role(int id, User userName, String role) {
+        this.id = id;
+        this.userName = userName;
         this.role = role;
     }
 
-    // Getters và setters
-    public User getUser() {
-        return user;
+    public int getId() {
+        return id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public User getUserName() {
+        return userName;
+    }
+
+    public void setUserName(User userName) {
+        this.userName = userName;
     }
 
     public String getRole() {

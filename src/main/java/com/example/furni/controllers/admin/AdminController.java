@@ -1,5 +1,7 @@
 package com.example.furni.controllers.admin;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +26,13 @@ public class AdminController {
     public String Product(){
         return "admin/Product/product";
     }
-    @GetMapping("/blog")
-    public String Blog(){
-        return "admin/Blog/blog";
-    }
-
-    @GetMapping("/login")
-    public String Login(){
+    @GetMapping("/loginAdmin")
+    public String login(){
         return "admin/login";
+    }
+    @GetMapping("/logoutAdmin")
+    public String logout(HttpServletRequest request) throws ServletException {
+        request.logout();
+        return "redirect:/admin/loginAdmin";
     }
 }
