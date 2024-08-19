@@ -2,60 +2,10 @@
 <html lang="en">
 <head>
   <div th:insert="/include/fragmentsAdmin :: head"></div>
-  <title>Title</title>
+  <title>Add Category</title>
 </head>
 <body>
 <div th:insert="/include/fragmentsAdmin :: navbar"></div>
-<section class="is-title-bar">
-  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-    <ul>
-      <li>List of Category</li>
-      <li>Add Category</li>
-    </ul>
-  </div>
-</section>
-<section class="section main-section">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="tile">
-        <div class="tile-body">
-          <form action="addClass" class="edit-event-form" method="post" >
-
-
-            <div class="form-group col-md-3">
-              <label class="control-label">Category name</label>
-              <input  class="form-control" name="className" placeholder="Title" />
-            </div>
-
-
-
-
-            <button style="margin-top:20px;"class="btn btn-save" type="submit">Save</button>
-            <a class="btn btn-cancel" href="/Events/Event">Cancel</a>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<script src="https://cdn.tiny.cloud/1/6a4ufu188x8itoqtz2agsuahgg475yn7bxva9xzabribtvjm/tinymce/5/tinymce.min.js"></script>
-<script>
-  tinymce.init({
-    selector: 'textarea[name="EventDescription"]'
-  });</script>
-<script>
-  function displayThumbnail(input) {
-    var thumbnailImage = document.getElementById('thumbnailImage');
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        thumbnailImage.src = e.target.result;
-        thumbnailImage.style.display = 'block';
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }</script>
-
 <style>
   .row {
     display: -webkit-box;
@@ -89,7 +39,6 @@
     -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   }
 
@@ -101,10 +50,8 @@
   .btn-save {
     background-color: rgb(166 236 171);
     color: rgb(1 123 10);
-    /* width: 100px; */
     font-weight: 600;
     letter-spacing: 1px;
-    border: none;
     border-radius: .357rem;
     border: none;
     padding: 5px 20px;
@@ -114,10 +61,8 @@
   .btn-cancel {
     background-color: rgb(255 197 197);
     color: rgb(190, 40, 40);
-    /* width: 100px; */
     font-weight: 600;
     letter-spacing: 1px;
-    border: none;
     border-radius: .357rem;
     border: none;
     padding: 8px 20px;
@@ -127,12 +72,37 @@
   .main-section {
     margin-left: 15px;
   }
-  .error-message {
-    color: red;
-    font-size: 15px;
-  }
 </style>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
 
+<section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li style="margin-left:-50px;">Admin</li>
+      <li>Add Category</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section main-section">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tile">
+        <h3 class="tile-title">Add Category</h3>
+        <div class="tile-body">
+          <form th:action="@{/admin/addCategory}" th:object="${category}" method="post" enctype="multipart/form-data">
+            <div class="form-group col-md-3">
+              <label class="control-label">Category Name</label>
+              <input type="text" th:field="*{categoryName}" class="form-control" name="categoryName" placeholder="Category Name" />
+            </div>
+            <button class="btn btn-save" type="submit">Save</button>
+            <a class="btn btn-cancel" href="/admin/category">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div th:insert="/include/fragmentsAdmin :: script"></div>
 </body>
 </html>
