@@ -15,10 +15,16 @@ public class SercurityConfiguration {
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-        userDetailsManager.setUsersByUsernameQuery("select user_name, password, is_active from user where user_name = ?");
-        userDetailsManager.setAuthoritiesByUsernameQuery("select user_name,role from roles where user_name = ?");
+
+        // Sử dụng email để lấy thông tin người dùng, sau đó kiểm tra bằng user_name
+        userDetailsManager.setUsersByUsernameQuery("select user_name, password, is_active from user where email = ?");
+
+        // Dùng user_name lấy từ email để tìm quyền trong bảng roles
+        userDetailsManager.setAuthoritiesByUsernameQuery("select user_name, role from roles where user_name = ?");
+
         return userDetailsManager;
     }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
