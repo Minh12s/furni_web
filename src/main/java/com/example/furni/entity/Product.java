@@ -14,7 +14,7 @@ public class Product {
     private String slug;
     @Column(name = "price")
     private double price;
-    @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
+        @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
     private String thumbnail;
     @Column(name = "qty")
     private int qty;
@@ -173,5 +173,13 @@ public class Product {
         this.brand = brand;
         this.material = material;
         this.size = size;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void generateSlug() {
+        if (this.productName != null) {
+            this.slug = productName.toLowerCase().replaceAll("[^a-z0-9]+", "-");
+        }
     }
 }

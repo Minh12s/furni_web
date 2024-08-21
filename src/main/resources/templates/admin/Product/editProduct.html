@@ -19,35 +19,85 @@
     <div class="col-md-12">
       <div class="tile">
         <div class="tile-body">
-          <form action="addClass" class="edit-event-form" method="post" >
+          <!-- Update the form action to point to the editProduct controller -->
+          <form th:action="@{/admin/editProduct/{id}(id=${product.id})}" th:object="${product}" method="post" enctype="multipart/form-data">
 
+            <!-- Product ID (Hidden) -->
+            <input type="hidden" th:value="${product.id}" name="id" />
 
+            <!-- Product Name -->
             <div class="form-group col-md-3">
-              <label class="control-label">Product name</label>
-              <input  class="form-control" name="className" placeholder="Title" />
+              <label class="control-label">Product Name</label>
+              <input class="form-control" th:field="${product.productName}" name="productName" placeholder="Product Name" />
             </div>
 
+            <!-- Price -->
             <div class="form-group col-md-3">
               <label class="control-label">Price</label>
-              <input  class="form-control" name="className" placeholder="Title" />
+              <input class="form-control" th:field="${product.price}" name="price" placeholder="Price" />
             </div>
 
+            <!-- Quantity -->
             <div class="form-group col-md-3">
-              <label class="control-label">Qty</label>
-              <input  class="form-control" name="className" placeholder="Title" />
+              <label class="control-label">Quantity</label>
+              <input class="form-control" th:field="${product.qty}" name="qty" placeholder="Quantity" />
             </div>
-
+            <div class="form-group col-md-3">
+              <label class="control-label">Color</label>
+              <input class="form-control" th:field="${product.color}" name="color" placeholder="color" />
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">weight</label>
+              <input class="form-control" th:field="${product.weight}" name="weight" placeholder="weight" />
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">height</label>
+              <input class="form-control" th:field="${product.height}" name="height" placeholder="height" />
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">length</label>
+              <input class="form-control" th:field="${product.length}" name="length" placeholder="length" />
+            </div>
+            <!-- Thumbnail -->
             <div class="form-group col-md-3">
               <label class="control-label">Thumbnail</label>
-              <input asp-for="Thumbnail" type="file" name="Thumbnail" class="form-control" onchange="displayThumbnail(this,'thumbnailImage0');" />
-              <img id="thumbnailImage"  alt="Thumbnail image" style="max-width: 50%;" />
+              <input type="file" name="thumbnailFile" class="form-control" onchange="displayThumbnail(this);" />
+              <img id="thumbnailImage" th:src="'data:image/png;base64,' + ${product.thumbnail}" alt="Thumbnail image" style="max-width: 50%;" />            </div>
 
+            <!-- Category -->
+            <div class="form-group col-md-3">
+              <label class="control-label">Category</label>
+              <select class="form-control" name="category">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}" th:selected="${category.id == product.category.id}"></option>
+              </select>
             </div>
 
+            <!-- Brand -->
+            <div class="form-group col-md-3">
+              <label class="control-label">Brand</label>
+              <select class="form-control" name="brand">
+                <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.brandName}" th:selected="${brand.id == product.brand.id}"></option>
+              </select>
+            </div>
 
+            <!-- Material -->
+            <div class="form-group col-md-3">
+              <label class="control-label">Material</label>
+              <select class="form-control" name="material">
+                <option th:each="material : ${materials}" th:value="${material.id}" th:text="${material.materialName}" th:selected="${material.id == product.material.id}"></option>
+              </select>
+            </div>
 
-            <button style="margin-top:20px;"class="btn btn-save" type="submit">Save</button>
-            <a class="btn btn-cancel" href="/Events/Event">Cancel</a>
+            <!-- Size -->
+            <div class="form-group col-md-3">
+              <label class="control-label">Size</label>
+              <select class="form-control" name="size">
+                <option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.sizeName}" th:selected="${size.id == product.size.id}"></option>
+              </select>
+            </div>
+
+            <button style="margin-top:20px;" class="btn btn-save" type="submit">Save</button>
+            <a class="btn btn-cancel" href="/admin/products">Cancel</a>
           </form>
         </div>
       </div>
