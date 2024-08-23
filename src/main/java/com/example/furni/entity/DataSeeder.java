@@ -43,9 +43,6 @@ public class DataSeeder {
             "Compact Sofa", "Elegant Sofa", "Adjustable Sofa", "Convertible Sofa", "Tufted Sofa",
             "Luxury Sofa", "Eco-friendly Sofa"
     };
-
-
-
     private static final String[] COLORS = {
             "Red", "Blue", "Green", "Gray", "Black", "White", "Yellow", "Orange", "Purple", "Brown"
     };

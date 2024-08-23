@@ -1,4 +1,5 @@
 package com.example.furni.controllers.admin;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import com.example.furni.entity.Material;
 import com.example.furni.service.MaterialService;
@@ -22,12 +23,22 @@ public class MaterialController {
 
     @GetMapping("/materials")
     public String showMaterials(Model model,
-                            @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "5") int size) {
-        Page<Material> blogsPage = materialService.getMaterialsPaginated(page, size);
-        model.addAttribute("materialsPage", blogsPage);
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "5") int size,
+                                HttpSession session) {
+        Page<Material> materialsPage = materialService.getMaterialsPaginated(page, size);
+        model.addAttribute("materialsPage", materialsPage);
+
+        // Get the success message from session and remove it after retrieval
+        String successMessage = (String) session.getAttribute("successMessage");
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
+
         return "admin/Material/material";
     }
+
 
     @GetMapping("/addMaterial")
     public String showAddMaterialForm(Model model) {
@@ -36,11 +47,11 @@ public class MaterialController {
     }
 
     @PostMapping("/addMaterial")
-    public String addBlog(@ModelAttribute("material") Material material) {
+    public String addMaterial(@ModelAttribute("material") Material material, HttpSession session) {
         materialService.saveMaterial(material);
+        session.setAttribute("successMessage", "Material added successfully!");
         return "redirect:/admin/materials";
     }
-
 
     @GetMapping("/editMaterial/{id}")
     public String showEditMaterialForm(@PathVariable int id, Model model) {
