@@ -12,10 +12,6 @@ public class HomeController {
     public String Home(){
         return "User/index";
     }
-    @GetMapping("/category")
-    public String Category(){
-        return "User/category";
-    }
     @GetMapping("/details")
     public String Detail(){
         return "User/details";
@@ -36,10 +32,7 @@ public class HomeController {
     public String BlogDetail(){
         return "User/blogdetails";
     }
-    @GetMapping("/contact")
-    public String Contact(){
-        return "User/contact";
-    }
+
     @GetMapping("/checkout")
     public String Checkout(){
         return "User/checkout";
