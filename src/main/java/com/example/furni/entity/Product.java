@@ -10,7 +10,8 @@ public class Product {
     private int id;
     @Column(name = "product_name")
     private String productName;
-    @Column(name = "slug")
+
+    @Column(name = "slug", length = 255)
     private String slug;
     @Column(name = "price")
     private double price;
