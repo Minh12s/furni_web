@@ -137,11 +137,11 @@
     <div class="login-box">
         <h2>Sign up</h2>
 
-        <form action="/Page/Register" method="post">
+        <form th:action="@{/registers}" method="post" th:object="${user}">
             <div class="input-group">
-                <label for="username">Username:</label>
+                <label for="fullName">Full Name:</label>
                 <i class="fas fa-user input-icon"></i>
-                <input type="text" id="username" name="username">
+                <input type="text" id="fullName" th:field="*{fullName}" required>
             </div>
             <div style="margin-left:-167px;">
                 <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Username -->
@@ -150,7 +150,7 @@
             <div class="input-group">
                 <label for="email">Email:</label>
                 <i class="fas fa-envelope input-icon"></i>
-                <input type="text" id="email" name="email">
+                <input type="email" id="email" th:field="*{email}" required>
             </div>
             <div style="margin-left:-200px;">
                 <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Email -->
@@ -159,7 +159,7 @@
             <div class="input-group">
                 <label for="password">Password:</label>
                 <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="password" name="password">
+                <input type="password" id="password" th:field="*{password}" required>
             </div>
             <div style="margin-left:-167px;">
                 <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Password -->

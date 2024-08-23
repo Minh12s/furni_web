@@ -26,13 +26,5 @@ public class AdminController {
     public String Product(){
         return "admin/Product/product";
     }
-    @GetMapping("/loginAdmin")
-    public String login(){
-        return "admin/login";
-    }
-    @GetMapping("/logoutAdmin")
-    public String logout(HttpServletRequest request) throws ServletException {
-        request.logout();
-        return "redirect:/admin/loginAdmin";
-    }
+
 }

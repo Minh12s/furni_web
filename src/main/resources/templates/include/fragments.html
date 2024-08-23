@@ -64,12 +64,14 @@
           <li class="nav-item cta cta-colored">
             <a href="#" class="nav-link" onclick="showCartDropdown()">
               <span class="icon-user" style="font-size:11px; color: #333; margin-top: 10px;"></span>
+              <span th:text="${session.fullName != null ? session.fullName : 'Guest'}">Guest</span>
+
             </a>
             <div class="cart-dropdown-content" id="cartDropdownContent">
               <a href="/MyOrder/MyOrder"><i class="fas fa-file-alt text-dark"></i> MyOrder</a>
-              <a href="#"><i class="fas fa-sign-out-alt text-dark"></i> Logout</a>
-              <a href="/User/login"><i class="fas fa-sign-in-alt text-dark"></i> Login</a>
-              <a href="/User/register"><i class="fas fa-user-plus text-dark"></i> Register</a>
+              <a href="/loginPage"><i class="fas fa-sign-in-alt text-dark"></i> Login</a>
+              <a href="/logout"><i class="fas fa-sign-out-alt text-dark"></i> Logout</a>
+              <a href="/registers"><i class="fas fa-user-plus text-dark"></i> Register</a>
             </div>
           </li>
         </ul>

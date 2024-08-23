@@ -7,12 +7,13 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Column(name = "user_name")
     private String userName;
-
+    @Column(name = "full_name")
+    private String fullName;
     @Column(name = "email")
     private String email;
 
@@ -24,8 +25,10 @@ public class User {
 
     @Column(name = "address")
     private String address;
+
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
     @Column(name = "password")
     private String password;
 
@@ -33,9 +36,10 @@ public class User {
     public User() {
     }
 
-    public User(int id, String userName, String email, String thumbnail, String phoneNumber, String address, boolean isActive, String password) {
+    public User(int id, String userName, String fullName, String email, String thumbnail, String phoneNumber, String address, boolean isActive, String password) {
         this.id = id;
         this.userName = userName;
+        this.fullName = fullName;
         this.email = email;
         this.thumbnail = thumbnail;
         this.phoneNumber = phoneNumber;
@@ -58,6 +62,14 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {

@@ -136,15 +136,16 @@
     <div class="login-box">
         <h2>Sign in</h2>
         <div style="margin-left:-50px;">
-            <!-- Vùng hiển thị thông báo lỗi -->
-            <div class="text-danger"></div>
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                Invalid email or password. Please try again.
+            </div>
         </div>
 
-        <form action="/Page/Login" method="post">
+        <form th:action="@{/authenticateUser}" method="post">
             <div class="input-group">
-                <label for="email">Email:</label>
+                <label for="username">Email:</label>
                 <i class="fas fa-envelope input-icon"></i>
-                <input type="text" id="email" name="email" required autofocus>
+                <input type="text" id="username" name="username" required autofocus>
             </div>
 
             <div class="input-group">
@@ -161,7 +162,7 @@
         </form>
 
         <div class="create-account">
-            <p>Create A New Account? <a style="color:#FFA45C;" href="/Page/Register" class="register-link">Sign Up</a></p>
+            <p>Create A New Account? <a style="color:#FFA45C;" href="/registers" class="register-link">Sign Up</a></p>
         </div>
     </div>
 </div>
