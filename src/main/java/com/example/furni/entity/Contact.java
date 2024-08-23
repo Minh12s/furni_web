@@ -1,6 +1,7 @@
 package com.example.furni.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "contact")
@@ -18,6 +19,9 @@ public class Contact {
 
     @Column(name = "message", nullable = false, length = 500)
     private String message;
+
+    @Column(name = "contact_date", nullable = false)
+    private LocalDateTime contactDate;
 
     // Getters và setters
 
@@ -45,8 +49,6 @@ public class Contact {
         this.email = email;
     }
 
-
-
     public String getMessage() {
         return message;
     }
@@ -55,4 +57,11 @@ public class Contact {
         this.message = message;
     }
 
+    public LocalDateTime getContactDate() {
+        return contactDate;
+    }
+
+    public void setContactDate(LocalDateTime contactDate) {
+        this.contactDate = contactDate;
+    }
 }
