@@ -39,8 +39,12 @@ public class DataSeeder {
             "Leather Upholstered Sofa", "Fabric Upholstered Sofa", "Wooden Frame Sofa", "Metal Frame Sofa", "Classic Sofa",
             "Modern Sofa", "Japanese Style Sofa", "Korean Style Sofa", "European Style Sofa",
             "Armless Sofa", "Armrest Sofa", "High-legged Sofa", "Low-legged Sofa", "Extended Sofa",
-            "Multi-functional Double Sofa", "Comfortable Four-seater Sofa", "Stylish Double Sofa", "Practical Single Sofa", "Compact Sofa"
+            "Multi-functional Double Sofa", "Comfortable Four-seater Sofa", "Stylish Double Sofa", "Practical Single Sofa",
+            "Compact Sofa", "Elegant Sofa", "Adjustable Sofa", "Convertible Sofa", "Tufted Sofa",
+            "Luxury Sofa", "Eco-friendly Sofa"
     };
+
+
 
     private static final String[] COLORS = {
             "Red", "Blue", "Green", "Gray", "Black", "White", "Yellow", "Orange", "Purple", "Brown"
@@ -125,10 +129,8 @@ public class DataSeeder {
 
     private void seedProducts() {
         if (productRepository.count() == 0) {
-            for (int i = 1; i <= 70; i++) {
-                String productName = PRODUCT_NAMES[RANDOM.nextInt(PRODUCT_NAMES.length)];
-                String slugBase = productName.toLowerCase().replaceAll("[^a-z0-9]+", "-");
-                String slug = generateUniqueSlug(slugBase);
+            for (String productName : PRODUCT_NAMES) {
+                String slug = productName.toLowerCase().replaceAll("[^a-z0-9]+", "-");
 
                 // In ra slug để kiểm tra
                 System.out.println("Generated Slug: " + slug);
@@ -164,24 +166,6 @@ public class DataSeeder {
                 productRepository.save(product);
             }
         }
-    }
-
-    private String generateUniqueSlug(String slugBase) {
-        String slug;
-        do {
-            slug = slugBase + "-" + generateRandomAlphanumericString(10);
-        } while (productRepository.existsBySlug(slug));
-        return slug;
-    }
-
-    private String generateRandomAlphanumericString(int length) {
-        String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            int randomIndex = RANDOM.nextInt(characters.length());
-            sb.append(characters.charAt(randomIndex));
-        }
-        return sb.toString();
     }
 
     private double roundToNearestFive(double value) {
