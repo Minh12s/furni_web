@@ -2,6 +2,7 @@ package com.example.furni.controllers.admin;
 
 import com.example.furni.entity.Size;
 import com.example.furni.service.SizeService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,13 +21,19 @@ public class SizeController {
     private SizeService sizeService;
 
     @GetMapping("/size")
-    public String sizeList(Model model, @RequestParam(defaultValue = "0") int page) {
+    public String sizeList(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session ) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Size> sizePage = sizeService.findAll(pageable);
         model.addAttribute("sizes", sizePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", sizePage.getTotalPages());
+        // Get the success message from session and remove it after retrieval
+        String successMessage = (String) session.getAttribute("successMessage");
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
         return "admin/Size/size";
     }
 
@@ -37,8 +44,9 @@ public class SizeController {
     }
 
     @PostMapping("/addSize")
-    public String addSize(@ModelAttribute Size size) {
+    public String addSize(@ModelAttribute Size size, HttpSession session) {
         sizeService.save(size);
+        session.setAttribute("successMessage", "Size added successfully!");
         return "redirect:/admin/size";
     }
 
