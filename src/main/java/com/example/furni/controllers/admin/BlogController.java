@@ -2,6 +2,7 @@ package com.example.furni.controllers.admin;
 
 import com.example.furni.entity.Blog;
 import com.example.furni.service.BlogService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Base64;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,9 +24,18 @@ public class BlogController {
     @GetMapping("/blogs")
     public String showBlogs(Model model,
                             @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "5") int size) {
+                            @RequestParam(defaultValue = "5") int size,
+                            HttpSession session) {
         Page<Blog> blogsPage = blogService.getBlogsPaginated(page, size);
         model.addAttribute("blogsPage", blogsPage);
+
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
+        String successMessage = (String) session.getAttribute("successMessage");
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
+
         return "admin/Blog/blog";
     }
 
@@ -38,7 +47,8 @@ public class BlogController {
 
     @PostMapping("/addBlog")
     public String addBlog(@ModelAttribute("blog") Blog blog,
-                          @RequestParam("thumbnailFile") MultipartFile file) {
+                          @RequestParam("thumbnailFile") MultipartFile file,
+                          HttpSession session) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -49,15 +59,14 @@ public class BlogController {
             }
         }
 
-        // Gán giá trị ngày giờ hiện tại nếu blogDate là null
         if (blog.getBlogDate() == null) {
             blog.setBlogDate(LocalDateTime.now());
         }
 
         blogService.saveBlog(blog);
+        session.setAttribute("successMessage", "Blog added successfully!");
         return "redirect:/admin/blogs";
     }
-
 
     @GetMapping("/editBlog/{id}")
     public String showEditBlogForm(@PathVariable int id, Model model) {
@@ -69,7 +78,8 @@ public class BlogController {
     @PostMapping("/editBlog/{id}")
     public String editBlog(@PathVariable int id,
                            @ModelAttribute("blog") Blog blogDetails,
-                           @RequestParam("thumbnailFile") MultipartFile file) {
+                           @RequestParam("thumbnailFile") MultipartFile file,
+                           HttpSession session) {
         Blog existingBlog = blogService.getBlogById(id)
                 .orElseThrow(() -> new RuntimeException("Blog not found"));
 
@@ -77,7 +87,6 @@ public class BlogController {
         existingBlog.setTag(blogDetails.getTag());
         existingBlog.setContent(blogDetails.getContent());
 
-        // Xử lý hình ảnh nếu có
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -88,16 +97,15 @@ public class BlogController {
             }
         }
 
-        // Không ghi đè thumbnail hiện tại nếu không có tệp mới
         blogService.updateBlog(id, existingBlog);
+        session.setAttribute("successMessage", "Blog updated successfully!");
         return "redirect:/admin/blogs";
     }
 
-
-
     @PostMapping("/deleteBlog/{id}")
-    public String deleteBlog(@PathVariable int id) {
+    public String deleteBlog(@PathVariable int id, HttpSession session) {
         blogService.deleteBlog(id);
+        session.setAttribute("successMessage", "Blog deleted successfully!");
         return "redirect:/admin/blogs";
     }
 }

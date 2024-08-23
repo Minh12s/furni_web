@@ -1,4 +1,5 @@
 package com.example.furni.controllers.admin;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import com.example.furni.entity.Material;
@@ -7,12 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -39,7 +34,6 @@ public class MaterialController {
         return "admin/Material/material";
     }
 
-
     @GetMapping("/addMaterial")
     public String showAddMaterialForm(Model model) {
         model.addAttribute("material", new Material());
@@ -55,27 +49,32 @@ public class MaterialController {
 
     @GetMapping("/editMaterial/{id}")
     public String showEditMaterialForm(@PathVariable int id, Model model) {
-        Material material = materialService.getMaterialById(id).orElseThrow(() -> new RuntimeException("Material not found"));
+        Material material = materialService.getMaterialById(id)
+                .orElseThrow(() -> new RuntimeException("Material not found"));
         model.addAttribute("material", material);
         return "admin/Material/editMaterial";
     }
 
     @PostMapping("/editMaterial/{id}")
     public String editMaterial(@PathVariable int id,
-                           @ModelAttribute("material") Material materialDetails) {
+                               @ModelAttribute("material") Material materialDetails,
+                               HttpSession session) {
         Material existingMaterial = materialService.getMaterialById(id)
                 .orElseThrow(() -> new RuntimeException("Material not found"));
 
         existingMaterial.setMaterialName(materialDetails.getMaterialName());
         materialService.updateMaterial(id, existingMaterial);
+
+        // Add success message to session
+        session.setAttribute("successMessage", "Material updated successfully!");
+
         return "redirect:/admin/materials";
     }
 
-
-
     @PostMapping("/deleteMaterial/{id}")
-    public String deleteMaterial(@PathVariable int id) {
+    public String deleteMaterial(@PathVariable int id, HttpSession session) {
         materialService.deleteMaterial(id);
+        session.setAttribute("successMessage", "Blog deleted successfully!");
         return "redirect:/admin/materials";
     }
 }
