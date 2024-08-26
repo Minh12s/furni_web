@@ -37,7 +37,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public String getAllProducts(Model model, @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size) {
+                                 @RequestParam(defaultValue = "9") int size) {
         Page<Product> productPage = productService.getProductsPaginated(page, size);
         model.addAttribute("products", productPage);
         return "admin/Product/product";

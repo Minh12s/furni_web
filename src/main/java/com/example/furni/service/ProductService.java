@@ -2,7 +2,9 @@ package com.example.furni.service;
 
 import com.example.furni.entity.Blog;
 import com.example.furni.entity.Brand;
+import com.example.furni.entity.Category;
 import com.example.furni.entity.Product;
+import com.example.furni.repository.CategoryRepository;
 import com.example.furni.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,8 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -25,6 +29,15 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable);
     }
+    public Page<Product> getProductsByCategoryPaginated(String slug, int page, int size) {
+        Category category = categoryRepository.findBySlug(slug);
+        if (category != null) {
+            return productRepository.findByCategory_Id(category.getId(), PageRequest.of(page, size));
+        } else {
+            return Page.empty(); // Không có category với slug tương ứng
+        }
+    }
+
 
     public Product findById(int id) {
         return productRepository.findById(id).orElse(null);
