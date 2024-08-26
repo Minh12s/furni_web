@@ -1,5 +1,6 @@
 package com.example.furni.controllers.admin;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,15 @@ public class CategoryController {
     @GetMapping("/category")
     public String showCategories(Model model,
                                  @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "5") int size) {
+                                 @RequestParam(defaultValue = "5") int size, HttpSession session) {
         Page<Category> categoriesPage = categoryService.getCategoriesPaginated(page, size);
         model.addAttribute("categoriesPage", categoriesPage);
+        // Get the success message from session and remove it after retrieval
+        String successMessage = (String) session.getAttribute("successMessage");
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
         return "admin/Category/category";
     }
 
@@ -32,13 +39,14 @@ public class CategoryController {
     }
 
     @PostMapping("/addCategory")
-    public String addCategory(@ModelAttribute("category") Category category) {
+    public String addCategory(@ModelAttribute("category") Category category, HttpSession session) {
 
         String slug = category.getCategoryName()
                 .toLowerCase()             // Chuyển toàn bộ thành chữ thường
                 .replaceAll("\\s+", "-");   // Thay thế khoảng trắng bằng dấu gạch nối
         category.setSlug(slug);
         categoryService.saveCategory(category);
+        session.setAttribute("successMessage", "Category added successfully!");
         return "redirect:/admin/category";
     }
 
@@ -54,7 +62,7 @@ public class CategoryController {
 
     @PostMapping("/editCategory/{id}")
     public String editCategory(@PathVariable int id,
-                               @ModelAttribute("category") Category categoryDetails) {
+                               @ModelAttribute("category") Category categoryDetails, HttpSession session) {
         Category existingCategory = categoryService.getCategoryById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
@@ -65,13 +73,16 @@ public class CategoryController {
         existingCategory.setSlug(newSlug);
 
         categoryService.updateCategory(id, existingCategory);
+        // Add success message to session
+        session.setAttribute("successMessage", "Category updated successfully!");
         return "redirect:/admin/category";
     }
 
 
     @PostMapping("/deleteCategory/{id}")
-    public String deleteCategory(@PathVariable int id) {
+    public String deleteCategory(@PathVariable int id, HttpSession session) {
         categoryService.deleteCategory(id);
+        session.setAttribute("successMessage", "Category deleted successfully!");
         return "redirect:/admin/category";
     }
 }

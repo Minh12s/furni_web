@@ -62,14 +62,17 @@ public class SizeController {
     }
 
     @PostMapping("/editSize")
-    public String editSize(@ModelAttribute Size size) {
+    public String editSize(@ModelAttribute Size size, HttpSession session) {
         sizeService.save(size);
+        // Add success message to session
+        session.setAttribute("successMessage", "Size updated successfully!");
         return "redirect:/admin/size";
     }
 
     @PostMapping("/deleteSize/{id}")
-    public String deleteSize(@PathVariable int id) {
+    public String deleteSize(@PathVariable int id,HttpSession session) {
         sizeService.deleteById(id);
+        session.setAttribute("successMessage", "Size deleted successfully!");
         return "redirect:/admin/size";
     }
 }
