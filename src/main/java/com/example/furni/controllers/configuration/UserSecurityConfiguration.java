@@ -1,5 +1,6 @@
 package com.example.furni.controllers.configuration;
 
+import com.example.furni.controllers.security.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,11 @@ import javax.sql.DataSource;
 
 @Configuration
 public class UserSecurityConfiguration {
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    public UserSecurityConfiguration(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -41,7 +47,7 @@ public class UserSecurityConfiguration {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/loginPage")
                         .loginProcessingUrl("/authenticateUser")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(customAuthenticationSuccessHandler)
                         .failureUrl("/loginPage?error=true")
                         .permitAll()
                 )
