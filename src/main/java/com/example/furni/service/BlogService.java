@@ -16,6 +16,7 @@ public class BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
+    // Service của Admin
     public List<Blog> getAllBlogs() {
         return blogRepository.findAll();
     }
@@ -45,5 +46,24 @@ public class BlogService {
     public void deleteBlog(int id) {
         Blog blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
         blogRepository.delete(blog);
+    }
+    // Service của User
+    public List<Blog> getAllBlogsForUser() {
+        return blogRepository.findAll();
+    }
+    public Optional<Blog> getBlogByIdForUser(int id) {
+        return blogRepository.findById(id);
+    }
+    public Page<Blog> getBlogsPaginatedForUser(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return blogRepository.findAll(pageable);
+    }
+    public Page<Blog> getBlogsByTag(String tag, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return blogRepository.findByTag(tag, pageable);
+    }
+    public List<String> getAllTags() {
+
+        return blogRepository.findDistinctTags();
     }
 }

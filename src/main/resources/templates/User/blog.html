@@ -45,102 +45,24 @@
     <div class="row">
       <div class="col-lg-8 ftco-animate">
         <div class="row">
-          <div class="col-md-12 d-flex ftco-animate">
+          <div class="col-md-12 d-flex ftco-animate" th:each="blog : ${blogsPage.content}">
             <div class="blog-entry align-self-stretch d-md-flex">
-              <a href="blogdetails" class="block-20" style="background-image: url('/images/product-1.jpg');">
+              <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="block-20"
+                 th:style="'background-image: url(data:image/jpeg;base64,' + ${blog.thumbnail} + ')'">
               </a>
               <div class="text d-block pl-md-4">
                 <div class="meta mb-3">
-                  <div><a href="#">April 9, 2019</a></div>
+                  <div><a href="#" th:text="${#temporals.format(blog.blogDate, 'dd/MM/yyyy')}">April 9, 2019</a></div>
                   <div><a href="#">Admin</a></div>
                   <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
                 </div>
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                <p><a href="blogdetails" class="btn btn-primary py-2 px-3">Read more</a></p>
+                <h3 class="heading"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" th:text="${blog.title}">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                <p th:utext="${blog.content}">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                <p><a href="#" th:href="@{/blogUser/{id}(id=${blog.id})}" class="btn btn-primary py-2 px-3">Read more</a></p>
               </div>
             </div>
           </div>
-          <div class="col-md-12 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch d-md-flex">
-              <a href="blogdetails" class="block-20" style="background-image: url('/images/product-2.jpg');">
-              </a>
-              <div class="text d-block pl-md-4">
-                <div class="meta mb-3">
-                  <div><a href="#">April 9, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                <p><a href="blogdetails" class="btn btn-primary py-2 px-3">Read more</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch d-md-flex">
-              <a href="blogdetails" class="block-20" style="background-image: url('/images/product-3.jpg');">
-              </a>
-              <div class="text d-block pl-md-4">
-                <div class="meta mb-3">
-                  <div><a href="#">April 9, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                <p><a href="blogdetails" class="btn btn-primary py-2 px-3">Read more</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch d-md-flex">
-              <a href="blogdetails" class="block-20" style="background-image: url('/images/product-4.jpg');">
-              </a>
-              <div class="text d-block pl-md-4">
-                <div class="meta mb-3">
-                  <div><a href="#">April 9, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                <p><a href="blogdetails" class="btn btn-primary py-2 px-3">Read more</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch d-md-flex">
-              <a href="blogdetails" class="block-20" style="background-image: url('/images/product-5.jpg');">
-              </a>
-              <div class="text d-block pl-md-4">
-                <div class="meta mb-3">
-                  <div><a href="#">April 9, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                <p><a href="blogdetails" class="btn btn-primary py-2 px-3">Read more</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch d-md-flex">
-              <a href="blogdetails" class="block-20" style="background-image: url('/images/product-6.jpg');">
-              </a>
-              <div class="text d-block pl-md-4">
-                <div class="meta mb-3">
-                  <div><a href="#">April 9, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                <p><a href="blogdetails" class="btn btn-primary py-2 px-3">Read more</a></p>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div> <!-- .col-md-8 -->
       <div class="col-lg-4 sidebar ftco-animate">
@@ -202,18 +124,15 @@
         </div>
 
         <div class="sidebar-box ftco-animate">
-          <h3 CLASS="heading">Tag Cloud</h3>
+          <h3 class="heading">Tag Cloud</h3>
           <div class="tagcloud">
-            <a href="#" class="tag-cloud-link">shop</a>
-            <a href="#" class="tag-cloud-link">products</a>
-            <a href="#" class="tag-cloud-link">shirt</a>
-            <a href="#" class="tag-cloud-link">jeans</a>
-            <a href="#" class="tag-cloud-link">shoes</a>
-            <a href="#" class="tag-cloud-link">dress</a>
-            <a href="#" class="tag-cloud-link">coats</a>
-            <a href="#" class="tag-cloud-link">jumpsuits</a>
+            <a th:each="tag : ${tags}"
+               th:href="@{/blogUser/tag/{tag}(tag=${tag})}"
+               class="tag-cloud-link"
+               th:text="${tag}"></a>
           </div>
         </div>
+
 
         <div class="sidebar-box ftco-animate">
           <h3 class="heading">Paragraph</h3>
@@ -221,6 +140,24 @@
         </div>
       </div>
 
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col text-center">
+      <div class="block-27">
+        <ul>
+          <li th:if="${currentPage > 0}">
+            <a th:href="@{/blog(page=${currentPage - 1}, size=${size})}">&lt;</a>
+          </li>
+          <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+              th:classappend="${i == currentPage} ? ' active' : ''">
+            <a th:href="@{/blog(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
+          </li>
+          <li th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/blog(page=${currentPage + 1}, size=${size})}">&gt;</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section> <!-- .section -->

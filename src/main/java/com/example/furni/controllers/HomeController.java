@@ -24,15 +24,6 @@ public class HomeController {
     public String About(){
         return "User/about";
     }
-    @GetMapping("/blog")
-    public String Blog(){
-        return "User/blog";
-    }
-    @GetMapping("/blogdetails")
-    public String BlogDetail(){
-        return "User/blogdetails";
-    }
-
     @GetMapping("/checkout")
     public String Checkout(){
         return "User/checkout";
