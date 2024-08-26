@@ -1,7 +1,7 @@
 package com.example.furni.controllers.User;
 
-import com.example.furni.entity.Product;
 import com.example.furni.entity.Category;
+import com.example.furni.entity.Product;
 import com.example.furni.service.ProductService;
 import com.example.furni.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class UserCategoryController {
 
     @GetMapping("/category")
     public String Category(Model model,
-                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "1") int page,
                            @RequestParam(defaultValue = "9") int size,
                            @RequestParam(required = false) String slug) {
 
@@ -48,5 +48,4 @@ public class UserCategoryController {
 
         return "User/category";
     }
-
 }

@@ -81,17 +81,36 @@
           <div class="col text-center">
             <div class="block-27">
               <ul>
+                <!-- Nút để quay lại trang trước đó -->
                 <li th:if="${currentPage > 0}">
-                  <a th:href="@{/category(categoryId=${selectedCategory}, page=${currentPage - 1}, size=${pageSize})}">&lt;</a>
+                  <a th:if="${selectedCategory != null}"
+                     th:href="@{/category(slug=${selectedCategory}, page=${currentPage - 1}, size=${pageSize})}">&lt;</a>
+                  <a th:if="${selectedCategory == null}"
+                     th:href="@{/category(page=${currentPage - 1}, size=${pageSize})}">&lt;</a>
                 </li>
+
+                <!-- Các nút để chuyển đến các trang cụ thể -->
                 <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                  <a th:href="@{/category(categoryId=${selectedCategory}, page=${i}, size=${pageSize})}"
-                     th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active'"></a>
+                  <a th:if="${selectedCategory != null}"
+                     th:href="@{/category(slug=${selectedCategory}, page=${i}, size=${pageSize})}"
+                     th:text="${i + 1}"
+                     th:classappend="${i == currentPage} ? 'active'"></a>
+                  <a th:if="${selectedCategory == null}"
+                     th:href="@{/category(page=${i}, size=${pageSize})}"
+                     th:text="${i + 1}"
+                     th:classappend="${i == currentPage} ? 'active'"></a>
                 </li>
+
+                <!-- Nút để chuyển đến trang tiếp theo -->
                 <li th:if="${currentPage < totalPages - 1}">
-                  <a th:href="@{/category(categoryId=${selectedCategory}, page=${currentPage + 1}, size=${pageSize})}">&gt;</a>
+                  <a th:if="${selectedCategory != null}"
+                     th:href="@{/category(slug=${selectedCategory}, page=${currentPage + 1}, size=${pageSize})}">&gt;</a>
+                  <a th:if="${selectedCategory == null}"
+                     th:href="@{/category(page=${currentPage + 1}, size=${pageSize})}">&gt;</a>
                 </li>
               </ul>
+
+
             </div>
           </div>
 
@@ -103,9 +122,10 @@
           <h2 class="heading mb-4"><a href="#">Clothing</a></h2>
           <ul>
             <li th:each="category : ${categories}">
-              <a th:href="@{/category(${category.slug})}"
+              <a th:href="@{/category(slug=${category.slug})}"
                  th:text="${category.categoryName}"></a>
             </li>
+
           </ul>
         </div>
         <div class="sidebar-box-2">

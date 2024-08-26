@@ -32,6 +32,7 @@ public class ProductService {
     public Page<Product> getProductsByCategoryPaginated(String slug, int page, int size) {
         Category category = categoryRepository.findBySlug(slug);
         if (category != null) {
+            // Tìm sản phẩm dựa trên category_id
             return productRepository.findByCategory_Id(category.getId(), PageRequest.of(page, size));
         } else {
             return Page.empty(); // Không có category với slug tương ứng
