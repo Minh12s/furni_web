@@ -26,7 +26,7 @@ public class UserCategoryController {
 
     @GetMapping("/category")
     public String Category(Model model,
-                           @RequestParam(defaultValue = "1") int page,
+                           @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "9") int size,
                            @RequestParam(required = false) String slug) {
 
