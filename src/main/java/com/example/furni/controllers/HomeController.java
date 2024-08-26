@@ -1,13 +1,21 @@
 package com.example.furni.controllers;
 
+import org.springframework.ui.Model;
+import com.example.furni.entity.Product;
+import com.example.furni.service.HomeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
-
+    @Autowired
+    private HomeService homeService;
     @GetMapping
     public String Home(){
         return "User/index";
@@ -37,12 +45,11 @@ public class HomeController {
         return "User/favorite";
     }
 
-    @GetMapping("/login")
-    public String Login(){
-        return "User/login";
+    @GetMapping("/search")
+    public String search(@RequestParam("searchString") String searchString, Model model) {
+        List<Product> products = homeService.searchProducts(searchString);
+        model.addAttribute("products", products);
+        return "User/search";
     }
-    @GetMapping("/register")
-    public String Register(){
-        return "User/register";
-    }
+
 }

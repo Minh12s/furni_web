@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:insert="/include/fragments :: head"></div>
+    <title>Search Results</title>
+    <style>
+        .search-results-container {
+            text-align: center; /* Căn giữa nội dung */
+            margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+        }
+
+        .search-results {
+            display: inline-block; /* Để margin có hiệu lực */
+        }
+
+        .star-yellow {
+            color: gold; /* Đổi màu của sao sang màu vàng */
+        }
+
+        .order-md-last {
+            margin-left: 130px;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="/include/fragments :: navbar"></div>
+<div class="search-results-container">
+    <h3 class="search-results" th:text="${products.size()} + ' Search Results'">Search Results</h3>
+</div>
+
+<div th:if="${products != null && products.size() > 0}" class="col-md-8 col-lg-10 order-md-last">
+    <div class="row">
+        <th:block th:each="product : ${products}">
+            <div class="col-sm-6 col-md-3 ftco-animate">
+                <div class="product">
+                    <a href="#" class="img-prod">
+                        <img class="img-fluid" th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Product Thumbnail">
+                        <span class="status">30%</span>
+                        <div class="overlay"></div>
+                    </a>
+                    <div class="text py-3 px-3">
+                        <h3><a th:href="@{/page/details/{slug}(slug=${product.slug})}" th:text="${product.productName}">Product Name</a></h3>
+                        <div class="d-flex">
+                            <div class="pricing">
+                                <p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$<span th:text="${product.price}">Price</span></span></p>
+                            </div>
+                            <div class="rating">
+                                <p class="text-right">
+                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                </p>
+                            </div>
+                        </div>
+                        <p class="bottom-area d-flex px-3">
+                            <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
+                            <a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>
+<p th:if="${products == null || products.size() == 0}">No results found.</p>
+<div th:insert="/include/fragments :: footer"></div>
+
+
+
+<!-- loader -->
+<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+<div th:insert="/include/fragments :: script"></div>
+</body>
+</html>
