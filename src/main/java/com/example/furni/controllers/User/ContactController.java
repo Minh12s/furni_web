@@ -2,6 +2,7 @@ package com.example.furni.controllers.User;
 
 import com.example.furni.entity.Contact;
 import com.example.furni.service.ContactService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,23 +18,25 @@ public class ContactController {
     @Autowired
     private ContactService contactService;
 
+
     // Hiển thị form contact
     @GetMapping("/contact")
-    public String showContactForm(Model model) {
-        model.addAttribute("contact", new Contact()); // Thêm đối tượng Contact vào model
-        return "User/contact"; // Trả về trang contact
+    public String showContactForm(Model model, HttpSession session) {
+        model.addAttribute("contact", new Contact());
+        String contactSuccessMessage = (String) session.getAttribute("contactSuccess");
+        if (contactSuccessMessage != null) {
+            model.addAttribute("success", contactSuccessMessage);
+            session.removeAttribute("contactSuccess");
+        }
+        return "User/contact";
     }
 
     // Xử lý form contact sau khi người dùng gửi
     @PostMapping("/contact")
-    public String submitContactForm(@ModelAttribute("contact") Contact contact, Model model) {
-        // Gọi service để xử lý lưu contact vào database
+    public String submitContactForm(@ModelAttribute("contact") Contact contact, HttpSession session) {
         contactService.saveContact(contact);
-
-        // Sau khi xử lý thành công, thêm thông báo vào model
-        model.addAttribute("successMessage", "Your message has been sent successfully!");
-
-        // Trả về trang contact với thông báo thành công
-        return "User/contact";
+        session.setAttribute("contactSuccess", "Your message has been sent successfully!");
+        return "redirect:/contact";
     }
+
 }
