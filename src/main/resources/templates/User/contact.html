@@ -38,14 +38,8 @@
     </div>
   </div>
 </div>
-<div class="row mt-5">
-  <div class="col-md-12">
+<div id="successAlert" class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
 
-    <div th:if="${successMessage}" class="alert alert-success " role="alert">
-      <span th:text="${successMessage}"></span>
-    </div>
-  </div>
-</div>
 
 
 <section class="ftco-section contact-section bg-light">
@@ -102,11 +96,48 @@
 
 <style>
   .alert {
-    text-align: center;
-    margin: 20px auto;
-    width: 100%; /* Điều chỉnh độ rộng của thông báo tùy theo nhu cầu */
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
+
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
   }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var alert = document.getElementById('successAlert');
+    if (alert) {
+      alert.classList.add('alert-show');
+      setTimeout(function() {
+        alert.classList.add('fade-out');
+        setTimeout(function() {
+          alert.style.display = 'none';
+        }, 1000); // match the duration of the fade-out transition
+      }, 3000); // display duration in milliseconds
+    }
+  });
+
+</script>
 
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
