@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -16,24 +18,24 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     public void registerUser(User user) {
         // Mã hóa mật khẩu trước khi lưu
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // Đặt giá trị mặc định cho is_active
-        user.setActive(true); // Hoặc user.setActive(1);
+        user.setActive(true);
 
         // Lưu người dùng vào database
         userRepository.save(user);
 
         // Tạo và lưu vai trò USER
         Role userRole = new Role();
-        userRole.setUserName(user); // Thiết lập đối tượng User cho vai trò
-        userRole.setRole("ROLE_USER");
+        userRole.setUserName(user); // Gán đối tượng User vào thuộc tính userName
+        userRole.setRole("ROLE_USER"); // Đặt vai trò là USER
 
-        roleRepository.save(userRole); // Lưu vai trò vào database
+        roleRepository.save(userRole);
     }
-
-
 }

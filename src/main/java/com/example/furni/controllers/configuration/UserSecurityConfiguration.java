@@ -54,6 +54,8 @@ public class UserSecurityConfiguration {
                 .logout(config -> config
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/loginPage")
+                        .invalidateHttpSession(true) // Xóa session
+                        .deleteCookies("JSESSIONID") // Xóa cookie session
                         .permitAll()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
