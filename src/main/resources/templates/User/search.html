@@ -39,7 +39,7 @@
                         <div class="overlay"></div>
                     </a>
                     <div class="text py-3 px-3">
-                        <h3><a th:href="@{/page/details/{slug}(slug=${product.slug})}" th:text="${product.productName}">Product Name</a></h3>
+                        <h3><a th:href="@{/product/details/{slug}(slug=${product.slug})}" th:text="${product.productName}">Product Name</a></h3>
                         <div class="d-flex">
                             <div class="pricing">
                                 <p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$<span th:text="${product.price}">Price</span></span></p>
