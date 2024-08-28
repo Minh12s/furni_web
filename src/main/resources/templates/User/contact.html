@@ -38,9 +38,10 @@
     </div>
   </div>
 </div>
-<div id="successAlert" class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
-
-
+<div id="successAlert" class="alert alert-success" th:if="${success != null}">
+  <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+  <span th:text="${success}"></span>
+</div>
 
 <section class="ftco-section contact-section bg-light">
   <div class="container">

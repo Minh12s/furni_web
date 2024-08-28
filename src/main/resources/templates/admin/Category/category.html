@@ -24,7 +24,11 @@
     </a>
   </div>
 </section>
-<div id="successAlert" class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+  <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+  <span th:text="${successMessage}"></span>
+</div>
+
 <section class="section main-section">
   <div class="card has-table">
     <div class="card-content">

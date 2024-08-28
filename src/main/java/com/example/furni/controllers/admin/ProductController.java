@@ -4,6 +4,7 @@ import com.example.furni.entity.Blog;
 import com.example.furni.entity.Brand;
 import com.example.furni.entity.Product;
 import com.example.furni.service.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -36,10 +37,23 @@ public class ProductController {
     private SizeService sizeService;
 
     @GetMapping("/products")
-    public String getAllProducts(Model model, @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "9") int size) {
-        Page<Product> productPage = productService.getProductsPaginated(page, size);
+    public String getAllProducts(Model model,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "9") int size,
+                                 @RequestParam(required = false) String name,
+                                 @RequestParam(required = false) Integer categoryId,
+                                 @RequestParam(required = false) Double minPrice,
+                                 @RequestParam(required = false) Double maxPrice,
+                                 HttpSession session) {
+        Page<Product> productPage = productService.filterProducts(name, categoryId, minPrice, maxPrice, page, size);
         model.addAttribute("products", productPage);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
+        String successMessage = (String) session.getAttribute("successMessage");
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
         return "admin/Product/product";
     }
     @GetMapping("/products/productDetail/{id}")
@@ -62,7 +76,8 @@ public class ProductController {
 
     @PostMapping("/addProduct")
     public String addProduct(@ModelAttribute("product") Product product,
-                             @RequestParam("thumbnailFile") MultipartFile file) {
+                             @RequestParam("thumbnailFile") MultipartFile file,
+                             HttpSession session) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -75,6 +90,7 @@ public class ProductController {
         // Gán giá trị ngày giờ hiện tại nếu blogDate là null
 
         productService.save(product);
+        session.setAttribute("successMessage", "Product added successfully!");
         return "redirect:/admin/products";
     }
 
@@ -92,7 +108,8 @@ public class ProductController {
     @PostMapping("/editProduct/{id}")
     public String updateProduct(@PathVariable("id") int id,
                                 @ModelAttribute("product") Product product,
-                                @RequestParam("thumbnailFile") MultipartFile file) {
+                                @RequestParam("thumbnailFile") MultipartFile file,
+                                HttpSession session) {
         // Tìm sản phẩm hiện tại trong cơ sở dữ liệu
         Product existingProduct = productService.findById(id);
 
@@ -123,6 +140,7 @@ public class ProductController {
 
             // Lưu sản phẩm cập nhật
             productService.save(existingProduct);
+            session.setAttribute("successMessage", "Product updated successfully!");
         }
 
         return "redirect:/admin/products";
@@ -130,8 +148,9 @@ public class ProductController {
 
 
     @PostMapping("/deleteProduct/{id}")
-    public String deleteProduct(@PathVariable("id") int id) {
+    public String deleteProduct(@PathVariable("id") int id,HttpSession session) {
         productService.delete(id);
+        session.setAttribute("successMessage", "Product deleted successfully!");
         return "redirect:/admin/products";
     }
 }

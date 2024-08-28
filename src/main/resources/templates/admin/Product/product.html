@@ -24,6 +24,32 @@
         </a>
     </div>
 </section>
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+    <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+    <span th:text="${successMessage}"></span>
+</div>
+
+<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" action="/admin/products" method="get">
+    <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+        <input value="" class="form-control" type="text" name="name" placeholder="Product Name" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+    </div>
+    <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
+        <input value="" class="form-control" type="number" name="minPrice" placeholder="Min Price" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
+        <input value="" class="form-control" type="number" name="maxPrice" placeholder="Max Price" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
+    </div>
+    <div class="input-group input-group-sm" style="margin-bottom: 10px;">
+        <select name="categoryId" class="form-select" style="width: 120px; height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px;">
+            <option value="">All Categories</option>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></option>
+        </select>
+    </div>
+    <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
+        <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+            <i class="mdi mdi-magnify" style="padding: 10px;"></i>
+        </button>
+    </div>
+</form>
+
 <section class="section main-section">
     <div class="card has-table">
         <header class="card-header">
@@ -42,8 +68,8 @@
                     <th>Thumbnail</th>
                     <th>ProductName</th>
                     <th>Price</th>
-                    <th>Slug</th>
                     <th>Qty</th>
+                    <th>Category</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -55,9 +81,8 @@
                              height="100"></td>
                     <td th:text="${product.productName}">Sample Product 1</td>
                     <td th:text="${product.price}">$10</td>
-                    <td th:text="${product.slug}">$10</td>
                     <td th:text="${product.qty}">$10</td>
-
+                    <td th:text="${product.category.categoryName}">Category Name</td>
                     <td>
                         <div class="button-group">
                             <a
@@ -97,6 +122,33 @@
     </div>
 </section>
 <style>
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: none;
+        color: #fff; /* Text color */
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: green; /* Blue background color */
+        border: 1px solid green;
+        color: white;
+    }
+
+    .alert-show {
+        display: block;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
     .btn-primary {
         color: rgb(245 157 57);
         background-color: rgb(251 226 197);
@@ -160,6 +212,20 @@
         margin-right: 10px;
     }
 </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var alert = document.getElementById('successAlert');
+        if (alert) {
+            alert.classList.add('alert-show');
+            setTimeout(function() {
+                alert.classList.add('fade-out');
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 1000); // match the duration of the fade-out transition
+            }, 3000); // display duration in milliseconds
+        }
+    });
+</script>
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 
 </body>

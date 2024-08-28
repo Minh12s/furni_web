@@ -25,8 +25,12 @@
         </a>
     </div>
 </section>
-<div id="successAlert" class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
-<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" asp-action="Blog" asp-controller="Admin" method="get">
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+    <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+    <span th:text="${successMessage}"></span>
+</div>
+
+<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" action="/admin/blogs" method="get">
     <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
         <input value="" class="form-control" type="text" name="Title" placeholder="Title" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
     </div>
@@ -43,6 +47,7 @@
         </button>
     </div>
 </form>
+
 
 <section class="section main-section">
 

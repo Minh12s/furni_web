@@ -23,7 +23,7 @@ public class ContactService {
         contactRepository.save(contact);
 
         // Gửi email với thông tin từ form liên hệ
-        String toEmail = "minhtnth2209037@fpt.edu.vn"; // Địa chỉ email mà bạn muốn nhận thông báo liên hệ
+        String toEmail = ""; // Địa chỉ email mà bạn muốn nhận thông báo liên hệ
         String subject = "New Contact Form Submission";
         String body = "Name: " + contact.getName() + "\n" +
                 "Email: " + contact.getEmail() + "\n" +

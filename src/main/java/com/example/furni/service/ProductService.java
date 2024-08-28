@@ -38,8 +38,10 @@ public class ProductService {
             return Page.empty(); // Không có category với slug tương ứng
         }
     }
-
-
+    public Page<Product> filterProducts(String name, Integer categoryId, Double minPrice, Double maxPrice, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.filterProducts(name, categoryId, minPrice, maxPrice, pageable);
+    }
     public Product findById(int id) {
         return productRepository.findById(id).orElse(null);
     }

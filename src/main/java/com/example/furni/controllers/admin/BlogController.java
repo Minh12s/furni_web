@@ -23,10 +23,17 @@ public class BlogController {
 
     @GetMapping("/blogs")
     public String showBlogs(Model model,
+                            @RequestParam(value = "Title", required = false) String title,
+                            @RequestParam(value = "Tag", required = false) String tag,
+                            @RequestParam(value = "StartDate", required = false) String startDate,
+                            @RequestParam(value = "EndDate", required = false) String endDate,
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "5") int size,
                             HttpSession session) {
-        Page<Blog> blogsPage = blogService.getBlogsPaginated(page, size);
+        LocalDateTime startDateTime = startDate != null && !startDate.isEmpty() ? LocalDateTime.parse(startDate + "T00:00:00") : null;
+        LocalDateTime endDateTime = endDate != null && !endDate.isEmpty() ? LocalDateTime.parse(endDate + "T23:59:59") : null;
+
+        Page<Blog> blogsPage = blogService.filterBlogs(title, tag, startDateTime, endDateTime, page, size);
         model.addAttribute("blogsPage", blogsPage);
 
         // Lấy thông báo thành công từ session và xóa sau khi lấy

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +48,11 @@ public class BlogService {
     public void deleteBlog(int id) {
         Blog blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
         blogRepository.delete(blog);
+    }
+
+    public Page<Blog> filterBlogs(String title, String tag, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return blogRepository.filterBlogs(title, tag, startDate, endDate, pageable);
     }
     // Service của User
     public List<Blog> getAllBlogsForUser() {
