@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -47,5 +48,16 @@ public class UserCategoryController {
         model.addAttribute("selectedCategory", slug);
 
         return "User/category";
+    }
+
+    @GetMapping("product/details/{slug}")
+    public String getProductDetails(@PathVariable String slug, Model model) {
+        Product product = productService.findBySlug(slug);
+        if (product != null) {
+            model.addAttribute("product", product);
+            return "User/details"; // Trả về view hiển thị chi tiết sản phẩm
+        } else {
+            return "redirect:/error"; // Chuyển hướng đến trang lỗi nếu không tìm thấy sản phẩm
+        }
     }
 }
