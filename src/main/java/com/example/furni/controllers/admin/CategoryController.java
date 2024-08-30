@@ -39,12 +39,22 @@ public class CategoryController {
     }
 
     @PostMapping("/addCategory")
-    public String addCategory(@ModelAttribute("category") Category category, HttpSession session) {
+    public String addCategory(@ModelAttribute("category") Category category, HttpSession session,Model model) {
 
         String slug = category.getCategoryName()
                 .toLowerCase()             // Chuyển toàn bộ thành chữ thường
                 .replaceAll("\\s+", "-");   // Thay thế khoảng trắng bằng dấu gạch nối
         category.setSlug(slug);
+        // Kiểm tra tính hợp lệ
+        if (category.getCategoryName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Category name cannot be empty.");
+            return "admin/Category/addCategory";
+        }
+
+        if (categoryService.isCategoryNameExists(category.getCategoryName())) {
+            model.addAttribute("errorMessage", "Category name already exists.");
+            return "admin/Category/addCategory";
+        }
         categoryService.saveCategory(category);
         session.setAttribute("successMessage", "Category added successfully!");
         return "redirect:/admin/category";
@@ -62,15 +72,26 @@ public class CategoryController {
 
     @PostMapping("/editCategory/{id}")
     public String editCategory(@PathVariable int id,
-                               @ModelAttribute("category") Category categoryDetails, HttpSession session) {
+                               @ModelAttribute("category") Category category, HttpSession session, Model model) {
         Category existingCategory = categoryService.getCategoryById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        existingCategory.setCategoryName(categoryDetails.getCategoryName());
+        existingCategory.setCategoryName(category.getCategoryName());
 
         // Update the slug based on the new category name
-        String newSlug = categoryDetails.getCategoryName().toLowerCase().replaceAll("\\s+", "-");
+        String newSlug = category.getCategoryName().toLowerCase().replaceAll("\\s+", "-");
         existingCategory.setSlug(newSlug);
+
+        // Kiểm tra tính hợp lệ
+        if (category.getCategoryName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Category name cannot be empty.");
+            return "admin/Category/editCategory";
+        }
+
+        if (categoryService.isCategoryNameExists(category.getCategoryName(), id)) {
+            model.addAttribute("errorMessage", "Category name already exists.");
+            return "admin/Category/editCategory";
+        }
 
         categoryService.updateCategory(id, existingCategory);
         // Add success message to session

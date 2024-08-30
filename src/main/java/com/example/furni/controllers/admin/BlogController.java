@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -55,15 +57,41 @@ public class BlogController {
     @PostMapping("/addBlog")
     public String addBlog(@ModelAttribute("blog") Blog blog,
                           @RequestParam("thumbnailFile") MultipartFile file,
-                          HttpSession session) {
-        if (!file.isEmpty()) {
+                          HttpSession session, Model model) {
+        List<String> errorMessages = new ArrayList<>();
+
+        if (blog.getTitle().trim().isEmpty()) {
+            errorMessages.add("Title cannot be empty.");
+        }
+
+        if (blogService.isTitleExists(blog.getTitle())) {
+            errorMessages.add("Title already exists.");
+        }
+
+        if (blog.getTag().trim().isEmpty()) {
+            errorMessages.add("Tag cannot be empty.");
+        }
+
+        if (blog.getContent().trim().isEmpty()) {
+            errorMessages.add("Content cannot be empty.");
+        }
+
+        if (file.isEmpty()) {
+            errorMessages.add("Thumbnail cannot be empty.");
+        } else {
             try {
                 byte[] bytes = file.getBytes();
                 String base64Image = Base64.getEncoder().encodeToString(bytes);
                 blog.setThumbnail(base64Image);
             } catch (IOException e) {
                 e.printStackTrace();
+                errorMessages.add("Error processing the thumbnail.");
             }
+        }
+
+        if (!errorMessages.isEmpty()) {
+            model.addAttribute("errorMessages", errorMessages);
+            return "admin/Blog/addBlog";
         }
 
         if (blog.getBlogDate() == null) {
@@ -74,6 +102,8 @@ public class BlogController {
         session.setAttribute("successMessage", "Blog added successfully!");
         return "redirect:/admin/blogs";
     }
+
+
 
     @GetMapping("/editBlog/{id}")
     public String showEditBlogForm(@PathVariable int id, Model model) {
@@ -86,29 +116,53 @@ public class BlogController {
     public String editBlog(@PathVariable int id,
                            @ModelAttribute("blog") Blog blogDetails,
                            @RequestParam("thumbnailFile") MultipartFile file,
-                           HttpSession session) {
+                           HttpSession session, Model model) {
+        List<String> errorMessages = new ArrayList<>();
+
+        if (blogDetails.getTitle().trim().isEmpty()) {
+            errorMessages.add("Title cannot be empty.");
+        }
+
+        if (blogService.isTitleExists(blogDetails.getTitle(), id)) {
+            errorMessages.add("Title already exists.");
+        }
+
+        if (blogDetails.getTag().trim().isEmpty()) {
+            errorMessages.add("Tag cannot be empty.");
+        }
+
+        if (blogDetails.getContent().trim().isEmpty()) {
+            errorMessages.add("Content cannot be empty.");
+        }
+
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                String base64Image = Base64.getEncoder().encodeToString(bytes);
+                blogDetails.setThumbnail(base64Image);
+            } catch (IOException e) {
+                e.printStackTrace();
+                errorMessages.add("Error processing the thumbnail.");
+            }
+        }
+
+        if (!errorMessages.isEmpty()) {
+            model.addAttribute("errorMessages", errorMessages);
+            return "admin/Blog/editBlog";
+        }
+
         Blog existingBlog = blogService.getBlogById(id)
                 .orElseThrow(() -> new RuntimeException("Blog not found"));
 
         existingBlog.setTitle(blogDetails.getTitle());
         existingBlog.setTag(blogDetails.getTag());
         existingBlog.setContent(blogDetails.getContent());
-
-        if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
-                String base64Image = Base64.getEncoder().encodeToString(bytes);
-                existingBlog.setThumbnail(base64Image);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        existingBlog.setThumbnail(blogDetails.getThumbnail());
 
         blogService.updateBlog(id, existingBlog);
         session.setAttribute("successMessage", "Blog updated successfully!");
         return "redirect:/admin/blogs";
     }
-
     @PostMapping("/deleteBlog/{id}")
     public String deleteBlog(@PathVariable int id, HttpSession session) {
         blogService.deleteBlog(id);

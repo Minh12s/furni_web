@@ -24,7 +24,7 @@ public class MaterialController {
         Page<Material> materialsPage = materialService.getMaterialsPaginated(page, size);
         model.addAttribute("materialsPage", materialsPage);
 
-        // Get the success message from session and remove it after retrieval
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");
         if (successMessage != null) {
             model.addAttribute("successMessage", successMessage);
@@ -41,7 +41,18 @@ public class MaterialController {
     }
 
     @PostMapping("/addMaterial")
-    public String addMaterial(@ModelAttribute("material") Material material, HttpSession session) {
+    public String addMaterial(@ModelAttribute("material") Material material, HttpSession session, Model model) {
+        // Kiểm tra tính hợp lệ
+        if (material.getMaterialName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Material name cannot be empty.");
+            return "admin/Material/addMaterial";
+        }
+
+        if (materialService.isMaterialNameExists(material.getMaterialName())) {
+            model.addAttribute("errorMessage", "Material name already exists.");
+            return "admin/Material/addMaterial";
+        }
+
         materialService.saveMaterial(material);
         session.setAttribute("successMessage", "Material added successfully!");
         return "redirect:/admin/materials";
@@ -58,14 +69,25 @@ public class MaterialController {
     @PostMapping("/editMaterial/{id}")
     public String editMaterial(@PathVariable int id,
                                @ModelAttribute("material") Material materialDetails,
-                               HttpSession session) {
+                               HttpSession session, Model model) {
         Material existingMaterial = materialService.getMaterialById(id)
                 .orElseThrow(() -> new RuntimeException("Material not found"));
+
+        // Kiểm tra tính hợp lệ
+        if (materialDetails.getMaterialName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Material name cannot be empty.");
+            return "admin/Material/editMaterial";
+        }
+
+        if (materialService.isMaterialNameExists(materialDetails.getMaterialName(), id)) {
+            model.addAttribute("errorMessage", "Material name already exists.");
+            return "admin/Material/editMaterial";
+        }
 
         existingMaterial.setMaterialName(materialDetails.getMaterialName());
         materialService.updateMaterial(id, existingMaterial);
 
-        // Add success message to session
+        // Thêm thông báo thành công vào session
         session.setAttribute("successMessage", "Material updated successfully!");
 
         return "redirect:/admin/materials";
@@ -74,7 +96,7 @@ public class MaterialController {
     @PostMapping("/deleteMaterial/{id}")
     public String deleteMaterial(@PathVariable int id, HttpSession session) {
         materialService.deleteMaterial(id);
-        session.setAttribute("successMessage", "Blog deleted successfully!");
+        session.setAttribute("successMessage", "Material deleted successfully!");
         return "redirect:/admin/materials";
     }
 }

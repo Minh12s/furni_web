@@ -54,6 +54,15 @@ public class BlogService {
         Pageable pageable = PageRequest.of(page, size);
         return blogRepository.filterBlogs(title, tag, startDate, endDate, pageable);
     }
+    public boolean isTitleExists(String title) {
+        return blogRepository.existsByTitle(title);
+    }
+
+    public boolean isTitleExists(String title, int excludeId) {
+        return blogRepository.existsByTitleAndIdNot(title, excludeId);
+    }
+
+
     // Service của User
     public List<Blog> getAllBlogsForUser() {
         return blogRepository.findAll();

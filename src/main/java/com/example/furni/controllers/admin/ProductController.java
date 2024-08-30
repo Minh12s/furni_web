@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -77,22 +78,66 @@ public class ProductController {
     @PostMapping("/addProduct")
     public String addProduct(@ModelAttribute("product") Product product,
                              @RequestParam("thumbnailFile") MultipartFile file,
-                             HttpSession session) {
-        if (!file.isEmpty()) {
+                             HttpSession session, Model model) {
+        List<String> errorMessages = new ArrayList<>();
+
+        if (product.getProductName().trim().isEmpty()) {
+            errorMessages.add("Product name cannot be empty.");
+        }
+        if (productService.isProductNameExists(product.getProductName())) {
+            errorMessages.add("Product Name already exists.");
+        }
+        if (product.getPrice() <= 0) {
+            errorMessages.add("Price must be greater than zero.");
+        }
+
+        if (product.getQty() < 0) {
+            errorMessages.add("Quantity cannot be negative.");
+        }
+
+        if (product.getColor().trim().isEmpty()) {
+            errorMessages.add("Color cannot be empty.");
+        }
+
+        if (product.getWeight() <= 0) {
+            errorMessages.add("Weight must be greater than zero.");
+        }
+
+        if (product.getHeight() <= 0) {
+            errorMessages.add("Height must be greater than zero.");
+        }
+
+        if (product.getLength() <= 0) {
+            errorMessages.add("Length must be greater than zero.");
+        }
+
+        if (file.isEmpty()) {
+            errorMessages.add("Thumbnail cannot be empty.");
+        } else {
             try {
                 byte[] bytes = file.getBytes();
                 String base64Image = Base64.getEncoder().encodeToString(bytes);
                 product.setThumbnail(base64Image);
             } catch (IOException e) {
                 e.printStackTrace();
+                errorMessages.add("Error processing the thumbnail.");
             }
         }
-        // Gán giá trị ngày giờ hiện tại nếu blogDate là null
+
+        if (!errorMessages.isEmpty()) {
+            model.addAttribute("errorMessages", errorMessages);
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("materials", materialService.getAllMaterials());
+            model.addAttribute("sizes", sizeService.getAllSize());
+            return "admin/Product/addProduct";
+        }
 
         productService.save(product);
         session.setAttribute("successMessage", "Product added successfully!");
         return "redirect:/admin/products";
     }
+
 
     @GetMapping("/editProduct/{id}")
     public String showEditProductForm(@PathVariable("id") int id, Model model) {
@@ -109,12 +154,59 @@ public class ProductController {
     public String updateProduct(@PathVariable("id") int id,
                                 @ModelAttribute("product") Product product,
                                 @RequestParam("thumbnailFile") MultipartFile file,
-                                HttpSession session) {
-        // Tìm sản phẩm hiện tại trong cơ sở dữ liệu
-        Product existingProduct = productService.findById(id);
+                                HttpSession session, Model model) {
+        List<String> errorMessages = new ArrayList<>();
 
+        // Kiểm tra các lỗi
+        if (product.getProductName().trim().isEmpty()) {
+            errorMessages.add("Product name cannot be empty.");
+        }
+        if (productService.isProductNameExists(product.getProductName(), id)) {
+            errorMessages.add("Product name already exists.");
+        }
+        if (product.getPrice() <= 0) {
+            errorMessages.add("Price must be greater than zero.");
+        }
+        if (product.getQty() < 0) {
+            errorMessages.add("Quantity cannot be negative.");
+        }
+        if (product.getColor().trim().isEmpty()) {
+            errorMessages.add("Color cannot be empty.");
+        }
+        if (product.getWeight() <= 0) {
+            errorMessages.add("Weight must be greater than zero.");
+        }
+        if (product.getHeight() <= 0) {
+            errorMessages.add("Height must be greater than zero.");
+        }
+        if (product.getLength() <= 0) {
+            errorMessages.add("Length must be greater than zero.");
+        }
+
+        // Xử lý thumbnail
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                String base64Image = Base64.getEncoder().encodeToString(bytes);
+                product.setThumbnail(base64Image);
+            } catch (IOException e) {
+                e.printStackTrace();
+                errorMessages.add("Error processing the thumbnail.");
+            }
+        }
+
+        if (!errorMessages.isEmpty()) {
+            model.addAttribute("errorMessages", errorMessages);
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("materials", materialService.getAllMaterials());
+            model.addAttribute("sizes", sizeService.getAllSize());
+            return "admin/Product/editProduct";
+        }
+
+        // Cập nhật sản phẩm
+        Product existingProduct = productService.findById(id);
         if (existingProduct != null) {
-            // Cập nhật các thuộc tính của sản phẩm từ form
             existingProduct.setProductName(product.getProductName());
             existingProduct.setPrice(product.getPrice());
             existingProduct.setQty(product.getQty());
@@ -127,24 +219,25 @@ public class ProductController {
             existingProduct.setMaterial(product.getMaterial());
             existingProduct.setSize(product.getSize());
 
-            // Nếu có file hình ảnh mới, cập nhật thumbnail
             if (!file.isEmpty()) {
-                try {
-                    byte[] bytes = file.getBytes();
-                    String base64Image = Base64.getEncoder().encodeToString(bytes);
-                    existingProduct.setThumbnail(base64Image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                existingProduct.setThumbnail(product.getThumbnail());
             }
 
-            // Lưu sản phẩm cập nhật
             productService.save(existingProduct);
             session.setAttribute("successMessage", "Product updated successfully!");
+        } else {
+            errorMessages.add("Product not found.");
+            model.addAttribute("errorMessages", errorMessages);
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("materials", materialService.getAllMaterials());
+            model.addAttribute("sizes", sizeService.getAllSize());
+            return "admin/Product/editProduct";
         }
 
         return "redirect:/admin/products";
     }
+
 
 
     @PostMapping("/deleteProduct/{id}")

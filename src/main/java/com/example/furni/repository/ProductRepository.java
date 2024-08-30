@@ -18,6 +18,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                  @Param("minPrice") Double minPrice,
                                  @Param("maxPrice") Double maxPrice,
                                  Pageable pageable);
+    boolean existsByProductName(String productName);
+    boolean existsByProductNameAndIdNot(String productName, int id);
 
 }
 

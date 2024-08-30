@@ -56,4 +56,13 @@ public class ProductService {
     public void delete(int id) {
         productRepository.deleteById(id);
     }
+
+    public boolean isProductNameExists(String productName) {
+        return productRepository.existsByProductName(productName);
+    }
+
+    public boolean isProductNameExists(String productName, int excludeId) {
+        return productRepository.existsByProductNameAndIdNot(productName, excludeId);
+    }
+
 }

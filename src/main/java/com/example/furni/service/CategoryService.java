@@ -45,4 +45,11 @@ public class CategoryService {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
         categoryRepository.delete(category);
     }
+    public boolean isCategoryNameExists(String categoryName) {
+        return categoryRepository.existsByCategoryName(categoryName);
+    }
+
+    public boolean isCategoryNameExists(String categoryName, int excludeId) {
+        return categoryRepository.existsByCategoryNameAndIdNot(categoryName, excludeId);
+    }
 }

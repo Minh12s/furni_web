@@ -77,6 +77,42 @@
   .main-section {
     margin-left: 15px;
   }
+  #alertsContainer {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Khoảng cách giữa các thông báo */
+    z-index: 1000;
+  }
+
+  .alert {
+    padding: 15px;
+    border-radius: 4px;
+    background-color: red;
+    border: 1px solid red;
+    color: white;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+    /* Chúng ta có thể bỏ vị trí absolute tại đây */
+  }
+
+
+  .alert-danger {
+    background-color: red;
+    border: 1px solid red;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
 </style>
 <section class="is-title-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
@@ -86,6 +122,12 @@
     </ul>
   </div>
 </section>
+<div id="alertsContainer" th:if="${errorMessages != null}">
+  <div th:each="errorMessage : ${errorMessages}" class="alert alert-danger">
+    <i class="mdi mdi-alert-circle" style="margin-right: 8px;"></i>
+    <span th:text="${errorMessage}"></span>
+  </div>
+</div>
 <section class="section main-section">
   <div class="row">
     <div class="col-md-12">
@@ -137,6 +179,20 @@
       reader.readAsDataURL(input.files[0]);
     }
   }
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var alerts = document.querySelectorAll('.alert');
+
+    alerts.forEach(function(alert) {
+      setTimeout(function() {
+        alert.style.opacity = 0;
+        setTimeout(function() {
+          alert.style.display = 'none'; // Ẩn thông báo sau khi làm mờ
+        }, 1000); // Thời gian làm mờ
+      }, 3000); // Thời gian hiển thị
+    });
+  });
 </script>
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 </body>

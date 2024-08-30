@@ -33,4 +33,12 @@ public class SizeService {
     public void deleteById(int id) {
         sizeRepository.deleteById(id);
     }
+
+    public boolean isSizeNameExists(String sizeName) {
+        return sizeRepository.existsBySizeName(sizeName);
+    }
+
+    public boolean isSizeNameExists(String sizeName, int excludeId) {
+        return sizeRepository.existsBySizeNameAndIdNot(sizeName, excludeId);
+    }
 }

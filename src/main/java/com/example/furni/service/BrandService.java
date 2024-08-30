@@ -20,6 +20,7 @@ public class BrandService {
     public List<Brand> getAllBrands() {
         return brandRepository.findAll();
     }
+
     public Page<Brand> getBrandsPaginated(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return brandRepository.findAll(pageable);
@@ -35,5 +36,13 @@ public class BrandService {
 
     public void deleteBrand(int id) {
         brandRepository.deleteById(id);
+    }
+
+    public boolean isBrandNameExists(String brandName) {
+        return brandRepository.existsByBrandName(brandName);
+    }
+
+    public boolean isBrandNameExists(String brandName, int excludeId) {
+        return brandRepository.existsByBrandNameAndIdNot(brandName, excludeId);
     }
 }

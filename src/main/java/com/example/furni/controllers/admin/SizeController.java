@@ -44,7 +44,18 @@ public class SizeController {
     }
 
     @PostMapping("/addSize")
-    public String addSize(@ModelAttribute Size size, HttpSession session) {
+    public String addSize(@ModelAttribute Size size, HttpSession session, Model model) {
+        // Kiểm tra tính hợp lệ
+        if (size.getSizeName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Size name cannot be empty.");
+            return "admin/Size/addSize";
+        }
+
+        if (sizeService.isSizeNameExists(size.getSizeName())) {
+            model.addAttribute("errorMessage", "Size name already exists.");
+            return "admin/Size/addSize";
+        }
+
         sizeService.save(size);
         session.setAttribute("successMessage", "Size added successfully!");
         return "redirect:/admin/size";
@@ -62,9 +73,20 @@ public class SizeController {
     }
 
     @PostMapping("/editSize")
-    public String editSize(@ModelAttribute Size size, HttpSession session) {
+    public String editSize(@ModelAttribute Size size, HttpSession session, Model model) {
+        // Kiểm tra tính hợp lệ
+        if (size.getSizeName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Size name cannot be empty.");
+            return "admin/Size/editSize";
+        }
+
+        if (sizeService.isSizeNameExists(size.getSizeName(), size.getId())) {
+            model.addAttribute("errorMessage", "Size name already exists.");
+            return "admin/Size/editSize";
+        }
+
         sizeService.save(size);
-        // Add success message to session
+        // Thêm thông báo thành công vào session
         session.setAttribute("successMessage", "Size updated successfully!");
         return "redirect:/admin/size";
     }

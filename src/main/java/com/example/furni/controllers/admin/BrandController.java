@@ -50,26 +50,52 @@ public class BrandController {
             return "redirect:/admin/brand";
         }
     }
+
     @GetMapping("/addBrand")
     public String AddBrand(Model model) {
         model.addAttribute("brand", new Brand());
         return "/admin/brand/addBrand";
     }
+
     @PostMapping("/addBrand")
-    public String AddBrand(@ModelAttribute Brand brand , HttpSession session) {
+    public String AddBrand(@ModelAttribute Brand brand, HttpSession session, Model model) {
+        // Kiểm tra tính hợp lệ
+        if (brand.getBrandName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Brand name cannot be empty.");
+            return "/admin/brand/addBrand";
+        }
+
+        if (brandService.isBrandNameExists(brand.getBrandName())) {
+            model.addAttribute("errorMessage", "Brand name already exists.");
+            return "/admin/brand/addBrand";
+        }
+
         brandService.saveBrand(brand);
         session.setAttribute("successMessage", "Brand added successfully!");
         return "redirect:/admin/brand";
     }
+
     @PostMapping("/editBrand/{id}")
-    public String updateBrand(@PathVariable Integer id, @ModelAttribute Brand brand , HttpSession session) {
+    public String updateBrand(@PathVariable Integer id, @ModelAttribute Brand brand, HttpSession session, Model model) {
+        // Kiểm tra tính hợp lệ
+        if (brand.getBrandName().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Brand name cannot be empty.");
+            return "/admin/brand/editBrand";
+        }
+
+        if (brandService.isBrandNameExists(brand.getBrandName(), id)) {
+            model.addAttribute("errorMessage", "Brand name already exists.");
+            return "/admin/brand/editBrand";
+        }
+
         brand.setId(id);
         brandService.saveBrand(brand);
         session.setAttribute("successMessage", "Brand updated successfully!");
         return "redirect:/admin/brand";
     }
-    @PostMapping ("/deleteBrand/{id}")
-    public String deleteClassRoom(@PathVariable Integer id,HttpSession session) {
+
+    @PostMapping("/deleteBrand/{id}")
+    public String deleteClassRoom(@PathVariable Integer id, HttpSession session) {
         brandService.deleteBrand(id);
         session.setAttribute("successMessage", "Brand deleted successfully!");
         return "redirect:/admin/brand";

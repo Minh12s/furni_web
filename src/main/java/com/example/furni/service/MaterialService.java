@@ -42,4 +42,11 @@ public class MaterialService {
         Material material = materialRepository.findById(id).orElseThrow(() -> new RuntimeException("Material not found"));
         materialRepository.delete(material);
     }
+    public boolean isMaterialNameExists(String materialName) {
+        return materialRepository.existsByMaterialName(materialName);
+    }
+
+    public boolean isMaterialNameExists(String materialName, int excludeId) {
+        return materialRepository.existsByMaterialNameAndIdNot(materialName, excludeId);
+    }
 }

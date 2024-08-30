@@ -27,4 +27,6 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
                            @Param("startDate") LocalDateTime startDate,
                            @Param("endDate") LocalDateTime endDate,
                            Pageable pageable);
+    boolean existsByTitle(String title);
+    boolean existsByTitleAndIdNot(String title, int id);
 }
