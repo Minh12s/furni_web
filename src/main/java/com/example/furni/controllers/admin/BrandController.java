@@ -26,10 +26,11 @@ public class BrandController {
     @GetMapping("/brand")
     public String getAllBrands(Model model,
                                @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(defaultValue = "10") int size,
                                HttpSession session) {
         Page<Brand> brandsPage = brandService.getBrandsPaginated(page, size);
         model.addAttribute("brandsPage", brandsPage);
+        model.addAttribute("size", size);
 
         // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");

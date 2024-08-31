@@ -37,24 +37,23 @@
 
 
 <section class="section main-section">
-  <div class="notification blue">
-    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
-      <div>
-        <span class="icon"><i class="mdi mdi-buffer"></i></span>
-        <b>Responsive table</b>
-      </div>
-      <button type="button" class="button small textual --jb-notification-dismiss">Dismiss</button>
-    </div>
-  </div>
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
-        <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-        Clients
+        Brand
       </p>
-      <a href="#" class="card-header-icon">
-        <span class="icon"><i class="mdi mdi-reload"></i></span>
-      </a>
+
+      <form class="card-header-icon" method="get" onchange="this.submit()">
+        <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+          <option value="5" th:selected="${size == 5}">5</option>
+          <option value="10" th:selected="${size == 10}">10</option>
+          <option value="20" th:selected="${size == 20}">20</option>
+          <option value="50" th:selected="${size == 50}">50</option>
+        </select>
+
+        <input type="hidden" name="page" th:value="${brandsPage.number}">
+      </form>
+
     </header>
     <div class="card-content">
       <table>
@@ -107,7 +106,7 @@
                     th:each="i : ${#numbers.sequence(0, brandsPage.totalPages - 1)}"
                     th:classappend="${i == brandsPage.number} ? ' active' : ''"
                     th:text="${i + 1}"
-                    th:onclick="|window.location.href='/admin/brand?page=' + [[${i}]] + '&size=' + [[${brandsPage.size}]]|">
+                    th:onclick="|window.location.href='/admin/brand?page=' + ${i} + '&size=' + ${brandsPage.size}|">
             </button>
           </div>
           <small th:text="'Page ' + (${brandsPage.number} + 1) + ' of ' + ${brandsPage.totalPages}"></small>

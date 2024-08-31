@@ -53,10 +53,22 @@
 <section class="section main-section">
     <div class="card has-table">
         <header class="card-header">
-            <p class="card-header-title">Product</p>
-            <a href="#" class="card-header-icon">
-                <span class="icon"><i class="mdi mdi-reload"></i></span>
-            </a>
+            <p class="card-header-title">
+                Material
+            </p>
+
+            <form class="card-header-icon" method="get" onchange="this.submit()">
+                <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+                    <option value="10" th:selected="${size == 10}">10</option>
+                    <option value="20" th:selected="${size == 20}">20</option>
+                    <option value="50" th:selected="${size == 50}">50</option>
+                    <option value="100" th:selected="${size == 100}">100</option>
+                </select>
+
+                <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
+                <input type="hidden" name="page" th:value="${productPage.number}">
+            </form>
+
         </header>
         <div class="card-content">
             <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0"
@@ -74,7 +86,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="product : ${products}">
+                <tr th:each="product : ${productPage.content}">
                     <td><input type="checkbox" name="check1" th:value="${product.id}"></td>
                     <td th:text="${product.id}">1</td>
                     <td><img th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Thumbnail" width="100"
@@ -108,13 +120,13 @@
                 <div class="flex items-center justify-between">
                     <div class="buttons">
                         <button type="button" class="button"
-                                th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}"
-                                th:classappend="${i == products.number} ? ' active' : ''"
+                                th:each="i : ${#numbers.sequence(0, productPage.totalPages - 1)}"
+                                th:classappend="${i == productPage.number} ? ' active' : ''"
                                 th:text="${i + 1}"
-                                th:onclick="|window.location.href='/admin/products?page=' + [[${i}]] + '&size=' + [[${products.size}]]|">
+                                th:onclick="|window.location.href='/admin/products?page=' + [[${i}]] + '&size=' + [[${productPage.size}]]|">
                         </button>
                     </div>
-                    <small th:text="'Page ' + (${products.number} + 1) + ' of ' + ${products.totalPages}"></small>
+                    <small th:text="'Page ' + (${productPage.number} + 1) + ' of ' + ${productPage.totalPages}"></small>
                 </div>
             </div>
         </div>

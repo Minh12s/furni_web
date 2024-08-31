@@ -40,12 +40,19 @@
     <div class="card has-table">
         <header class="card-header">
             <p class="card-header-title">
-                <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-                Clients
+                Size
             </p>
-            <a href="#" class="card-header-icon">
-                <span class="icon"><i class="mdi mdi-reload"></i></span>
-            </a>
+            <form class="card-header-icon" method="get" onchange="this.submit()">
+                <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+                    <option value="10" th:selected="${size == 10}">10</option>
+                    <option value="20" th:selected="${size == 20}">20</option>
+                    <option value="50" th:selected="${size == 50}">50</option>
+                    <option value="100" th:selected="${size == 100}">100</option>
+                </select>
+
+                <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
+                <input type="hidden" name="page" th:value="${sizesPage.number}">
+            </form>
         </header>
         <div class="card-content">
             <table>
@@ -64,7 +71,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="size : ${sizes}">
+                <tr th:each="size : ${sizesPage.content}">
                     <td width="10"><input type="checkbox" name="check1" th:value="${size.id}"></td>
                     <td th:text="${size.id}"></td>
                     <td th:text="${size.sizeName}"></td>
@@ -87,15 +94,14 @@
             <div class="table-pagination">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
-                        <a th:href="@{/admin/size(page=${currentPage - 1})}" th:if="${currentPage > 0}" class="button">Previous</a>
-                        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                            <a th:href="@{/admin/size(page=${i})}"
-                               th:text="${i + 1}"
-                               th:classappend="${i == currentPage} ? 'button active' : 'button'">1</a>
-                        </span>
-                        <a th:href="@{/admin/size(page=${currentPage + 1})}" th:if="${currentPage < totalPages - 1}" class="button">Next</a>
+                        <button type="button" class="button"
+                                th:each="i : ${#numbers.sequence(0, sizesPage.totalPages - 1)}"
+                                th:classappend="${i == sizesPage.number} ? ' active' : ''"
+                                th:text="${i + 1}"
+                                th:onclick="|window.location.href='/admin/sizes?page=' + ${i} + '&size=' + ${sizesPage.size}|">
+                        </button>
                     </div>
-                    <small>Page <span th:text="${currentPage + 1}">1</span> of <span th:text="${totalPages}">1</span></small>
+                    <small th:text="'Page ' + (${sizesPage.number} + 1) + ' of ' + ${sizesPage.totalPages}"></small>
                 </div>
             </div>
         </div>

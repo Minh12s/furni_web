@@ -1,9 +1,11 @@
 package com.example.furni.service;
 
+import com.example.furni.entity.Material;
 import com.example.furni.entity.Size;
 import com.example.furni.repository.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +20,15 @@ public class SizeService {
     public List<Size> getAllSize() {
         return sizeRepository.findAll();
     }
-    public Page<Size> findAll(Pageable pageable) {
-        return sizeRepository.findAll(pageable);
-    }
 
     public Optional<Size> findById(int id) {
         return sizeRepository.findById(id);
     }
 
+    public Page<Size> getSizesPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return sizeRepository.findAll(pageable);
+    }
     public Size save(Size size) {
         return sizeRepository.save(size);
     }

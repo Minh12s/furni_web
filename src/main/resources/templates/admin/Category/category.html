@@ -31,6 +31,24 @@
 
 <section class="section main-section">
   <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
+        Category
+      </p>
+
+      <form class="card-header-icon" method="get" onchange="this.submit()">
+        <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+          <option value="10" th:selected="${size == 10}">10</option>
+          <option value="20" th:selected="${size == 20}">20</option>
+          <option value="50" th:selected="${size == 50}">50</option>
+          <option value="100" th:selected="${size == 100}">100</option>
+        </select>
+
+        <!-- Truyền giá trị page hiện tại -->
+        <input type="hidden" name="page" th:value="${categoriesPage.number}">
+      </form>
+
+    </header>
     <div class="card-content">
       <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
         <thead>
@@ -77,6 +95,7 @@
           <small th:text="'Page ' + (${categoriesPage.number} + 1) + ' of ' + ${categoriesPage.totalPages}"></small>
         </div>
       </div>
+
     </div>
   </div>
 </section>

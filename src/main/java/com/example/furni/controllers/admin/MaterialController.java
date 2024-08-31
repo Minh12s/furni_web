@@ -19,10 +19,11 @@ public class MaterialController {
     @GetMapping("/materials")
     public String showMaterials(Model model,
                                 @RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int size,
+                                @RequestParam(defaultValue = "10") int size,
                                 HttpSession session) {
         Page<Material> materialsPage = materialService.getMaterialsPaginated(page, size);
         model.addAttribute("materialsPage", materialsPage);
+        model.addAttribute("size", size);
 
         // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");
@@ -33,6 +34,7 @@ public class MaterialController {
 
         return "admin/Material/material";
     }
+
 
     @GetMapping("/addMaterial")
     public String showAddMaterialForm(Model model) {

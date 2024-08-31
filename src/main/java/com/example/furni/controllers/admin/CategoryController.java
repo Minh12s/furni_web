@@ -20,17 +20,22 @@ public class CategoryController {
     @GetMapping("/category")
     public String showCategories(Model model,
                                  @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "5") int size, HttpSession session) {
+                                 @RequestParam(defaultValue = "10") int size,
+                                 HttpSession session) {
         Page<Category> categoriesPage = categoryService.getCategoriesPaginated(page, size);
         model.addAttribute("categoriesPage", categoriesPage);
-        // Get the success message from session and remove it after retrieval
+        model.addAttribute("size", size);
+
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");
         if (successMessage != null) {
             model.addAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
         }
+
         return "admin/Category/category";
     }
+
 
     @GetMapping("/addCategory")
     public String showAddCategoryForm(Model model) {

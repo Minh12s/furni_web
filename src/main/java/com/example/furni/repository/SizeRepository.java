@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 @Repository
 public interface SizeRepository extends JpaRepository<Size, Integer> {
-    Page<Size> findAll(Pageable pageable);
 
     boolean existsBySizeName(String sizeName);
     boolean existsBySizeNameAndIdNot(String sizeName, int id);

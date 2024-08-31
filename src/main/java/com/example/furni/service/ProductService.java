@@ -21,10 +21,6 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
     public Page<Product> getProductsPaginated(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable);

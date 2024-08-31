@@ -47,7 +47,8 @@ public class ProductController {
                                  @RequestParam(required = false) Double maxPrice,
                                  HttpSession session) {
         Page<Product> productPage = productService.filterProducts(name, categoryId, minPrice, maxPrice, page, size);
-        model.addAttribute("products", productPage);
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("size", size);
         model.addAttribute("categories", categoryService.getAllCategories());
         // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");

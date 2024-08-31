@@ -37,6 +37,7 @@ public class BlogController {
 
         Page<Blog> blogsPage = blogService.filterBlogs(title, tag, startDateTime, endDateTime, page, size);
         model.addAttribute("blogsPage", blogsPage);
+        model.addAttribute("size", size);
 
         // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");

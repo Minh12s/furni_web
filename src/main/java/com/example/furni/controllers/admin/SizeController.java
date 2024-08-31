@@ -20,20 +20,22 @@ public class SizeController {
     @Autowired
     private SizeService sizeService;
 
-    @GetMapping("/size")
-    public String sizeList(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session ) {
-        int pageSize = 5;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Size> sizePage = sizeService.findAll(pageable);
-        model.addAttribute("sizes", sizePage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", sizePage.getTotalPages());
-        // Get the success message from session and remove it after retrieval
+    @GetMapping("/sizes")
+    public String showSizes(Model model,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "10") int size,
+                            HttpSession session) {
+        Page<Size> sizesPage = sizeService.getSizesPaginated(page, size);
+        model.addAttribute("sizesPage", sizesPage);
+        model.addAttribute("size", size);
+
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");
         if (successMessage != null) {
             model.addAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
         }
+
         return "admin/Size/size";
     }
 
@@ -58,7 +60,7 @@ public class SizeController {
 
         sizeService.save(size);
         session.setAttribute("successMessage", "Size added successfully!");
-        return "redirect:/admin/size";
+        return "redirect:/admin/sizes";
     }
 
     @GetMapping("/editSize/{id}")
@@ -68,7 +70,7 @@ public class SizeController {
             model.addAttribute("size", size.get());
             return "admin/Size/editSize";
         } else {
-            return "redirect:/admin/size";
+            return "redirect:/admin/sizes";
         }
     }
 
@@ -88,13 +90,13 @@ public class SizeController {
         sizeService.save(size);
         // Thêm thông báo thành công vào session
         session.setAttribute("successMessage", "Size updated successfully!");
-        return "redirect:/admin/size";
+        return "redirect:/admin/sizes";
     }
 
     @PostMapping("/deleteSize/{id}")
     public String deleteSize(@PathVariable int id,HttpSession session) {
         sizeService.deleteById(id);
         session.setAttribute("successMessage", "Size deleted successfully!");
-        return "redirect:/admin/size";
+        return "redirect:/admin/sizes";
     }
 }
