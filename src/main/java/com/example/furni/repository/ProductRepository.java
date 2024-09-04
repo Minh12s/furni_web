@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByCategory_Id(int categoryId, Pageable pageable);
+    Page<Product> findByCategory_IdAndIdNot(int categoryId, int productId, Pageable pageable);
+
     Product findBySlug(String slug);
     @Query("SELECT p FROM Product p WHERE (:name IS NULL OR p.productName LIKE %:name%) " +
             "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +

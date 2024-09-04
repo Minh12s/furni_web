@@ -25,6 +25,12 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable);
     }
+
+    public Page<Product> getRelatedProducts(int categoryId, int productId, int size) {
+        Pageable pageable = PageRequest.of(0, size); // Lấy trang đầu tiên với số lượng sản phẩm là `size`
+        return productRepository.findByCategory_IdAndIdNot(categoryId, productId, pageable);
+    }
+
     public Page<Product> getProductsByCategoryPaginated(String slug, int page, int size) {
         Category category = categoryRepository.findBySlug(slug);
         if (category != null) {

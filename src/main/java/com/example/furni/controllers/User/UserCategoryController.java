@@ -55,9 +55,16 @@ public class UserCategoryController {
         Product product = productService.findBySlug(slug);
         if (product != null) {
             model.addAttribute("product", product);
+
+            // Lấy 4 sản phẩm cùng danh mục nhưng không bao gồm sản phẩm hiện tại
+            Page<Product> relatedProducts = productService.getRelatedProducts(product.getCategory().getId(), product.getId(), 4);
+            model.addAttribute("relatedProducts", relatedProducts.getContent());
+
             return "User/details"; // Trả về view hiển thị chi tiết sản phẩm
         } else {
             return "redirect:/error"; // Chuyển hướng đến trang lỗi nếu không tìm thấy sản phẩm
         }
     }
+
+
 }

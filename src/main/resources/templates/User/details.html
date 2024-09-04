@@ -44,8 +44,23 @@
   <div class="container">
     <div th:each="product : ${product}" class="row">
       <div class="col-lg-6 mb-5 ftco-animate">
-        <a href="" class="image-popup"><img th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" class="img-fluid" alt="Colorlib Template"></a>
+        <div class="img-wrapper" >
+          <img id="image" th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" class="img-fluid" alt="Colorlib Template">
+        </div>
+        <div class="small-images-container">
+          <div class="small-images">
+            <img th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" class="small-image" alt="Small Image 1" onclick="showLargeImage(this)">
+            <img src="/images/about-2.jpg" class="small-image" alt="Small Image 2" onclick="showLargeImage(this)">
+            <img src="/images/anhbg1.jpg" class="small-image" alt="Small Image 3" onclick="showLargeImage(this)">
+            <img src="/images/anhbg2.jpg" class="small-image" alt="Small Image 4" onclick="showLargeImage(this)">
+          </div>
+        </div>
       </div>
+
+      <script>function showLargeImage(img) {
+        var largeImage = document.getElementById('large-image');
+        largeImage.src = img.src;
+      }</script>
       <div class="col-lg-6 product-details pl-md-5 ftco-animate">
         <h3 th:text="${product.productName}">Young Woman Wearing Dress</h3>
         <div class="rating d-flex">
@@ -64,10 +79,45 @@
             <a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
           </p>
         </div>
-        <p class="price"><span th:text="${product.price}">$120.00</span></p>
-        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-        <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.
-        </p>
+        <p class="price"><span th:text="${product.price + '$'}">$120.00</span></p>
+        <ul class="details-list">
+          <li>
+            <span>color: </span>
+            <span th:text="${product.color}">  sefvdvfcv bgfc </span>
+          </li>
+
+          <li class="">
+            <span>weight: </span>
+            <span th:text="${product.weight}">  sefvdvfcv bgfc </span>
+          </li>
+
+          <li class="">
+            <span>height:  </span>
+            <span th:text="${product.height}">  sefvdvfcv bgfc </span>
+          </li>
+
+          <li class="">
+            <span>length:   </span>
+            <span th:text="${product.length}">  sefvdvfcv bgfc </span>
+          </li>
+
+          <li class="">
+            <span>brand:   </span>
+            <span th:text="${product.brand.brandName}">  sefvdvfcv bgfc </span>
+          </li>
+
+          <li class="">
+            <span>material:  </span>
+            <span th:text="${product.material.materialName}">  sefvdvfcv bgfc </span>
+
+          </li>
+
+          <li class="">
+            <span>size:    </span>
+            <span th:text="${product.size.getSizeName()}">  sefvdvfcv bgfc </span>
+          </li>
+
+        </ul>
         <div class="row mt-4">
           <div class="col-md-6">
             <div class="form-group d-flex">
@@ -98,7 +148,7 @@
           </div>
           <div class="w-100"></div>
           <div class="col-md-12">
-            <p style="color: #000;">80 piece available</p>
+            <p style="color: #000;" th:text="${product.qty + ' piece available'}">80 piece available</p>
           </div>
         </div>
         <p><a href="cart" class="btn btn-black py-3 px-5">Add to Cart</a></p>
@@ -118,119 +168,44 @@
   </div>
   <div class="container">
     <div class="row">
-      <div class="col-sm col-md-6 col-lg ftco-animate">
-        <div class="product">
-          <a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
-            <span class="status">30%</span>
-            <div class="overlay"></div>
-          </a>
-          <div class="text py-3 px-3">
-            <h3><a href="#">Floral Jackquard Pullover</a></h3>
-            <div class="d-flex">
-              <div class="pricing">
-                <p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
+      <th:block th:each="relatedProduct : ${relatedProducts}">
+        <div class="col-sm col-md-6 col-lg ftco-animate">
+          <div class="product">
+            <a th:href="@{/product/details/{slug}(slug=${relatedProduct.slug})}" class="img-prod">
+              <img class="img-fluid" th:src="'data:image/jpeg;base64,' + ${relatedProduct.thumbnail}" alt="Product Image">
+              <div class="overlay"></div>
+            </a>
+            <div class="text py-3 px-3">
+              <h3><a th:href="@{/product/details/{slug}(slug=${relatedProduct.slug})}"
+                     th:text="${relatedProduct.productName}">Product Name</a></h3>
+              <div class="d-flex">
+                <div class="pricing">
+                  <p class="price"><span th:text="${relatedProduct.price}">Price</span></p>
+                </div>
+                <div class="rating">
+                  <p class="text-right">
+                    <!-- Assuming a 5-star rating system -->
+                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                  </p>
+                </div>
               </div>
-              <div class="rating">
-                <p class="text-right">
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                </p>
-              </div>
+              <p class="bottom-area d-flex px-3">
+                <a href="#" class="add-to-cart text-center py-2 mr-1">
+                  <span>Add to cart <i class="ion-ios-add ml-1"></i></span>
+                </a>
+                <a href="#" class="buy-now text-center py-2">
+                  Buy now<span><i class="ion-ios-cart ml-1"></i></span>
+                </a>
+              </p>
             </div>
-            <p class="bottom-area d-flex px-3">
-              <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-              <a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
-            </p>
           </div>
         </div>
-      </div>
-      <div class="col-sm col-md-6 col-lg ftco-animate">
-        <div class="product">
-          <a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg" alt="Colorlib Template">
-            <div class="overlay"></div>
-          </a>
-          <div class="text py-3 px-3">
-            <h3><a href="#">Floral Jackquard Pullover</a></h3>
-            <div class="d-flex">
-              <div class="pricing">
-                <p class="price"><span>$120.00</span></p>
-              </div>
-              <div class="rating">
-                <p class="text-right">
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                </p>
-              </div>
-            </div>
-            <p class="bottom-area d-flex px-3">
-              <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-              <a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm col-md-6 col-lg ftco-animate">
-        <div class="product">
-          <a href="#" class="img-prod"><img class="img-fluid" src="images/product-3.jpg" alt="Colorlib Template">
-            <div class="overlay"></div>
-          </a>
-          <div class="text py-3 px-3">
-            <h3><a href="#">Floral Jackquard Pullover</a></h3>
-            <div class="d-flex">
-              <div class="pricing">
-                <p class="price"><span>$120.00</span></p>
-              </div>
-              <div class="rating">
-                <p class="text-right">
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                </p>
-              </div>
-            </div>
-            <p class="bottom-area d-flex px-3">
-              <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-              <a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm col-md-6 col-lg ftco-animate">
-        <div class="product">
-          <a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg" alt="Colorlib Template">
-            <div class="overlay"></div>
-          </a>
-          <div class="text py-3 px-3">
-            <h3><a href="#">Floral Jackquard Pullover</a></h3>
-            <div class="d-flex">
-              <div class="pricing">
-                <p class="price"><span>$120.00</span></p>
-              </div>
-              <div class="rating">
-                <p class="text-right">
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                  <a href="#"><span class="ion-ios-star-outline"></span></a>
-                </p>
-              </div>
-            </div>
-            <p class="bottom-area d-flex px-3">
-              <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-              <a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
-            </p>
-          </div>
-        </div>
-      </div>
+      </th:block>
+
     </div>
   </div>
 </section>
@@ -281,6 +256,115 @@
 
   });
 </script>
+<style>
+  .details-list {
+    list-style-type: none;
+    padding: 0;
+  }
 
+  .details-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  .details-list span:first-child {
+    flex: 1;
+  }
+
+  .details-list span:last-child {
+    flex: 2;
+    text-align: left;
+    margin-right: 20px;
+  }
+  .img-wrapper {
+    border: 2px solid #ccc; / Thêm viền xung quanh ảnh /
+  padding: 10px; / Thêm padding nếu cần /
+  overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 90%;
+  }
+
+  .img-wrapper img {
+    transition: transform 0.3s ease;
+    width: 100%;
+    height: 100%;
+  }
+
+  .img-wrapper:hover .overlay {
+    opacity: 1;
+  }
+
+  .small-images-container {
+    width: 530px; / Điều chỉnh kích thước container theo nhu cầu /
+  overflow: hidden; / Ẩn các sản phẩm nằm ngoài phạm vi container /
+  }
+
+  .small-images {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    transition: transform 0.5s ease; / Áp dụng hiệu ứng chuyển động /
+  -webkit-overflow-scrolling: touch;
+  }
+
+  .small-image {
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    box-sizing: border-box;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  .small-image:hover {
+    transform: scale(1.2); / Phóng to khi rê chuột vào /
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+</style>
+
+<script>function showLargeImage(img) {
+  var largeImage = document.getElementById('image');
+  largeImage.src = img.src;
+  largeImage.style.transform = "scale(1)"; // Reset hiệu ứng zoom khi chuyển đổi ảnh lớn
+}</script>
+
+<script>// Lưu trữ thời gian giữa các lần chuyển đổi (ở đây là 3 giây)
+const slideInterval = 3000;
+
+// Hàm để di chuyển các sản phẩm từ phải qua trái như một vòng tròn
+function slideImages() {
+  const container = document.querySelector('.small-images');
+  const images = container.querySelectorAll('.small-image');
+
+  // Lấy kích thước của một sản phẩm
+  const itemWidth = images[0].offsetWidth;
+
+  // Di chuyển container từ phải qua trái
+  container.style.transition = 'transform 1s ease-in-out'; // Áp dụng hiệu ứng chuyển động
+  container.style.transform = `translateX(-${itemWidth}px)`;
+
+  // Sau một khoảng thời gian nhất định, di chuyển sản phẩm cuối cùng lên đầu danh sách
+  setTimeout(function () {
+    container.appendChild(container.firstElementChild);
+    container.style.transition = 'none'; // Tắt hiệu ứng chuyển động tạm thời
+    container.style.transform = 'translateX(0)';
+  }, slideInterval);
+}
+
+// Gọi hàm slideImages để bắt đầu chuyển động tự động
+setInterval(slideImages, slideInterval); // Gọi hàm sau mỗi khoảng thời gian giữa các lần chuyển đổi</script>
 </body>
 </html>
