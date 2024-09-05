@@ -40,7 +40,7 @@
   </div>
 </div>
 <div id="successAlert" class="alert alert-success" th:if="${cartMessage}">
-  <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+  <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
   <span th:text="${cartMessage}"></span>
 </div>
 <section class="ftco-section ftco-cart">
@@ -76,7 +76,7 @@
 
               <td class="product-name">
                 <h3  th:text="${item.product.productName}">Product Name</h3>
-                <div th:if="${#lists.contains(outOfStockProductIds, item.product.id)}" class="text-danger">Sản phẩm đã hết hàng hoặc không đủ số lượng</div>
+                <div th:if="${#lists.contains(outOfStockProductIds, item.product.id)}" class="text-danger">The product is out of stock or insufficient in quantity.</div>
 
               </td>
 
@@ -182,6 +182,15 @@
 
   });
 </script>
+<style>
+  .quantity .btn-update {
+    display: none;
+  }
+
+  .quantity:hover .btn-update {
+    display: inline-block;
+  }
+</style>
 <style>
   .alert {
     padding: 15px;

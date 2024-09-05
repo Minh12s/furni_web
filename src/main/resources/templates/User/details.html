@@ -40,14 +40,16 @@
   </div>
 </div>
 <div id="successAlert" class="alert alert-success" th:if="${successMessage}">
-  <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+  <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+  <i class="fa-solid fa-circle-xmark" style="margin-right: 8px;"></i>
   <span th:text="${successMessage}"></span>
 </div>
 
 <div id="errorAlert" class="alert alert-danger" th:if="${errorMessage}">
-  <i class="mdi mdi-alert-circle" style="margin-right: 8px;"></i>
+  <i class="fa-solid fa-circle-xmark" style="margin-right: 8px;"></i>
   <span th:text="${errorMessage}"></span>
   </div>
+
 <section class="ftco-section">
   <div class="container">
     <div th:each="product : ${product}" class="row">
@@ -147,18 +149,24 @@
             <p style="color: #000;" th:text="${product.getQty} + ' pieces available'">80 pieces available</p>
           </div>
         </div>
-        <form id="add-to-cart-form" th:action="@{/add-to-cart}" method="post" th:if="${product.qty > 0}">
+        <form id="add-to-cart-form" th:action="@{/add-to-cart}" method="post">
           <input type="hidden" name="productId" th:value="${product.id}">
           <!-- Trường ẩn để lưu số lượng sản phẩm được chọn -->
           <input type="hidden" name="qty" id="hidden-quantity">
-          <input type="submit" class="btn btn-primary py-3 px-5" value="ADD TO CART">
-        </form>
 
+          <!-- Nút ADD TO CART -->
+          <input type="submit" class="btn btn-primary py-3 px-5" value="ADD TO CART"
+                 th:disabled="${product.qty == 0}">
+        </form>
 
         <!-- Thông báo nếu sản phẩm hết hàng -->
         <div th:if="${product.qty == 0}">
-          <p class="text-danger">This product is currently out of stock..</p>
+          <p class="text-danger">This product is currently out of stock.</p>
         </div>
+
+
+
+
 
       </div>
     </div>

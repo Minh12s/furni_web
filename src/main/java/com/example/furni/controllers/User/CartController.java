@@ -55,15 +55,10 @@ public class CartController extends BaseController {
             return "User/details";
         }
 
-        if (cartService.isProductInCart(userId, productId)) {
-            cartService.updateCartQuantity(userId, productId, qty);
-            request.getSession().setAttribute("successMessage", "The quantity of products has been updated in the shopping cart.");
+        double total = product.getPrice() * qty;
+        cartService.addToCart(userId, product, qty, total);  // Gọi phương thức đã cập nhật để thêm sản phẩm và cộng dồn
 
-        } else {
-            double total = product.getPrice() * qty;
-            cartService.addToCart(userId, product, qty, total);
-            request.getSession().setAttribute("successMessage", "Product added successfully.");
-        }
+        request.getSession().setAttribute("successMessage", "Product added successfully.");
 
         return "redirect:/product/details/" + (slug != null ? slug : product.getSlug());
     }
