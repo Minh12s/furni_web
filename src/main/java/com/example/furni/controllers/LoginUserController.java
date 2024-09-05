@@ -1,5 +1,6 @@
     package com.example.furni.controllers;
 
+    import com.example.furni.controllers.User.BaseController;
     import com.example.furni.entity.User;
     import com.example.furni.service.UserService;  // Add this service to handle User saving logic
     import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +13,7 @@
     import org.springframework.web.bind.annotation.PostMapping;
 
     @Controller
-    public class LoginUserController {
+    public class LoginUserController extends BaseController {
         @Autowired
         private UserService userService;  // Inject UserService
 

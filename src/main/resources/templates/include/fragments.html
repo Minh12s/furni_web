@@ -58,8 +58,10 @@
           </li>
 
           <li class="nav-item cta cta-colored">
-            <a href="cart" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a>
-
+            <a href="/carts" class="nav-link">
+              <span class="icon-shopping_cart"></span>
+              [<span th:text="${cartItemCount}">0</span>]
+            </a>
           </li>
           <li class="nav-item cta cta-colored">
             <a style="font-size:11px;" href="favorite" class="nav-link"><span class="icon-favorite">[0]</span></a>

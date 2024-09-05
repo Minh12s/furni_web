@@ -1,5 +1,6 @@
 package com.example.furni.controllers;
 
+import com.example.furni.controllers.User.BaseController;
 import org.springframework.ui.Model;
 import com.example.furni.entity.Product;
 import com.example.furni.service.HomeService;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class HomeController {
+public class HomeController extends BaseController {
     @Autowired
     private HomeService homeService;
     @GetMapping

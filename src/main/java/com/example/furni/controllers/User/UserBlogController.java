@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/blogUser")
-public class UserBlogController {
+public class UserBlogController extends BaseController{
 
     @Autowired
     private BlogService blogService;

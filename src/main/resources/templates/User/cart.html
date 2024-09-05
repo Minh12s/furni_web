@@ -39,7 +39,10 @@
     </div>
   </div>
 </div>
-
+<div id="successAlert" class="alert alert-success" th:if="${cartMessage}">
+  <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+  <span th:text="${cartMessage}"></span>
+</div>
 <section class="ftco-section ftco-cart">
   <div class="container">
     <div class="row">
@@ -54,54 +57,60 @@
               <th>Price</th>
               <th>Quantity</th>
               <th>Total</th>
+              <th> </th>
             </tr>
             </thead>
             <tbody>
-            <tr class="text-center">
-              <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-
-              <td class="image-prod"><div class="img" style="background-image:url(/images/product-3.jpg);"></div></td>
+            <tr class="text-center" th:each="item : ${cartItems}">
+              <td class="product-remove">
+                <form method="post" th:action="@{/remove-from-cart}">
+                  <input type="hidden" name="cartId" th:value="${item.id}">
+                  <button style="width: 30px; height: 30px; background-color: white; border: 1px solid #ccc; border-radius: 0;" type="submit" class="btn btn-danger">
+                    <span class="ion-ios-close"></span>
+                  </button>
+                </form>
+              </td>
+              <td class="image-prod">
+                <img th:src="'data:image/jpeg;base64,' + ${item.product.thumbnail}" class="img" >
+              </td>
 
               <td class="product-name">
-                <h3>Young Woman Wearing Dress</h3>
-                <p>Far far away, behind the word mountains, far from the countries</p>
+                <h3  th:text="${item.product.productName}">Product Name</h3>
+                <div th:if="${#lists.contains(outOfStockProductIds, item.product.id)}" class="text-danger">Sản phẩm đã hết hàng hoặc không đủ số lượng</div>
+
               </td>
 
-              <td class="price">$4.90</td>
+              <td class="price" th:text="${item.product.price}">Price</td>
 
               <td class="quantity">
-                <div class="input-group mb-3">
-                  <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-                </div>
+                <form th:action="@{/update-cart}" method="post">
+                  <input type="hidden" name="cartId" th:value="${item.id}">
+                  <div class="input-group mb-3">
+                    <input style="margin-top:30px;" type="number" name="qty" class="quantity form-control input-number" th:value="${item.qty}">
+                  </div>
+                  <button type="submit" style="border: none; padding: 20px 20px;" class="btn btn-primary py-3 px-5 btn-update">Update</button>
+                </form>
               </td>
 
-              <td class="total">$4.90</td>
+              <td class="total" th:text="${item.total}">Total</td>
             </tr><!-- END TR-->
 
-            <tr class="text-center">
-              <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-
-              <td class="image-prod"><div class="img" style="background-image:url(/images/product-4.jpg);"></div></td>
-
-              <td class="product-name">
-                <h3>Young Woman Wearing Dress</h3>
-                <p>Far far away, behind the word mountains, far from the countries</p>
-              </td>
-
-              <td class="price">$15.70</td>
-
-              <td class="quantity">
-                <div class="input-group mb-3">
-                  <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-                </div>
-              </td>
-
-              <td class="total">$15.70</td>
-            </tr><!-- END TR-->
             </tbody>
           </table>
         </div>
       </div>
+    </div>
+    <div class="shoping__cart__btns d-flex justify-content-between">
+      <p class="mb-0">
+        <button style="border: 1px solid white; background-color:white; width:200px;" type="submit" class="primary-btn cart-btn" href="#">CONTINUE SHOPPING</button>
+      </p>
+      <form th:action="@{/clear-cart}" method="post">
+        <button style="border: 1px solid white; background-color:white; width:200px;" type="submit" class="primary-btn cart-btn">
+          <span style="margin-right:10px;" class="fa fa-spinner fa-spin"></span>
+          CLEAR CART
+        </button>
+
+      </form>
     </div>
     <div class="row justify-content-center">
       <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
@@ -109,20 +118,16 @@
           <h3>Cart Totals</h3>
           <p class="d-flex">
             <span>Subtotal</span>
-            <span>$20.60</span>
+            <span th:text="${subtotal}">$0.00</span>
           </p>
           <p class="d-flex">
             <span>Delivery</span>
-            <span>$0.00</span>
-          </p>
-          <p class="d-flex">
-            <span>Discount</span>
-            <span>$3.00</span>
+            <span th:text="${delivery}">$5.00</span>
           </p>
           <hr>
           <p class="d-flex total-price">
             <span>Total</span>
-            <span>$17.60</span>
+            <span th:text="${total}">$0.00</span>
           </p>
         </div>
         <p class="text-center"><a href="checkout" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
@@ -139,6 +144,7 @@
 <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 <div th:insert="/include/fragments :: script"></div>
+
 
 <script>
   $(document).ready(function(){
@@ -176,6 +182,65 @@
 
   });
 </script>
+<style>
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
 
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+  .alert-danger {
+    background-color: red; /* Blue background color */
+    border: 1px solid red;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var successAlert = document.getElementById('successAlert');
+    var errorAlert = document.getElementById('errorAlert');
+
+    if (successAlert) {
+      successAlert.classList.add('alert-show');
+      setTimeout(function() {
+        successAlert.classList.add('fade-out');
+        setTimeout(function() {
+          successAlert.style.display = 'none';
+        }, 1000); // thời gian khớp với hiệu ứng fade-out
+      }, 3000); // thời gian hiển thị thông báo thành công
+    }
+
+    if (errorAlert) {
+      errorAlert.classList.add('alert-show');
+      setTimeout(function() {
+        errorAlert.classList.add('fade-out');
+        setTimeout(function() {
+          errorAlert.style.display = 'none';
+        }, 1000); // thời gian khớp với hiệu ứng fade-out
+      }, 3000); // thời gian hiển thị thông báo lỗi
+    }
+  });
+</script>
 </body>
 </html>

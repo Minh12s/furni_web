@@ -4,6 +4,7 @@ import com.example.furni.entity.Category;
 import com.example.furni.entity.Product;
 import com.example.furni.service.ProductService;
 import com.example.furni.service.CategoryService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class UserCategoryController {
+public class UserCategoryController extends BaseController{
 
     @Autowired
     private ProductService productService;
@@ -51,7 +52,7 @@ public class UserCategoryController {
     }
 
     @GetMapping("product/details/{slug}")
-    public String getProductDetails(@PathVariable String slug, Model model) {
+    public String getProductDetails(@PathVariable String slug, Model model, HttpServletRequest request) {
         Product product = productService.findBySlug(slug);
         if (product != null) {
             model.addAttribute("product", product);
@@ -59,6 +60,20 @@ public class UserCategoryController {
             // Lấy 4 sản phẩm cùng danh mục nhưng không bao gồm sản phẩm hiện tại
             Page<Product> relatedProducts = productService.getRelatedProducts(product.getCategory().getId(), product.getId(), 4);
             model.addAttribute("relatedProducts", relatedProducts.getContent());
+
+            // Lấy thông báo thành công từ session và xóa sau khi lấy
+            String successMessage = (String) request.getSession().getAttribute("successMessage");
+            if (successMessage != null) {
+                model.addAttribute("successMessage", successMessage);
+                request.getSession().removeAttribute("successMessage");
+            }
+
+            // Lấy thông báo lỗi từ session và xóa sau khi lấy
+            String errorMessage = (String) request.getSession().getAttribute("errorMessage");
+            if (errorMessage != null) {
+                model.addAttribute("errorMessage", errorMessage);
+                request.getSession().removeAttribute("errorMessage");
+            }
 
             return "User/details"; // Trả về view hiển thị chi tiết sản phẩm
         } else {

@@ -39,7 +39,15 @@
     </div>
   </div>
 </div>
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+  <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+  <span th:text="${successMessage}"></span>
+</div>
 
+<div id="errorAlert" class="alert alert-danger" th:if="${errorMessage}">
+  <i class="mdi mdi-alert-circle" style="margin-right: 8px;"></i>
+  <span th:text="${errorMessage}"></span>
+  </div>
 <section class="ftco-section">
   <div class="container">
     <div th:each="product : ${product}" class="row">
@@ -118,44 +126,84 @@
           </li>
 
         </ul>
+
         <div class="row mt-4">
-          <div class="col-md-6">
-            <div class="form-group d-flex">
-              <div class="select-wrap">
-                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                <select name="" id="" class="form-control">
-                  <option value="">Small</option>
-                  <option value="">Medium</option>
-                  <option value="">Large</option>
-                  <option value="">Extra Large</option>
-                </select>
-              </div>
-            </div>
-          </div>
           <div class="w-100"></div>
           <div class="input-group col-md-6 d-flex mb-3">
-	             	<span class="input-group-btn mr-2">
-	                	<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
-	                   <i class="ion-ios-remove"></i>
-	                	</button>
-	            		</span>
-            <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+            <span class="input-group-btn mr-2">
+              <button type="button" class="quantity-left-minus btn btn-outline-secondary" data-type="minus">
+                <i class="ion-ios-remove"></i>
+              </button>
+            </span>
+            <input style="margin-top:-40px; margin-left:42px;width:230px;" type="text" id="quantity-input" name="quantity" class="form-control input-number" value="1" min="1" max="${product.stockQuantity}">
             <span class="input-group-btn ml-2">
-	                	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-	                     <i class="ion-ios-add"></i>
-	                 </button>
-	             	</span>
+              <button style="position: relative; top: -40px; margin-left: 234px; " type="button" class="quantity-right-plus btn btn-outline-secondary" data-type="plus">
+                <i class="ion-ios-add"></i>
+              </button>
+            </span>
           </div>
           <div class="w-100"></div>
           <div class="col-md-12">
-            <p style="color: #000;" th:text="${product.qty + ' piece available'}">80 piece available</p>
+            <p style="color: #000;" th:text="${product.getQty} + ' pieces available'">80 pieces available</p>
           </div>
         </div>
-        <p><a href="cart" class="btn btn-black py-3 px-5">Add to Cart</a></p>
+        <form id="add-to-cart-form" th:action="@{/add-to-cart}" method="post" th:if="${product.qty > 0}">
+          <input type="hidden" name="productId" th:value="${product.id}">
+          <!-- Trường ẩn để lưu số lượng sản phẩm được chọn -->
+          <input type="hidden" name="qty" id="hidden-quantity">
+          <input type="submit" class="btn btn-primary py-3 px-5" value="ADD TO CART">
+        </form>
+
+
+        <!-- Thông báo nếu sản phẩm hết hàng -->
+        <div th:if="${product.qty == 0}">
+          <p class="text-danger">This product is currently out of stock..</p>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const quantityInput = document.getElementById('quantity-input');
+    const hiddenQuantityInput = document.getElementById('hidden-quantity');
+    const maxQuantity = parseInt(quantityInput.getAttribute('max'), 10);
+
+    // Cập nhật giá trị ban đầu cho trường ẩn
+    hiddenQuantityInput.value = quantityInput.value;
+
+    document.querySelector('.quantity-left-minus').addEventListener('click', function () {
+      let currentQuantity = parseInt(quantityInput.value, 10);
+      if (currentQuantity > 1) {
+        currentQuantity -= 1;
+        quantityInput.value = currentQuantity;
+        hiddenQuantityInput.value = currentQuantity;
+      }
+    });
+
+    document.querySelector('.quantity-right-plus').addEventListener('click', function () {
+      let currentQuantity = parseInt(quantityInput.value, 10);
+      if (currentQuantity >= 1) {
+        currentQuantity += 1;
+        quantityInput.value = currentQuantity;
+        hiddenQuantityInput.value = currentQuantity;
+      }
+    });
+
+    // Khi số lượng thay đổi, cập nhật giá trị cho trường ẩn
+    quantityInput.addEventListener('input', function () {
+      hiddenQuantityInput.value = quantityInput.value;
+    });
+  });
+</script>
+<script>
+  document.getElementById('add-to-cart').addEventListener('click', function() {
+    document.getElementById('add-to-cart-form').submit();
+  });
+
+</script>
 
 <section class="ftco-section bg-light">
   <div class="container">
@@ -220,42 +268,6 @@
 <div th:insert="/include/fragments :: script"></div>
 
 
-<script>
-  $(document).ready(function(){
-
-    var quantitiy=0;
-    $('.quantity-right-plus').click(function(e){
-
-      // Stop acting like a button
-      e.preventDefault();
-      // Get the field name
-      var quantity = parseInt($('#quantity').val());
-
-      // If is not undefined
-
-      $('#quantity').val(quantity + 1);
-
-
-      // Increment
-
-    });
-
-    $('.quantity-left-minus').click(function(e){
-      // Stop acting like a button
-      e.preventDefault();
-      // Get the field name
-      var quantity = parseInt($('#quantity').val());
-
-      // If is not undefined
-
-      // Increment
-      if(quantity>0){
-        $('#quantity').val(quantity - 1);
-      }
-    });
-
-  });
-</script>
 <style>
   .details-list {
     list-style-type: none;
@@ -366,5 +378,67 @@ function slideImages() {
 
 // Gọi hàm slideImages để bắt đầu chuyển động tự động
 setInterval(slideImages, slideInterval); // Gọi hàm sau mỗi khoảng thời gian giữa các lần chuyển đổi</script>
+<style>
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
+
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+  .alert-danger {
+    background-color: red; /* Blue background color */
+    border: 1px solid red;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var successAlert = document.getElementById('successAlert');
+    var errorAlert = document.getElementById('errorAlert');
+
+    if (successAlert) {
+      successAlert.classList.add('alert-show');
+      setTimeout(function() {
+        successAlert.classList.add('fade-out');
+        setTimeout(function() {
+          successAlert.style.display = 'none';
+        }, 1000); // thời gian khớp với hiệu ứng fade-out
+      }, 3000); // thời gian hiển thị thông báo thành công
+    }
+
+    if (errorAlert) {
+      errorAlert.classList.add('alert-show');
+      setTimeout(function() {
+        errorAlert.classList.add('fade-out');
+        setTimeout(function() {
+          errorAlert.style.display = 'none';
+        }, 1000); // thời gian khớp với hiệu ứng fade-out
+      }, 3000); // thời gian hiển thị thông báo lỗi
+    }
+  });
+</script>
+
+
 </body>
 </html>
