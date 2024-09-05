@@ -61,6 +61,9 @@
             </tr>
             </thead>
             <tbody>
+            <tr th:if="${#lists.isEmpty(cartItems)}">
+              <td colspan="7" class="text-center">No items in the cart!</td>
+            </tr>
             <tr class="text-center" th:each="item : ${cartItems}">
               <td class="product-remove">
                 <form method="post" th:action="@{/remove-from-cart}">
@@ -122,7 +125,7 @@
           </p>
           <p class="d-flex">
             <span>Delivery</span>
-            <span th:text="${delivery}">$5.00</span>
+            <span th:text="${delivery}">$0.00</span>
           </p>
           <hr>
           <p class="d-flex total-price">
