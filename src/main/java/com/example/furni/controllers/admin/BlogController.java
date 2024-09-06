@@ -136,34 +136,41 @@ public class BlogController {
             errorMessages.add("Content cannot be empty.");
         }
 
+        // Lấy blog hiện tại từ cơ sở dữ liệu
+        Blog existingBlog = blogService.getBlogById(id)
+                .orElseThrow(() -> new RuntimeException("Blog not found"));
+
+        // Cập nhật thông tin blog, bao gồm giữ lại ảnh cũ nếu không có file mới
+        existingBlog.setTitle(blogDetails.getTitle());
+        existingBlog.setTag(blogDetails.getTag());
+        existingBlog.setContent(blogDetails.getContent());
+
+        // Kiểm tra nếu có file mới
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
                 String base64Image = Base64.getEncoder().encodeToString(bytes);
-                blogDetails.setThumbnail(base64Image);
+                existingBlog.setThumbnail(base64Image);
             } catch (IOException e) {
                 e.printStackTrace();
                 errorMessages.add("Error processing the thumbnail.");
             }
+        } else {
+            // Giữ lại ảnh cũ nếu không có file mới
+            existingBlog.setThumbnail(existingBlog.getThumbnail());
         }
 
         if (!errorMessages.isEmpty()) {
             model.addAttribute("errorMessages", errorMessages);
+            model.addAttribute("blog", existingBlog);
             return "admin/Blog/editBlog";
         }
-
-        Blog existingBlog = blogService.getBlogById(id)
-                .orElseThrow(() -> new RuntimeException("Blog not found"));
-
-        existingBlog.setTitle(blogDetails.getTitle());
-        existingBlog.setTag(blogDetails.getTag());
-        existingBlog.setContent(blogDetails.getContent());
-        existingBlog.setThumbnail(blogDetails.getThumbnail());
 
         blogService.updateBlog(id, existingBlog);
         session.setAttribute("successMessage", "Blog updated successfully!");
         return "redirect:/admin/blogs";
     }
+
     @PostMapping("/deleteBlog/{id}")
     public String deleteBlog(@PathVariable int id, HttpSession session) {
         blogService.deleteBlog(id);

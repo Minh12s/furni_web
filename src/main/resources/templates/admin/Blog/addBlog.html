@@ -157,6 +157,15 @@
               <label class="control-label">Content</label>
               <textarea th:field="*{content}" class="form-control" name="content" placeholder="Content"></textarea>
             </div>
+            <div class="form-group col-md-12">
+              <label class="control-label">AI supports content writing</label>
+              <div class="box_ai">
+                <textarea id="box_ai_text" class="form-control" placeholder="Nhập gợi ý cho AI tạo nội dung..!"></textarea>
+                <button id="box_ai_but" type="button" class="btn-save">Content Creation</button>
+                <!-- Thẻ hiển thị thông báo chờ xử lý -->
+                <div id="box_ai_content">Pending...</div>
+              </div>
+            </div>
 
             <button class="btn btn-save" type="submit">Save</button>
             <a class="btn btn-cancel" href="/Admin/Blog">Cancel</a>
@@ -166,6 +175,35 @@
     </div>
   </div>
 </section>
+<script src="https://esgoo.net/scripts/jquery.js"></script>
+<script>
+  $(document).ready(function() {
+    $("#box_ai_but").click(function(e){
+      var text = $("#box_ai_text").val();
+      if(text == '') {
+        alert("Haven't entered suggestions for AI to create content?");
+      } else {
+        // Hiển thị thông báo chờ xử lý
+        $("#box_ai_content").html('<img src="https://esgoo.net/imgs/loadcard.gif"> AI is creating content...');
+
+        $.getJSON('https://esgoo.net/api-ai-content/' + encodeURIComponent(text) + '.htm', function(data_ai) {
+
+          // Copy nội dung từ AI vào textarea content trực tiếp
+          tinymce.get('content').setContent(data_ai.data);
+
+          // Cập nhật lại thẻ `box_ai_content` sau khi nhận được phản hồi
+          $("#box_ai_content").html('AI content has been successfully created!');
+        })
+                .fail(function() {
+                  // Xử lý lỗi nếu có
+                  $("#box_ai_content").html('An error occurred, please try again later.');
+                });
+      }
+    });
+  });
+
+</script>
+
 <script src="https://cdn.tiny.cloud/1/6a4ufu188x8itoqtz2agsuahgg475yn7bxva9xzabribtvjm/tinymce/5/tinymce.min.js"></script>
 <script>tinymce.init({
   selector: 'textarea[name="content"]'
