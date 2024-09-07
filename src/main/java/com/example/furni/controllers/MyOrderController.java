@@ -12,10 +12,10 @@ public class MyOrderController {
     public String MyOrder(){
         return "MyOrder/MyOrder";
     }
-    @GetMapping("/ChangePassword")
-    public String ChangePassword(){
-        return "MyOrder/ChangePassword";
-    }
+//    @GetMapping("/ChangePassword")
+//    public String ChangePassword(){
+//        return "MyOrder/ChangePassword";
+//    }
     @GetMapping("/Profile")
     public String Profile(){
         return "MyOrder/Profile";

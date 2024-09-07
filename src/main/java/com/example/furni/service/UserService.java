@@ -5,6 +5,8 @@ import com.example.furni.entity.User;
 import com.example.furni.repository.RoleRepository;
 import com.example.furni.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,4 +40,20 @@ public class UserService {
 
         roleRepository.save(userRole);
     }
+    public User getUserById(int userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+    }
+
+    public boolean checkPassword(User user, String password) {
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
+
+    public void changePassword(int userId, String newPassword) {
+        User user = getUserById(userId);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
 }
+
