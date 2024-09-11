@@ -135,10 +135,9 @@
 <div class="login-container">
     <div class="login-box">
         <h2>Sign in</h2>
-        <div style="margin-left:-50px;">
-            <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                Invalid email or password. Please try again.
-            </div>
+        <div id="errorAlert" th:if="${errorLogin}" class="alert alert-danger">
+            <i class="fa-solid fa-circle-xmark" style="margin-right: 8px;"></i>
+            <span th:text="${errorLogin}"></span>
         </div>
 
         <form th:action="@{/authenticateUser}" method="post">
@@ -177,6 +176,65 @@
 <div th:insert="/include/fragments :: script"></div>
 
 </body>
+<style>
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: none;
+        color: #fff; /* Text color */
+        font-weight: bold;
+    }
 
-</body>
+    .alert-success {
+        background-color: green; /* Blue background color */
+        border: 1px solid green;
+        color: white;
+    }
+    .alert-danger {
+        background-color: red; /* Blue background color */
+        border: 1px solid red;
+        color: white;
+    }
+
+    .alert-show {
+        display: block;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var successAlert = document.getElementById('successAlert');
+        var errorAlert = document.getElementById('errorAlert');
+
+        if (successAlert) {
+            successAlert.classList.add('alert-show');
+            setTimeout(function() {
+                successAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    successAlert.style.display = 'none';
+                }, 1000); // thời gian khớp với hiệu ứng fade-out
+            }, 3000); // thời gian hiển thị thông báo thành công
+        }
+
+        if (errorAlert) {
+            errorAlert.classList.add('alert-show');
+            setTimeout(function() {
+                errorAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    errorAlert.style.display = 'none';
+                }, 1000); // thời gian khớp với hiệu ứng fade-out
+            }, 3000); // thời gian hiển thị thông báo lỗi
+        }
+    });
+</script>
+
 </html>

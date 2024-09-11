@@ -142,39 +142,27 @@
                 <label for="fullName">Full Name:</label>
                 <i class="fas fa-user input-icon"></i>
                 <input type="text" id="fullName" th:field="*{fullName}" required>
-            </div>
-            <div style="margin-left:-167px;">
-                <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Username -->
+                <!-- Hiển thị lỗi cho fullName -->
+                <div class="text-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
             </div>
 
             <div class="input-group">
                 <label for="email">Email:</label>
                 <i class="fas fa-envelope input-icon"></i>
                 <input type="email" id="email" th:field="*{email}" required>
-            </div>
-            <div style="margin-left:-200px;">
-                <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Email -->
+                <!-- Hiển thị lỗi cho email -->
+                <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
             <div class="input-group">
                 <label for="password">Password:</label>
                 <i class="fas fa-lock input-icon"></i>
                 <input type="password" id="password" th:field="*{password}" required>
-            </div>
-            <div style="margin-left:-167px;">
-                <div class="text-danger"></div> <!-- Vùng hiển thị thông báo lỗi cho Password -->
-            </div>
-
-            <div style="margin-top:20px;" class="remember-password">
-                <label><input type="checkbox">Remember Me</label>
-                <a href="#">Forget Password</a>
+                <!-- Hiển thị lỗi cho password -->
+                <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
             </div>
 
             <button type="submit" class="btn btn-primary py-3 px-5">Register</button>
-
-            <div class="create-account">
-                <p>Create A New Account? <a style="color:#FFA45C;" href="/Page/Login" class="register-link">Sign in</a></p>
-            </div>
         </form>
     </div>
 </div>
