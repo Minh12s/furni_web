@@ -14,22 +14,26 @@
     </ul>
   </div>
 </section>
-
 <section class="is-hero-bar">
-  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-    <div class="col-sm-2 flex items-center">
-      <button onclick="myApp.printTable()" class="btn btn-add ml-2">
+  <div class="flex flex-col md:flex-row items-center justify-start">
+
+    <div class="col-sm-2" style="margin-right: 5px;">
+      <button onclick="myApp.printTable()" class="btn btn-add">
         <i class="fas fa-file-pdf"></i>
         Print PDF
       </button>
     </div>
-    <div class="col-sm-2 flex items-center">
-      <button onclick="exportToExcel()" class="btn btn-add ml-2" style="margin-right:890px">
+
+
+    <div class="col-sm-2" style="margin-right: 5px;">
+      <button onclick="exportFacilitiesToExcel()" class="btn btn-add">
         <i class="fas fa-file-excel"></i>
         Export Excel
       </button>
     </div>
-    <div class="col-sm-2 flex items-center">
+
+
+    <div class="col-sm-2">
       <button onclick="exportExcel()" class="btn btn-add">
         <i class="fas fa-file-excel"></i>
         Excel Filtered
@@ -37,26 +41,30 @@
     </div>
   </div>
 </section>
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+  <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+  <span th:text="${successMessage}"></span>
+</div>
 
-<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" asp-action="Order" asp-controller="Admin" method="get">
-  <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-    <input value="" class="form-control" type="text" name="ShippingMethod" placeholder="ShippingMethod" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" action="/admin/orders" method="get">
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input class="form-control" type="text" name="ShippingMethod" placeholder="ShippingMethod" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
   </div>
-  <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-    <input value="" class="form-control" type="text" name="TotalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input class="form-control" type="text" name="TotalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
   </div>
-  <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-    <input value="" class="form-control" type="text" name="PaymentMethod" placeholder="Payment Method" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input class="form-control" type="text" name="PaymentMethod" placeholder="Payment Method" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
   </div>
-  <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-    <select value="" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px; margin-right: -10px;" name="IsPaid" class="form-control">
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <select style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px; margin-right: -10px;" name="IsPaid" class="form-control">
       <option value="">Select paid</option>
       <option value="1">paid</option>
       <option value="0">unpaid</option>
     </select>
   </div>
-  <div class="input-group input-group-sm" style="margin-left:10px; margin-right: 5px; margin-bottom: 10px;">
-    <select value="" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px; margin-right: -10px;" name="Status" class="form-control">
+  <div class="input-group input-group-sm" style="margin-left: 10px; margin-bottom: 10px;">
+    <select style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px; margin-right: -5px;" name="Status" class="form-control">
       <option value="">select status</option>
       <option value="pending">Pending</option>
       <option value="confirmed">Confirmed</option>
@@ -66,35 +74,36 @@
       <option value="cancel">Cancel</option>
     </select>
   </div>
-  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
-    <input value="" type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
-  </div>
-  <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
-    <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+  <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: 10px;">
+    <button style="height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
       <i class="mdi mdi-magnify" style="padding: 10px;"></i>
     </button>
   </div>
 </form>
-
 <section class="section main-section">
   <div class="card has-table">
     <header class="card-header">
-      <p class="card-header-title"></p>
-      <form class="card-header-icon" asp-controller="Admin" asp-action="Order" method="get" onchange="this.submit()">
-        <select style="margin-left:-10px; padding: 5px 10px;border:1px solid #F1F1F1 " name="PageSize">
-          <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
-          <option value="20" selected="@(ViewBag.PageSize == 20)">20</option>
-          <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
-          <option value="100" selected="@(ViewBag.PageSize == 100)">100</option>
+      <p class="card-header-title">
+        Orders
+      </p>
+      <form class="card-header-icon" method="get" onchange="this.submit()">
+        <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+          <option value="10" th:selected="${size == 10}">10</option>
+          <option value="20" th:selected="${size == 20}">20</option>
+          <option value="50" th:selected="${size == 50}">50</option>
+          <option value="100" th:selected="${size == 100}">100</option>
         </select>
-        <input type="hidden" name="page" value="@ViewBag.CurrentPage">
+
+        <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
+        <input type="hidden" name="page" th:value="${ordersPage.number}">
       </form>
+
     </header>
     <div class="card-content">
       <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
         <thead>
         <tr>
-          <th width="10"><input type="checkbox" id="all"></th>
+          <th width="10"><input type="checkbox"></th>
           <th>Order Id</th>
           <th>Order Date</th>
           <th>Total Amount</th>
@@ -102,47 +111,30 @@
           <th>Shipping Method</th>
           <th>Payment Method</th>
           <th>Is Paid</th>
+          <th>Status</th>
           <th>Action</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th width="10"><input type="checkbox" id="all"></th>
-          <td>1</td>
-          <td>2024-08-01</td>
-          <td>100.00</td>
-          <td>John Doe</td>
-          <td>Standard</td>
-          <td>Credit Card</td>
+        <tr th:each="order : ${ordersPage.content}">
+          <th width="10"><input type="checkbox"></th>
+          <td th:text="${order.id}"></td>
+          <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
+          <td th:text="${order.totalAmount}"></td>
+          <td th:text="${order.fullName}"></td>
+          <td th:text="${order.shippingMethod}"></td>
+          <td th:text="${order.paymentMethod}"></td>
+          <td th:text="${order.isPaid ? 'paid' : 'unpaid'}"></td>
           <td>
-            <span class="badge bg-warning text-pending">pending</span>
+              <span th:text="${order.status}"
+                   th:class="${statusClass[order.status]}">
+             </span>
           </td>
-          <td>unpaid</td>
+
           <td class="actions-cell">
             <div class="buttons right nowrap">
 
-              <a href="/admin/detailorder" class="btn btn-primary" style="background-color:green; color:white;" asp-route-id="@item.OrderId">
-                <span class="icon"><i class="mdi mdi-eye"></i></span>
-              </a>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th width="10"><input type="checkbox" id="all"></th>
-          <td>2</td>
-          <td>2024-08-02</td>
-          <td>150.00</td>
-          <td>Jane Smith</td>
-          <td>Express</td>
-          <td>PayPal</td>
-          <td>
-            <span class="badge bg-primary text-confirmed">confirmed</span>
-          </td>
-          <td>paid</td>
-          <td class="actions-cell">
-            <div class="buttons right nowrap">
-
-              <a href="/admin/detailorder" class="btn btn-primary" style="background-color:green; color:white;" asp-route-id="@item.OrderId">
+              <a th:href="@{/admin/detailorder/{id}(id=${order.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-eye"></i></span>
               </a>
             </div>
@@ -150,30 +142,70 @@
         </tr>
         </tbody>
       </table>
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, ordersPage.totalPages - 1)}"
+                    th:classappend="${i == ordersPage.number} ? ' active' : ''"
+                    th:text="${i + 1}"
+                    th:onclick="|window.location.href='/admin/orders?page=' + ${i} + '&size=' + ${ordersPage.size}|">
+            </button>
+          </div>
+          <small th:text="'Page ' + (${ordersPage.number} + 1) + ' of ' + ${ordersPage.totalPages}"></small>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 
 <style>
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
+
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
   .text-pending {
-    color: orange; /* Màu chữ cho trạng thái "pending" */
+    color: tomato; /* Màu chữ cho trạng thái "pending" */
   }
 
   .text-confirmed {
-    color: blue; /* Màu chữ cho trạng thái "confirmed" */
+    color: navy; /* Màu chữ cho trạng thái "confirmed" */
   }
 
   .text-shipping {
-    color: green; /* Màu chữ cho trạng thái "shipping" */
+    color: orange; /* Màu chữ cho trạng thái "shipping" */
   }
 
   .text-shipped {
-    color: purple; /* Màu chữ cho trạng thái "shipped" */
+    color: black; /* Màu chữ cho trạng thái "shipped" */
   }
 
   .text-complete {
-    color: gray; /* Màu chữ cho trạng thái "complete" */
+    color: green; /* Màu chữ cho trạng thái "complete" */
   }
 
   .text-cancel {
@@ -183,9 +215,6 @@
   .btn-primary {
     color: rgb(245 157 57);
     background-color: rgb(251 226 197);
-    border-color: none;
-    /* border-top-left-radius: 10px !important; */
-    /* border-bottom-right-radius: 10px !important; */
     border-radius: .357rem;
     border: none;
     font-weight: 600;
@@ -195,15 +224,61 @@
   .btn-add {
     color: white;
     background-color: black;
-    border-color: none;
-    /* border-top-left-radius: 10px !important; */
-    /* border-bottom-right-radius: 10px !important; */
     border-radius: .357rem;
     border: none;
     font-weight: 600;
     padding: 10px 20px; /* Điều chỉnh kích thước theo ý muốn */
   }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var alert = document.getElementById('successAlert');
+    if (alert) {
+      alert.classList.add('alert-show');
+      setTimeout(function() {
+        alert.classList.add('fade-out');
+        setTimeout(function() {
+          alert.style.display = 'none';
+        }, 1000); // match the duration of the fade-out transition
+      }, 3000); // display duration in milliseconds
+    }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+
+<script>
+  this.exportExcel = function () {
+    // Lấy bảng cần xuất
+    var tab = document.getElementById('sampleTable');
+    // Tạo một đối tượng Excel
+    var excel = new ExcelJS.Workbook();
+    // Thêm một trang tính mới
+    var sheet = excel.addWorksheet('Sheet 1');
+    // Lặp qua các hàng và cột của bảng để đổ dữ liệu vào trang tính Excel
+    for (var i = 0; i < tab.rows.length; i++) {
+      var row = sheet.getRow(i + 1);
+      for (var j = 0; j < tab.rows[i].cells.length; j++) {
+        row.getCell(j + 1).value = tab.rows[i].cells[j].innerText;
+      }
+    }
+    // Tạo một blob từ file Excel
+    excel.xlsx.writeBuffer().then(function (buffer) {
+      var blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      // Tạo một URL từ blob và mở cửa sổ mới để tải xuống file Excel
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = "orderfiltered.xlsx";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+</script>
+
+
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 
 </body>
