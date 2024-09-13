@@ -57,9 +57,9 @@ public class UserSecurityConfiguration {
                         .invalidateHttpSession(true) // Xóa session
                         .deleteCookies("JSESSIONID") // Xóa cookie session
                         .permitAll()
-                )
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .accessDeniedPage("/error/404")
+//                )
+//                .exceptionHandling(exceptionHandling -> exceptionHandling
+//                        .accessDeniedPage("/error/404")
                 );
         return http.build();
     }

@@ -54,6 +54,24 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
+    // Kiểm tra email đã tồn tại trong database
+    public boolean isEmailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    // Kiểm tra full name đã tồn tại trong database
+    public boolean isFullNameExists(String fullName) {
+        return userRepository.existsByFullName(fullName);
+    }
+
+    // Kiểm tra định dạng email hợp lệ
+    public boolean isValidEmail(String email) {
+        return email.contains("@") && email.contains(".");
+    }
+    // Lưu user mới vào database
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
 
 }
 

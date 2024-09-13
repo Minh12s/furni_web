@@ -107,6 +107,42 @@
     button:hover {
         background-color: #0056b3;
     }
+    #alertsContainer {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Khoảng cách giữa các thông báo */
+        z-index: 1000;
+    }
+
+    .alert {
+        padding: 15px;
+        border-radius: 4px;
+        background-color: red;
+        border: 1px solid red;
+        color: white;
+        opacity: 1;
+        transition: opacity 1s ease-out;
+        /* Chúng ta có thể bỏ vị trí absolute tại đây */
+    }
+
+
+    .alert-danger {
+        background-color: red;
+        border: 1px solid red;
+        color: white;
+    }
+
+    .alert-show {
+        display: block;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
 </style>
 <body class="goto-here">
 <div class="py-1 bg-black">
@@ -132,37 +168,49 @@
 </div>
 <div th:insert="/include/fragments :: navbar"></div>
 <!-- END nav -->
-
+<!-- Phần chứa các thông báo lỗi -->
+<div id="alertsContainer" th:if="${errorRegister != null}">
+    <div th:each="error : ${errorRegister}" class="alert alert-danger">
+        <i class="fa-solid fa-circle-xmark" style="margin-right: 8px;"></i>
+        <span th:text="${error}"></span>
+    </div>
+</div>
 <div class="login-container">
     <div class="login-box">
         <h2>Sign up</h2>
 
-        <form th:action="@{/registers}" method="post" th:object="${user}">
+        <form th:action="@{/registers}" method="post" th:object="${user}" novalidate>
             <div class="input-group">
                 <label for="fullName">Full Name:</label>
                 <i class="fas fa-user input-icon"></i>
-                <input type="text" id="fullName" th:field="*{fullName}" required>
-                <!-- Hiển thị lỗi cho fullName -->
-                <div class="text-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                <input type="text" id="fullName" th:field="*{fullName}" >
             </div>
+
 
             <div class="input-group">
                 <label for="email">Email:</label>
                 <i class="fas fa-envelope input-icon"></i>
-                <input type="email" id="email" th:field="*{email}" required>
-                <!-- Hiển thị lỗi cho email -->
-                <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                <input type="email" id="email" th:field="*{email}" >
             </div>
+
 
             <div class="input-group">
                 <label for="password">Password:</label>
                 <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="password" th:field="*{password}" required>
-                <!-- Hiển thị lỗi cho password -->
-                <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                <input type="password" id="password" th:field="*{password}" >
+            </div>
+
+
+            <div style="margin-top:20px;" class="remember-password">
+                <label><input type="checkbox">Remember Me</label>
+                <a href="#">Forget Password</a>
             </div>
 
             <button type="submit" class="btn btn-primary py-3 px-5">Register</button>
+
+            <div class="create-account">
+                <p>Create A New Account? <a style="color:#FFA45C;" href="/Page/Login" class="register-link">Sign in</a></p>
+            </div>
         </form>
     </div>
 </div>
@@ -175,6 +223,19 @@
 <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 <div th:insert="/include/fragments :: script"></div>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            alert.classList.add('alert-show');
+            setTimeout(function() {
+                alert.classList.add('fade-out');
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 1000);
+            }, 3000);
+        });
+    });
+</script>
 </body>
 </html>

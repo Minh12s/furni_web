@@ -12,7 +12,9 @@
         import org.springframework.web.bind.annotation.ModelAttribute;
         import org.springframework.web.bind.annotation.PostMapping;
         import org.springframework.web.bind.annotation.RequestParam;
-        import jakarta.validation.Valid;  // Import valid annotation
+
+        import java.util.ArrayList;
+        import java.util.List;
 
 
         @Controller
@@ -42,18 +44,41 @@
             }
 
 
+
             @PostMapping("/registers")
-            public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
-                if (result.hasErrors()) {
-                    return "User/register";  // Nếu có lỗi, trả về trang đăng ký cùng với lỗi
+            public String register(@ModelAttribute("user") User user, Model model) {
+                List<String> errorRegister = new ArrayList<>();
+
+                // Kiểm tra Full Name
+                if (user.getFullName().trim().isEmpty()) {
+                    errorRegister.add("Full name cannot be  blank.");
+                } else if (userService.isFullNameExists(user.getFullName())) {
+                    errorRegister.add("This Full Name already exists.");
                 }
 
-                // Gán userName bằng fullName
-                user.setUserName(user.getFullName());
+                // Kiểm tra Email
+                if (user.getEmail().trim().isEmpty()) {
+                    errorRegister.add("Email cannot be blank.");
+                } else if (!userService.isValidEmail(user.getEmail())) {
+                    errorRegister.add("Please enter correct email format.");
+                } else if (userService.isEmailExists(user.getEmail())) {
+                    errorRegister.add("This email already exists.");
+                }
 
-                userService.registerUser(user); // Gọi phương thức để lưu người dùng và vai trò
+                // Kiểm tra Password
+                if (user.getPassword().trim().isEmpty()) {
+                    errorRegister.add("Password cannot be blank.");
+                }
 
-                return "redirect:/loginPage";
+                // Nếu có lỗi, trả về trang đăng ký và hiển thị lỗi
+                if (!errorRegister.isEmpty()) {
+                    model.addAttribute("errorRegister", errorRegister);
+                    return "User/register";
+                }
+
+                // Nếu không có lỗi, lưu user và điều hướng tới trang đăng nhập
+                userService.saveUser(user);
+                return "redirect:/Page/Login";
             }
-    
+
         }

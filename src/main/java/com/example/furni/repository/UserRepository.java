@@ -10,4 +10,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByUserName(String userName);
 
+    // Kiểm tra email đã tồn tại
+    boolean existsByEmail(String email);
+
+    // Kiểm tra full name đã tồn tại
+    boolean existsByFullName(String fullName);
 }
