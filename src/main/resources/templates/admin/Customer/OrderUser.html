@@ -16,13 +16,6 @@
 </section>
 
 <section class="is-hero-bar">
-    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-        <h1 class="title">
-            List of orders
-        </h1>
-    </div>
-</section>
-<section class="is-hero-bar">
     <h1 style="text-align:center; margin: 20px 0">Purchased order</h1>
 </section>
 <section class="section main-section">
@@ -33,65 +26,42 @@
                 <tr>
                     <th width="10"><input type="checkbox" id="all"></th>
                     <th>Order Id</th>
-                    <th>Customer Name</th>
-                    <th>Total amount</th>
+                    <th>Order Date</th>
+                    <th>Total Amount</th>
+                    <th>Full Name</th>
+                    <th>Payment Method</th>
+                    <th>Is Paid</th>
                     <th>Status</th>
-                    <th>IsPaid</th>
-                    <th>Order date</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
+                <tr th:if="${#lists.isEmpty(orders)}">
+                    <td colspan="9" style="text-align: center; font-weight: bold;">
+                        No orders available.
+                    </td>
+                </tr>
 
-                <tr>
+                <tr th:each="order : ${orders}" th:unless="${#lists.isEmpty(orders)}">
                     <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                    <td>1</td>
-                    <td>John Doe</td>
-                    <td>$100.00</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                    <td><span>Yes</span></td>
-                    <td>2024-07-25</td>
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${order.totalAmount}"></td>
+                    <td th:text="${order.fullName}"></td>
+                    <td th:text="${order.paymentMethod}"></td>
+                    <td th:text="${order.isPaid ? 'paid' : 'unpaid'}"></td>
+                    <td th:text="${order.status}"></td>
                     <td class="actions-cell">
                         <div class="buttons right nowrap">
-                            <a class="btn btn-primary" style="background-color:green; color:white;"href="/admin/orderdetailuser" >
-                                <span class="icon"><i class="mdi mdi-eye"></i></span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="10"><input type="checkbox" name="check1" value="2"></td>
-                    <td>2</td>
-                    <td>Jane Smith</td>
-                    <td>$250.00</td>
-                    <td><span class="badge bg-warning">Pending</span></td>
-                    <td><span>No</span></td>
-                    <td>2024-07-26</td>
-                    <td class="actions-cell">
-                        <div class="buttons right nowrap">
-                            <a class="btn btn-primary" style="background-color:green; color:white;" href="/admin/orderdetailuser">
-                                <span class="icon"><i class="mdi mdi-eye"></i></span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="10"><input type="checkbox" name="check1" value="3"></td>
-                    <td>3</td>
-                    <td>Bob Johnson</td>
-                    <td>$150.00</td>
-                    <td><span class="badge bg-danger">Cancelled</span></td>
-                    <td><span>No</span></td>
-                    <td>2024-07-27</td>
-                    <td class="actions-cell">
-                        <div class="buttons right nowrap">
-                            <a class="btn btn-primary" style="background-color:green; color:white;" href="/admin/orderdetailsuer">
+                            <a class="btn btn-primary" style="background-color:green; color:white;"
+                               th:href="@{/admin/orderdetailuser/{id}(id=${order.id})}">
                                 <span class="icon"><i class="mdi mdi-eye"></i></span>
                             </a>
                         </div>
                     </td>
                 </tr>
                 </tbody>
+
             </table>
         </div>
     </div>
@@ -103,14 +73,14 @@
     .btn-primary {
         color: rgb(245 157 57);
         background-color: rgb(251 226 197);
-        border-color: none;
+
         border-radius: .357rem;
         border: none;
         font-weight: 600;
         padding: 5px 20px;
     }
     .btn-secondary {
-        border-color: none;
+
         border-radius: .357rem;
         border: none;
         font-weight: 600;

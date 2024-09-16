@@ -1,15 +1,19 @@
 package com.example.furni.service;
 
+import com.example.furni.entity.Orders;
 import com.example.furni.entity.Role;
 import com.example.furni.entity.User;
 import com.example.furni.repository.RoleRepository;
 import com.example.furni.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +28,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    // auth user
     public void registerUser(User user) {
         // Mã hóa mật khẩu trước khi lưu
         user.setPassword(passwordEncoder.encode(user.getPassword()));

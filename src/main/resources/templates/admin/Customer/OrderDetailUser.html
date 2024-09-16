@@ -12,33 +12,37 @@
         <div class="row order_d_inner">
             <div class="col-lg-4">
                 <div class="details_item">
-                    <h4>Order Info</h4>
+                    <h3>Order Info</h3>
                     <ul class="list">
-                        <li><a href="#"><span>Order id</span>: 1</a></li>
-                        <li><a href="#"><span>Date</span>: 2024-07-25</a></li>
-                        <li><a href="#"><span>Total</span>: $100.00</a></li>
-                        <li><a href="#"><span>Payment Method</span>: Credit Card</a></li>
-                        <li><a href="#"><span>IsPaid</span>: Yes</a></li>
-                        <li><a href="#"><span>Status</span>: Completed</a></li>
+                        <li><a href="#"><span>Order id</span>: <span th:text="${order.id}"></span></a></li>
+                        <li><a href="#"><span>Date</span>: <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></span></a></li>
+                        <li><a href="#"><span>Total</span>: <span th:text="${order.totalAmount}"></span></a></li>
+                        <li><a href="#"><span>Payment Method</span>: <span th:text="${order.paymentMethod}"></span></a></li>
+                        <li><a href="#"><span>IsPaid</span>: <span th:text="${order.id}"></span></a></li>
+                        <li><a href="#"><span>Status</span>: <span th:text="${order.status}"></span></a></li>
+                        <li><a href="#"><span>Note</span>: <span th:text="${order.note}"></span></a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="details_item">
-                    <h4>Customer Information</h4>
+                    <h3>Customer Information</h3>
                     <ul class="list">
-                        <li><a href="#"><span>Full Name</span>: John Doe</a></li>
-                        <li><a href="#"><span>Telephone</span>: 123-456-7890</a></li>
-                        <li><a href="#"><span>Email</span>: johndoe@example.com</a></li>
+                        <li><a href="#"><span>Full Name</span>: <span th:text="${order.fullName}"></span></a></li>
+                        <li><a href="#"><span>Telephone</span>: <span th:text="${order.telephone}"></span></a></li>
+                        <li><a href="#"><span>Email</span>: <span th:text="${order.email}"></span></a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="details_item">
-                    <h4>Shipping</h4>
+                    <h3>Shipping</h3>
                     <ul class="list">
-                        <li><a href="#"><span>Shipping method</span>: Standard</a></li>
-                        <li><a href="#"><span>Address</span>: 123 Main St, Cityville, ST, 12345</a></li>
+                        <li><a href="#"><span>Shipping method</span>: <span th:text="${order.shippingMethod}"></span></a></li>
+                        <li><a href="#"><span>Address</span>:
+                            <span th:text="${order.province} + ', ' + ${order.district} + ', ' + ${order.ward} + ' - ' + ${order.addressDetail}"></span>
+                        </a></li>
+                        <li><a href="#"><span>Schedule</span>: <span th:text="${#temporals.format(order.schedule, 'dd/MM/yyyy')}"></span></a></li>
                     </ul>
                 </div>
             </div>
@@ -57,13 +61,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="/images/product-1.jpg" width="120" /></td>
-                            <td>Product 1</td>
-                            <td>$50.00</td>
-                            <td>2</td>
-                            <td>$100.00</td>
+                        <tr th:each="orderProduct : ${orderProducts}">
+                            <td th:text="${orderProduct.product.id}"></td>
+                            <td><img th:src="'data:image/jpeg;base64,' + ${orderProduct.product.thumbnail}" width="120" /></td>
+                            <td th:text="${orderProduct.product.productName}"></td>
+                            <td th:text="${orderProduct.price}"></td>
+                            <td th:text="${orderProduct.qty}"></td>
+                            <td th:text="${orderProduct.price * orderProduct.qty}"></td>
                         </tr>
                         </tbody>
                     </table>

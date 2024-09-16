@@ -23,42 +23,52 @@
   </div>
 </section>
 <section class="is-hero-bar">
-  <div class="flex items-center">
-    <!-- Nút in PDF -->
-    <button onclick="myApp.printTable()" class="btn btn-add ml-2">
-      <i class="fas fa-file-pdf"></i>
-      Print PDF
-    </button>
-    <!-- Nút xuất Excel -->
-    <button onclick="exportCustomerToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
-      <i class="fas fa-file-excel"></i>
-      Export Excel
-    </button>
-    <button onclick="exportExcel()" class="btn btn-add">
-      <i class="fas fa-file-excel"></i>
-      Excel Filtered
-    </button>
+  <div class="flex flex-col md:flex-row items-center justify-start">
+
+    <div class="col-sm-2" style="margin-right: 5px;">
+      <button onclick="myApp.printTable()" class="btn btn-add">
+        <i class="fas fa-file-pdf"></i>
+        Print PDF
+      </button>
+    </div>
+
+
+    <div class="col-sm-2" style="margin-right: 5px;">
+      <button onclick="exportFacilitiesToExcel()" class="btn btn-add">
+        <i class="fas fa-file-excel"></i>
+        Export Excel
+      </button>
+    </div>
+
+
+    <div class="col-sm-2">
+      <button onclick="exportExcel()" class="btn btn-add">
+        <i class="fas fa-file-excel"></i>
+        Excel Filtered
+      </button>
+    </div>
   </div>
 </section>
-<form asp-action="Customer" asp-controller="Admin" method="get" style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;">
-  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
-    <input value="" type="text" name="userNameSearch" class="form-control" placeholder="Search by Username" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+<form method="get" action="/admin/customers" style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;">
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input type="text" name="userNameSearch" class="form-control" placeholder="Search by Username" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 160px; margin-left: 7px;" />
   </div>
-  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
-    <input value="" type="text" name="addressSearch" class="form-control" placeholder="Search by Address" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input type="email" name="emailSearch" class="form-control" placeholder="Search by Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 160px; margin-left: 7px;" />
   </div>
-  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
-    <input value="" type="text" name="phoneNumberSearch" class="form-control" placeholder="Search by Phone Number" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input type="text" name="addressSearch" class="form-control" placeholder="Search by Address" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 160px; margin-left: 7px;" />
   </div>
-  <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
-    <input value="" type="text" name="emailSearch" class="form-control" placeholder="Search by Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input type="text" name="phoneNumberSearch" class="form-control" placeholder="Search by Phone Number" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 160px; margin-left: 7px;" />
   </div>
-  <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
-    <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+  <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: 10px;">
+    <button style="height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
       <i class="mdi mdi-magnify" style="padding: 10px;"></i>
     </button>
   </div>
 </form>
+
 
 <section class="section main-section">
   <div class="card has-table">
@@ -66,14 +76,16 @@
       <p class="card-header-title">
         Customer
       </p>
-      <form class="card-header-icon" asp-controller="Admin" asp-action="Customer" method="get" onchange="this.submit()">
-      <select style="margin-left:-10px; padding: 5px 10px;border:1px solid #F1F1F1 " name="PageSize">
-        <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
-        <option value="20" selected="@(ViewBag.PageSize == 20)">20</option>
-        <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
-        <option value="100" selected="@(ViewBag.PageSize == 100)">100</option>
-      </select>
-      <input type="hidden" name="page" value="@ViewBag.CurrentPage">
+      <form class="card-header-icon" method="get" onchange="this.submit()">
+        <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+          <option value="10" th:selected="${size == 10}">10</option>
+          <option value="20" th:selected="${size == 20}">20</option>
+          <option value="50" th:selected="${size == 50}">50</option>
+          <option value="100" th:selected="${size == 100}">100</option>
+        </select>
+
+        <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
+        <input type="hidden" name="page" th:value="${customerPage.number}">
       </form>
     </header>
     <div class="card-content">
@@ -81,66 +93,51 @@
         <thead>
         <tr>
           <th width="10"><input type="checkbox" id="all"></th>
-          <th>UserId</th>
-          <th>Username</th>
+          <th>Id</th>
+          <th>Full name</th>
           <th>Thumbnail</th>
           <th>Email</th>
           <th>Address</th>
           <th>PhoneNumber</th>
-          <th>Account Balance</th>
           <th></th>
         </tr>
         </thead>
         <tbody>
 
-        <tr>
+        <tr th:each="customer : ${customerPage.content}">
           <td width="10"><input type="checkbox" name="check1" value="1"></td>
-          <td>1</td>
-          <td>JohnDoe</td>
-          <td><img src="/images/person_1.jpg" width="100" height="100" /></td>
-          <td>john@example.com</td>
-          <td>123 Main St</td>
-          <td>123-456-7890</td>
-          <td>$1000</td>
+          <td th:text="${customer.id}"></td>
+          <td th:text="${customer.fullName}"></td>
+          <td><img th:src="'data:image/jpeg;base64,' + ${customer.thumbnail}" width="120" /></td>
+          <td th:text="${customer.email}"></td>
+          <td th:text="${customer.address}"></td>
+          <td th:text="${customer.phoneNumber}"></td>
           <td class="actions-cell">
             <div class="buttons right nowrap">
-              <a href="/admin/orderuser" class="btn btn-primary" style="background-color:green; color:white;">
+              <!-- Sử dụng th:href để truyền customer.id vào URL -->
+              <a th:href="@{/admin/orderuser(userId=${customer.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-cart"></i></span>
               </a>
             </div>
           </td>
         </tr>
-        <tr>
-          <td width="10"><input type="checkbox" name="check1" value="1"></td>
-          <td>2</td>
-          <td>JaneDoe</td>
-          <td><img src="/images/person_2.jpg" width="100" height="100" /></td>
-          <td>jane@example.com</td>
-          <td>456 Elm St</td>
-          <td>987-654-3210</td>
-          <td>$2000</td>
-          <td class="actions-cell">
-            <div class="buttons right nowrap">
-              <a href="/admin/orderuser" class="btn btn-primary" style="background-color:green; color:white;">
-                <span class="icon"><i class="mdi mdi-cart"></i></span>
-              </a>
-            </div>
-          </td>
-        </tr>
-
         </tbody>
       </table>
       <div class="table-pagination">
         <div class="flex items-center justify-between">
           <div class="buttons">
-
-            <a href="#" class="page-link">1</a>
-            <a href="#" class="page-link">2</a>
-            <a href="#" class="page-link">3</a>
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, customerPage.totalPages - 1)}"
+                    th:classappend="${i == customerPage.number} ? ' active' : ''"
+                    th:text="${i + 1}"
+                    th:onclick="|window.location.href='/admin/customers?page=' + ${i} + '&size=' + ${customerPage.size}|">
+            </button>
           </div>
-          <small>Page 1 of 3</small>
+          <small th:text="'Page ' + (${customerPage.number} + 1) + ' of ' + ${customerPage.totalPages}"></small>
         </div>
       </div>
+
+
     </div>
   </div>
 </section>
@@ -148,7 +145,6 @@
   .btn-primary {
     color: rgb(245 157 57);
     background-color: rgb(251 226 197);
-    border-color: none;
     border-radius: .357rem;
     border: none;
     font-weight: 600;
@@ -171,7 +167,6 @@
   .btn-add {
     color: white;
     background-color: black;
-    border-color: none;
     border-radius: .357rem;
     border: none;
     font-weight: 600;
