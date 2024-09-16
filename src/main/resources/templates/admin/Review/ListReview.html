@@ -25,6 +25,10 @@
         <span class="icon"><i class="mdi mdi-reload"></i></span>
       </a>
     </header>
+    <div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+      <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+      <span th:text="${successMessage}"></span>
+    </div>
     <div class="card-content">
       <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
         <thead>
@@ -34,63 +38,87 @@
           <th>Customer name</th>
           <th>Email</th>
           <th>Status</th>
-          <th>Action</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th width="10"><input type="checkbox" id="all"></th>
-          <td>1</td>
-          <td>John Doe</td>
-          <td>john@example.com</td>
-          <td><span class="badge bg-warning text-pending">pending</span></td>
+        <tr th:each="review : ${reviewsPage.content}">
+          <th width="10"><input type="checkbox"></th>
+          <td th:text="${review.id}"></td>
+          <td th:text="${review.user.fullName}"></td>
+          <td th:text="${review.user.email}"></td>
+          <td th:text="${review.status}"></td>
           <td class="actions-cell">
             <div class="buttons right nowrap">
-              <a href="/admin/detailreview" asp-route-id="1" class="btn btn-primary" style="background-color:green; color:white;">
+              <a th:href="@{/admin/detailreview/{reviewId}(reviewId=${review.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-eye"></i></span>
               </a>
             </div>
           </td>
         </tr>
-        <tr>
-          <th width="10"><input type="checkbox" id="all"></th>
-          <td>2</td>
-          <td>Jane Smith</td>
-          <td>jane@example.com</td>
-          <td><span class="badge bg-primary text-approved">approved</span></td>
-          <td class="actions-cell">
-            <div class="buttons right nowrap">
-              <a href="/admin/detailreview" asp-route-id="2" class="btn btn-primary" style="background-color:green; color:white;">
-                <span class="icon"><i class="mdi mdi-eye"></i></span>
-              </a>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th width="10"><input type="checkbox" id="all"></th>
-          <td>3</td>
-          <td>Michael Brown</td>
-          <td>michael@example.com</td>
-          <td><span class="badge bg-info text-rejected">rejected</span></td>
-          <td class="actions-cell">
-            <div class="buttons right nowrap">
-              <a href="/admin/detailreview" asp-route-id="3" class="btn btn-primary" style="background-color:green; color:white;">
-                <span class="icon"><i class="mdi mdi-eye"></i></span>
-              </a>
-            </div>
-          </td>
-        </tr>
+
         </tbody>
       </table>
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, reviewsPage.totalPages - 1)}"
+                    th:classappend="${i == reviewsPage.number} ? ' active' : ''"
+                    th:text="${i + 1}"
+                    th:onclick="|window.location.href='/admin/listReview/${productId}?page=' + ${i} + '&size=' + ${reviewsPage.size}|">
+            </button>
+          </div>
+          <small th:text="'Page ' + (${reviewsPage.number} + 1) + ' of ' + ${reviewsPage.totalPages}"></small>
+        </div>
+      </div>
     </div>
   </div>
 
 </section>
 <style>
+  /* Các lớp CSS cho trạng thái */
+  .status-pending {
+    color: #FF6347; /* Màu đỏ cam cho pending */
+  }
+
+  .status-approved {
+    color: #28a745; /* Màu xanh lá cây cho approved */
+  }
+
+  .status-rejected {
+    color: #dc3545; /* Màu đỏ cho rejected */
+  }
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
+
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
   .btn-primary {
     color: rgb(245 157 57);
     background-color: rgb(251 226 197);
-    border-color: none;
     border-radius: .357rem;
     border: none;
     font-weight: 600;
@@ -110,6 +138,20 @@
     background-color: #f0f0f0; /* Màu nền khi hover */
   }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var alert = document.getElementById('successAlert');
+    if (alert) {
+      alert.classList.add('alert-show');
+      setTimeout(function() {
+        alert.classList.add('fade-out');
+        setTimeout(function() {
+          alert.style.display = 'none';
+        }, 1000); // match the duration of the fade-out transition
+      }, 3000); // display duration in milliseconds
+    }
+  });
+</script>
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 
 </body>

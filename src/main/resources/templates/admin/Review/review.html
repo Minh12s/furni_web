@@ -15,35 +15,44 @@
   </div>
 </section>
 <section class="is-hero-bar">
-  <div class="flex items-center">
-    <!-- Nút "Print PDF" -->
-    <button onclick="myApp.printTable()" class="btn btn-add ml-2">
-      <i class="fas fa-file-pdf"></i>
-      Print PDF
-    </button>
-    <!-- Nút "Export Excel" -->
-    <button onclick="exportReviewToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
-      <i class="fas fa-file-excel"></i>
-      Export Excel
-    </button>
-    <button onclick="exportExcel()" class="btn btn-add">
-      <i class="fas fa-file-excel"></i>
-      Excel Filtered
-    </button>
+  <div class="flex flex-col md:flex-row items-center justify-start">
+
+    <div class="col-sm-2" style="margin-right: 5px;">
+      <button onclick="myApp.printTable()" class="btn btn-add">
+        <i class="fas fa-file-pdf"></i>
+        Print PDF
+      </button>
+    </div>
+
+
+    <div class="col-sm-2" style="margin-right: 5px;">
+      <button onclick="exportFacilitiesToExcel()" class="btn btn-add">
+        <i class="fas fa-file-excel"></i>
+        Export Excel
+      </button>
+    </div>
+
+
+    <div class="col-sm-2">
+      <button onclick="exportExcel()" class="btn btn-add">
+        <i class="fas fa-file-excel"></i>
+        Excel Filtered
+      </button>
+    </div>
   </div>
 </section>
-<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;">
+<form action="/admin/reviews" method="GET" style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;">
   <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
-    <input class="form-control" type="number" name="AvgRating" step="0.1" placeholder="Avg Rating" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+    <input class="form-control" type="number" name="avgRating" step="0.1" placeholder="Avg Rating" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
   </div>
   <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
-    <input class="form-control" type="number" name="Price_from" placeholder="Price From" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
+    <input class="form-control" type="text" name="productName" placeholder="Product Name" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 3px;" />
   </div>
   <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
-    <input class="form-control" type="number" name="Price_to" placeholder="Price To" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
+    <input class="form-control" type="number" name="priceFrom" placeholder="Price From" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
   </div>
-  <div class="input-group input-group-sm" style="margin-left: -5px; margin-bottom: 10px;">
-    <input type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 130px; margin-left:7px;" />
+  <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+    <input class="form-control" type="number" name="priceTo" placeholder="Price To" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 10px;" />
   </div>
   <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
     <button style="margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
@@ -51,20 +60,23 @@
     </button>
   </div>
 </form>
+
 <section class="section main-section">
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
         Product review
       </p>
-      <form class="card-header-icon" onchange="this.submit()">
-        <select style="margin-left:-10px; padding: 5px 10px; border:1px solid #F1F1F1" name="PageSize">
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
+      <form class="card-header-icon" method="get" onchange="this.submit()">
+        <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+          <option value="10" th:selected="${size == 10}">10</option>
+          <option value="20" th:selected="${size == 20}">20</option>
+          <option value="50" th:selected="${size == 50}">50</option>
+          <option value="100" th:selected="${size == 100}">100</option>
         </select>
-        <input type="hidden" name="page" value="1">
+
+        <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
+        <input type="hidden" name="page" th:value="${productsPage.number}">
       </form>
     </header>
     <div class="card-content">
@@ -72,54 +84,47 @@
         <thead>
         <tr>
           <th width="10"><input type="checkbox" id="all"></th>
-          <th>Id</th>
+          <th>ProductId</th>
           <th>Thumbnail</th>
-          <th>Product Name</th>
+          <th>ProductName</th>
           <th>Price</th>
+          <th>Category</th>
           <th>Average number of stars</th>
           <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
+        <tr th:each="product : ${productsPage.content}">
           <td><input type="checkbox"></td>
-          <td>1</td>
-          <td><img src="/images/product-2.jpg" alt="Thumbnail" width="100" height="100"></td>
-          <td>Product A</td>
-          <td>100.00</td>
-          <td>4.5</td>
+          <td th:text="${product.id}"></td>
+          <td><img th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Thumbnail" width="100" height="100"></td>
+          <td th:text="${product.productName}"></td>
+          <td th:text="${product.price}"></td>
+          <td th:text="${product.category.categoryName}"></td>
+          <td th:text="${product.averageRating}"></td>
           <td class="actions-cell">
             <div class="buttons right nowrap">
-              <a href="/admin/listreview" class="btn btn-primary" style="background-color:green; color:white;">
+              <a th:href="@{/admin/listReview/{productId}(productId=${product.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-comment-text-outline"></i></span>
               </a>
             </div>
           </td>
+
         </tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td>2</td>
-          <td><img src="/images/product-50.jpg" alt="Thumbnail" width="100" height="100"></td>
-          <td>Product B</td>
-          <td>150.00</td>
-          <td>4.0</td>
-          <td class="actions-cell">
-            <div class="buttons right nowrap">
-              <a href="/admin/listreview" class="btn btn-primary" style="background-color:green; color:white;">
-                <span class="icon"><i class="mdi mdi-comment-text-outline"></i></span>
-              </a>
-            </div>
-          </td>
-        </tr>
-        <!-- Thêm dữ liệu sản phẩm khác tại đây -->
         </tbody>
+
       </table>
       <div class="table-pagination">
         <div class="flex items-center justify-between">
           <div class="buttons">
-            <button type="button" class="button active" onclick="location.href='#'">1</button>
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, productsPage.totalPages - 1)}"
+                    th:classappend="${i == productsPage.number} ? ' active' : ''"
+                    th:text="${i + 1}"
+                    th:onclick="|window.location.href='/admin/reviews?page=' + ${i} + '&size=' + ${productsPage.size}|">
+            </button>
           </div>
-          <small>Page 1 of 1</small>
+          <small th:text="'Page ' + (${productsPage.number} + 1) + ' of ' + ${productsPage.totalPages}"></small>
         </div>
       </div>
     </div>
@@ -130,7 +135,6 @@
   .btn-primary {
     color: rgb(245 157 57);
     background-color: rgb(251 226 197);
-    border-color: none;
     border-radius: .357rem;
     border: none;
     font-weight: 600;
@@ -150,7 +154,6 @@
   .btn-add {
     color: white;
     background-color: black;
-    border-color: none;
     border-radius: .357rem;
     border: none;
     font-weight: 600;

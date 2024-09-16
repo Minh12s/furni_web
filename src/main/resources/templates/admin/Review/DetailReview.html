@@ -29,7 +29,7 @@
             <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
                 <thead>
                 <tr>
-                    <th width="10"><input type="checkbox" id="all"></th>
+                    <th width="10"><input type="checkbox" ></th>
                     <th>User Id</th>
                     <th>Customer name</th>
                     <th>Comment</th>
@@ -39,64 +39,53 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <th width="10"><input type="checkbox" id="all"></th>
-                    <td>1</td>
-                    <td>John Doe</td>
-                    <td>Great product!</td>
-                    <td>5</td>
-                    <td>2023-01-01</td>
+                    <th width="10"><input type="checkbox"></th>
+                    <td th:text="${review.user.id}">1</td>
+                    <td th:text="${review.user.fullName}">John Doe</td>
+                    <td th:text="${review.comment}">Great product!</td>
+                    <td th:text="${review.ratingValue}">5</td>
+                    <td th:text="${#temporals.format(review.reviewDate, 'dd/MM/yyyy')}">2023-01-01</td>
                 </tr>
-                <tr>
-                    <th width="10"><input type="checkbox" id="all"></th>
-                    <td>2</td>
-                    <td>Jane Smith</td>
-                    <td>Good value for money.</td>
-                    <td>4</td>
-                    <td>2023-01-02</td>
-                </tr>
-                <tr>
-                    <th width="10"><input type="checkbox" id="all"></th>
-                    <td>3</td>
-                    <td>Michael Brown</td>
-                    <td>Not as described.</td>
-                    <td>2</td>
-                    <td>2023-01-03</td>
-                </tr>
+
                 </tbody>
             </table>
         </div>
     </div>
 
 </section>
-<div>
-    <input type="hidden" id="returnUrl" name="returnUrl" value="@Url.Action("ListReview", "Admin", new { productId = 1 })" />
 
-    <div style="float:right; margin-top: 10px; display: flex; gap: 10px;">
-        <div>
-            <form method="post" action="@Url.Action("UpdateStatusReview", "Admin", new { id = 1, status = "approved" })">
 
-            <input type="hidden" name="returnUrl" value="@Url.Action("ListReview", "Admin", new { productId = 1 })" />
-            <button onclick="return confirm('Surely you want to update the status to: Approved')" type="submit" class="btn btn-success" style="padding: 5px 10px; border-radius: 5px; margin-right: 10px; background-color: green; color:white;">
-                Approved
+<div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+    <div th:if="${review.status == 'pending'}">
+        <form method="post" th:action="@{'/admin/updateReviewStatus/' + ${review.id}}">
+            <input type="hidden" name="status" value="approved" />
+            <button onclick="return confirm('Are you sure you want to update the status to: Approved?')" type="submit" class="btn btn-warning"
+                    style="padding: 5px 10px; border-radius: 5px; background-color: green; color: white;">
+                Approve
             </button>
-            </form>
-        </div>
+        </form>
+    </div>
 
-        <div>
-            <form method="post" action="@Url.Action("UpdateStatusReview", "Admin", new { id = 1, status = "rejected" })">
-
-            <input type="hidden" name="returnUrl" value="@Url.Action("ListReview", "Admin", new { productId = 1 })" />
-            <button onclick="return confirm('Surely you want to update the status to: Rejected')" type="submit" class="btn btn-danger" style="padding: 5px 10px; border-radius: 5px; margin-right: 10px; background-color: red; color: white;">
-                Rejected
+    <div th:if="${review.status == 'pending'}">
+        <form method="post" th:action="@{'/admin/updateReviewStatus/' + ${review.id}}">
+            <input type="hidden" name="status" value="rejected" />
+            <button onclick="return confirm('Are you sure you want to update the status to: Rejected?')" type="submit" class="btn btn-danger"
+                    style="padding: 5px 10px; border-radius: 5px; background-color: red; color: white;">
+                Reject
             </button>
-            </form>
-        </div>
+        </form>
+    </div>
 
-        <div>
-            <a style="padding: 5px 10px; border-radius: 5px; margin-right: 10px; background-color: red; color: white;" href="@Url.Action("ListReview", "Admin", new { productId = 1 })" class="btn btn-warning">Back</a>
-        </div>
+    <div th:if="${review.status != 'pending'}">
+        <a th:href="@{/admin/listReview/{productId}(productId=${review.product.id})}" class="btn btn-warning"
+           style="padding: 8px 10px; border-radius: 5px; background-color: red; color: white;">
+            Back
+        </a>
     </div>
 </div>
+
+
+
 <style>
     .text-pending {
         color: orange; /* Màu chữ cho trạng thái "pending" */
@@ -112,7 +101,6 @@
     .btn-primary {
         color: rgb(245 157 57);
         background-color: rgb(251 226 197);
-        border-color: none;
         border-radius: .357rem;
         border: none;
         font-weight: 600;

@@ -14,17 +14,5 @@ public class AdminController {
     public String Dashboard(){
         return "admin/dashboard";
     }
-    @GetMapping("/customer")
-    public String Customer(){
-        return "admin/Customer/customer";
-    }
-    @GetMapping("/order")
-    public String Order(){
-        return "admin/Order/order";
-    }
-    @GetMapping("/product")
-    public String Product(){
-        return "admin/Product/product";
-    }
 
 }

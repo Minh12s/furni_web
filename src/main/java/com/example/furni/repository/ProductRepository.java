@@ -20,6 +20,18 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                  @Param("minPrice") Double minPrice,
                                  @Param("maxPrice") Double maxPrice,
                                  Pageable pageable);
+    @Query("SELECT p FROM Product p "
+            + "LEFT JOIN Review r ON p.id = r.product.id "
+            + "WHERE (:productName IS NULL OR p.productName LIKE %:productName%) "
+            + "AND (:priceFrom IS NULL OR p.price >= :priceFrom) "
+            + "AND (:priceTo IS NULL OR p.price <= :priceTo) "
+            + "GROUP BY p "
+            + "HAVING (:avgRating IS NULL OR AVG(r.ratingValue) = :avgRating)")
+    Page<Product> findProductsByCriteria(@Param("productName") String productName,
+                                         @Param("priceFrom") Double priceFrom,
+                                         @Param("priceTo") Double priceTo,
+                                         @Param("avgRating") Double avgRating,
+                                         Pageable pageable);
     boolean existsByProductName(String productName);
     boolean existsByProductNameAndIdNot(String productName, int id);
 

@@ -15,7 +15,7 @@ public class Product {
     private String slug;
     @Column(name = "price")
     private double price;
-        @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
+    @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
     private String thumbnail;
     @Column(name = "qty")
     private int qty;
@@ -43,10 +43,17 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
-
+    @Transient
+    private double averageRating;
     public Product() {
     }
+    public double getAverageRating() {
+        return averageRating;
+    }
 
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
     public int getId() {
         return id;
     }
