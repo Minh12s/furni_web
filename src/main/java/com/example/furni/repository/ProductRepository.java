@@ -34,6 +34,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                          Pageable pageable);
     boolean existsByProductName(String productName);
     boolean existsByProductNameAndIdNot(String productName, int id);
-
+    // Đếm tổng số sản phẩm
+    long count();
 }
 

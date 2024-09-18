@@ -25,4 +25,11 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
                               @Param("IsPaid") String IsPaid,
                               @Param("Status") String Status,
                               Pageable pageable);
+    // tính tổng total amount tất cả đơn hàng có status là complete
+    @Query("SELECT SUM(o.totalAmount) FROM Orders o WHERE o.status = 'complete'")
+    Double getTotalAmountOfCompletedOrders();
+    // Lấy các đơn hàng có status là 'pending'
+    @Query("SELECT o FROM Orders o WHERE o.status = 'pending'")
+    Page<Orders> findPendingOrders(Pageable pageable);
+
 }
