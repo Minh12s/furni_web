@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <div th:insert="/include/fragments :: head"></div>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="goto-here">
 <div class="py-1 bg-black">
@@ -27,67 +29,23 @@
 </div>
 <div th:insert="/include/fragments :: navbar"></div>
 <!-- END nav -->
-
-<div class="hero-wrap hero-bread" style="background-image: url('/images/anhbg1.jpg');">
-    <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center">
-            <div class="col-md-9 ftco-animate text-center">
-                <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Thank You</span></p>
-                <h1 class="mb-0 bread">Thank You</h1>
-            </div>
-        </div>
-    </div>
-</div>
-
 <section class="thank-you spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h1 class="text-center">Thank you</h1>
-                <h3 class="text-center mb-3">Your order # 12345 has been placed</h3>
-                <h3 class="product-list-heading">Product List:</h3>
-                <table class="table mt-3">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Subtotal</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><img src="images/product-3.jpg" width="120" alt=""></td>
-                        <td>Young Woman Wearing Dress</td>
-                        <td>$4.90</td>
-                        <td>1</td>
-                        <td>$4.90</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><img src="images/product-4.jpg" width="120" alt=""></td>
-                        <td>Young Woman Wearing Dress</td>
-                        <td>$15.70</td>
-                        <td>1</td>
-                        <td>$15.70</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <!-- Hiển thị thông tin địa chỉ và phí ship nếu là Express -->
-                <div>
-                    <h3>Shipping Information:</h3>
-                    <p>Shipping Address: 123 Street Name, City, Country</p>
-                    <p>Shipping Fee: $10.00</p>
-                </div>
-                <p class="total-amount">Total Amount: $17.60</p>
+                <h1 class="text-center"><i class="fas fa-check-circle"></i>Thank You for Your Order! </h1>
+                <p>Your order has been successfully placed. We appreciate your trust in our service!</p>
+                <p>A confirmation email has been sent to you. Please check your email for order details and tracking information.</p>
+                <p>If you have any questions or concerns, feel free to contact our customer support.</p>
+
+                <a href="/" type="submit" class="btn btn-primary py-3 px-4">Continue Shopping</a>
             </div>
         </div>
     </div>
 </section>
-
+<div class="test">
+    <a href="/" type="submit" style="height: 100px;" class="test">Continue Shopping</a>
+</div>
 <div th:insert="/include/fragments :: footer"></div>
 
 
@@ -98,14 +56,14 @@
 <div th:insert="/include/fragments :: script"></div>
 
 <style>
-    .product-list-heading {
-        text-align: left;
+    .test{
+        background-color:white ;
+        color: white;
     }
 
-    .total-amount {
-        font-size: 18px;
-        font-weight: bold;
-        text-align: right;
+    .fas.fa-check-circle {
+        color: #28a745; /* Màu xanh cho icon tích */
+        margin-left: 10px; /* Khoảng cách giữa icon và chữ */
     }
 </style>
 </body>

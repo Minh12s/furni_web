@@ -11,5 +11,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     int countByUserId(Integer userId);
     // Thêm phương thức tìm kiếm theo userId và productId
     Cart findByUserIdAndProductId(int userId, int productId);
+    void deleteByUserId(Integer userId);
 
 }

@@ -5,6 +5,7 @@ import com.example.furni.entity.Product;
 import com.example.furni.entity.User;
 import com.example.furni.repository.CartRepository;
 import com.example.furni.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -89,4 +90,9 @@ public class CartService {
     public int getCartItemCount(Integer userId) {
         return cartRepository.countByUserId(userId);
     }
+    @Transactional
+    public void clearCartByUserId(Integer userId) {
+        cartRepository.deleteByUserId(userId);
+    }
+
 }

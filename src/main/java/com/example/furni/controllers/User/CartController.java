@@ -89,11 +89,11 @@ public class CartController extends BaseController {
 
 
         double subtotal = cartItems.stream().mapToDouble(Cart::getTotal).sum();
-        double delivery = 5.0; // phí giao hàng mặc định
-        double total = subtotal + delivery;
+//        double delivery = 5.0; // phí giao hàng mặc định
+        double total = subtotal ;
 
         model.addAttribute("subtotal", subtotal);
-        model.addAttribute("delivery", delivery);
+//        model.addAttribute("delivery", delivery);
         model.addAttribute("total", total);
 
         double totalPrice = cartItems.stream().mapToDouble(Cart::getTotal).sum();
