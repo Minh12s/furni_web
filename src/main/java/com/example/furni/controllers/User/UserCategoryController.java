@@ -1,9 +1,7 @@
 package com.example.furni.controllers.User;
 
-import com.example.furni.entity.Category;
-import com.example.furni.entity.Product;
-import com.example.furni.service.ProductService;
-import com.example.furni.service.CategoryService;
+import com.example.furni.entity.*;
+import com.example.furni.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -25,31 +25,67 @@ public class UserCategoryController extends BaseController{
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private MaterialService materialService;
+    @Autowired
+    private SizeService sizeService;
+    @Autowired
+    private BrandService brandService;
+
 
     @GetMapping("/category")
-    public String Category(Model model,
+    public String category(Model model,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "9") int size,
-                           @RequestParam(required = false) String slug) {
+                           @RequestParam(required = false) String slug,
+                           @RequestParam(required = false) Double minPrice,
+                           @RequestParam(required = false) Double maxPrice,
+                           @RequestParam(required = false) String sizeFilter,
+                           @RequestParam(required = false) String color,
+                           @RequestParam(required = false) String material,
+                           @RequestParam(required = false) Integer brandId) {
 
+        // Lấy tất cả các danh mục
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
 
+        // Lọc sản phẩm theo tiêu chí
         Page<Product> productPage;
-        if (slug != null) {
-            productPage = productService.getProductsByCategoryPaginated(slug, page, size);
+
+        if (slug != null && !slug.isEmpty()) {
+            productPage = productService.filterProductsByCategoryWithCriteria(slug, minPrice, maxPrice, sizeFilter, color, material, brandId, page, size);
         } else {
-            productPage = productService.getProductsPaginated(page, size);
+            productPage = productService.filterProductsWithMultipleCriteria( minPrice, maxPrice, sizeFilter, color, material, brandId, page, size);
         }
 
-        model.addAttribute("products", productPage.getContent());
+        // Lấy danh sách sản phẩm sau khi lọc
+        List<Product> filteredProducts = productPage.getContent();
+
+        // Lấy tất cả các màu sắc từ toàn bộ sản phẩm, không phụ thuộc vào kết quả lọc
+        Set<String> uniqueColors = productService.getAllAvailableColors(); // Hàm này trả về danh sách màu sắc không bị lặp
+
+        // Thêm các thuộc tính vào model
+        model.addAttribute("products", filteredProducts);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("pageSize", size);
         model.addAttribute("selectedCategory", slug);
+        model.addAttribute("uniqueColors", uniqueColors);  // Truyền danh sách tất cả các màu
+        model.addAttribute("selectedColor", color);  // Màu đã chọn
+
+        // Lấy các danh sách cho các trường lọc
+        List<Size> sizes = sizeService.getAllSize();
+        List<Material> materials = materialService.getAllMaterials();
+        List<Brand> brands = brandService.getAllBrands();
+
+        model.addAttribute("sizes", sizes);
+        model.addAttribute("materials", materials);
+        model.addAttribute("brands", brands);
 
         return "User/category";
     }
+
+
 
     @GetMapping("product/details/{slug}")
     public String getProductDetails(@PathVariable String slug, Model model, HttpServletRequest request) {

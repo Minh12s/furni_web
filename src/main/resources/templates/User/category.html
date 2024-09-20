@@ -5,6 +5,178 @@
 
 </head>
 <body class="goto-here">
+<style>
+  .sidebar__item {
+    margin-bottom: 35px;
+  }
+
+  .sidebar__item.sidebar__item__color--option {
+    overflow: hidden;
+  }
+
+  .sidebar__item h4 {
+    color: #1c1c1c;
+    /*            font-weight: 700;*/
+    margin-bottom: 25px;
+  }
+
+  .sidebar__item ul li {
+    list-style: none;
+  }
+
+  .sidebar__item ul li a {
+    font-size: 16px;
+    color: #1c1c1c;
+    line-height: 39px;
+    display: block;
+  }
+
+  .sidebar__item .latest-product__text {
+    position: relative;
+  }
+
+  .sidebar__item .latest-product__text h4 {
+    margin-bottom: 45px;
+  }
+
+  .sidebar__item .latest-product__text .owl-carousel .owl-nav {
+    right: 0;
+  }
+
+  .price-range-wrap .range-slider {
+    margin-top: 20px;
+  }
+
+  .price-range-wrap .range-slider .price-input {
+    position: relative;
+  }
+
+  .price-range-wrap .range-slider .price-input:after {
+    position: absolute;
+    left: 38px;
+    top: 13px;
+    height: 1px;
+    width: 5px;
+    background: #FFA45C;
+    content: "";
+  }
+
+  .price-range-wrap .range-slider .price-input input {
+    font-size: 16px;
+    color: #FFA45C;
+    font-weight: 700;
+    max-width: 40%;
+    border: none;
+    display: inline-block;
+  }
+
+  .price-range-wrap .price-range {
+    border-radius: 0;
+  }
+
+  .price-range-wrap .price-range.ui-widget-content {
+    border: none;
+    background: #ebebeb;
+    height: 5px;
+  }
+
+  .price-range-wrap .price-range.ui-widget-content .ui-slider-handle {
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: none;
+    -webkit-box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .price-range-wrap .price-range .ui-slider-range {
+    background: #FFA45C;
+    border-radius: 0;
+  }
+
+  .price-range-wrap .price-range .ui-slider-range.ui-corner-all.ui-widget-header:last-child {
+    background: #FFA45C;
+  }
+
+  .sidebar__item__color {
+    float: left;
+    width: 40%;
+  }
+
+  .sidebar__item__color.sidebar__item__color--white label:after {
+    border: 2px solid #333333;
+    background: transparent;
+  }
+
+  .sidebar__item__color.sidebar__item__color--gray label:after {
+    background: #E9A625;
+  }
+
+  .sidebar__item__color.sidebar__item__color--red label:after {
+    background: #D62D2D;
+  }
+
+  .sidebar__item__color.sidebar__item__color--black label:after {
+    background: #252525;
+  }
+
+  .sidebar__item__color.sidebar__item__color--blue label:after {
+    background: #249BC8;
+  }
+
+  .sidebar__item__color.sidebar__item__color--green label:after {
+    background: #3CC032;
+  }
+
+  .sidebar__item__color label {
+    font-size: 16px;
+    color: #333333;
+    position: relative;
+    padding-left: 32px;
+    cursor: pointer;
+  }
+
+  .sidebar__item__color label input {
+    position: absolute;
+    visibility: hidden;
+  }
+
+  .sidebar__item__color label:after {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    height: 14px;
+    width: 14px;
+    background: #222;
+    content: "";
+    border-radius: 50%;
+  }
+
+  .sidebar__item__size {
+    display: inline-block;
+    margin-right: 16px;
+    margin-bottom: 10px;
+  }
+
+  .sidebar__item__size label {
+    font-size: 12px;
+    color: #6f6f6f;
+    display: inline-block;
+    padding: 8px 25px 6px;
+    background: #f5f5f5;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .sidebar__item__size label input {
+    position: absolute;
+    visibility: hidden;
+  }
+</style>
+
 <div class="py-1 bg-black">
   <div class="container">
     <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
@@ -117,19 +289,89 @@
       </div>
 
       <div class="col-md-4 col-lg-2 sidebar">
+        <!-- Danh sách các danh mục (Category) -->
         <div class="sidebar-box-2">
           <h2 class="heading mb-4"><a href="#">Category</a></h2>
           <ul>
             <li th:each="category : ${categories}">
-              <a th:href="@{/category(slug=${category.slug})}"
-                 th:text="${category.categoryName}"></a>
+              <a th:href="@{/category(slug=${category.slug})}" th:text="${category.categoryName}"></a>
             </li>
-
           </ul>
         </div>
+
+        <!-- Form lọc sản phẩm -->
+        <form id="filterForm" method="get" th:action="@{/category}">
+          <!-- Ẩn trường slug để gửi cùng form -->
+          <input type="hidden" name="slug" th:value="${selectedCategory}">
+          <div class="sidebar-box-2">
+            <h2 class="heading mb-4"><a href="#">Size</a></h2>
+            <ul>
+              <li>
+                <label for="minPrice">Min Price</label>
+                <input type="number" name="minPrice" id="minPrice" min="0" th:value="${minPrice}" class="form-control" placeholder="Min">
+              </li>
+              <li>
+                <label for="maxPrice">Max Price</label>
+                <input type="number" name="maxPrice" id="maxPrice" min="0" th:value="${maxPrice}" class="form-control" placeholder="Max">
+              </li>
+            </ul>
+          </div>
+          <!-- Lọc theo kích thước (Size) -->
+          <div class="sidebar-box-2">
+            <h2 class="heading mb-4"><a href="#">Size</a></h2>
+            <ul>
+              <li th:each="size : ${sizes}">
+                <input type="checkbox" name="sizeFilter" th:value="${size.sizeName}"
+                       th:checked="${size.sizeName == sizeFilter}">
+                <label style="margin-left:5px;" th:text="${size.sizeName}"></label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Lọc theo màu sắc (Color) -->
+          <div class="sidebar-box-2">
+            <h2 class="heading mb-4"><a href="#">Color</a></h2>
+            <ul>
+              <li th:each="color : ${uniqueColors}">
+                <input type="checkbox" name="color" th:value="${color}"
+                       th:checked="${color == selectedColor}">
+                <label style="margin-left:5px;" th:text="${color}"></label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Lọc theo chất liệu (Material) -->
+          <div class="sidebar-box-2">
+            <h2 class="heading mb-4"><a href="#">Material</a></h2>
+            <ul>
+              <li th:each="material : ${materials}">
+                <input type="checkbox" name="material" th:value="${material.materialName}"
+                       th:checked="${material.materialName == material}">
+                <label style="margin-left:5px;" th:text="${material.materialName}"></label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Lọc theo thương hiệu (Brand) -->
+          <div class="sidebar-box-2">
+            <h2 class="heading mb-4"><a href="#">Brand</a></h2>
+            <ul>
+              <li th:each="brand : ${brands}">
+                <input type="checkbox" name="brandId" th:value="${brand.id}"
+                       th:checked="${brand.id == brandId}">
+                <label style="margin-left:5px;" th:text="${brand.brandName}"></label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Nút submit form -->
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </form>
       </div>
+
     </div>
-  </div>
+    </div>
+   </div>
 </section>
 
 <div th:insert="/include/fragments :: footer"></div>
@@ -138,6 +380,102 @@
 
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script>
+  var minPriceParam, maxPriceParam; // Biến toàn cục để lưu trữ giá trị phạm vi giá
+
+  // document.addEventListener("DOMContentLoaded", function () {
+  //   var filterForm = document.getElementById("filterForm");
+  //   var inputs = filterForm.querySelectorAll("input[type='text'], input[type='checkbox']");
+  //
+  //   var urlParams = new URLSearchParams(window.location.search);
+  //   inputs.forEach(function (input) {
+  //     var paramName = input.getAttribute("name");
+  //     if (urlParams.has(paramName)) {
+  //       if (input.type === "checkbox") {
+  //         var paramValue = urlParams.getAll(paramName);
+  //         if (paramValue.includes(input.value)) {
+  //           input.checked = true;
+  //         }
+  //       } else {
+  //         input.value = urlParams.get(paramName);
+  //       }
+  //     }
+  //   });
+  //
+  //   minPriceParam = urlParams.get('minPrice');
+  //   maxPriceParam = urlParams.get('maxPrice');
+  //   if (minPriceParam && maxPriceParam) {
+  //     rangeSlider.slider("values", [parseInt(minPriceParam), parseInt(maxPriceParam)]);
+  //     minamount.val(minPriceParam);
+  //     maxamount.val(maxPriceParam);
+  //   }
+  //
+  //   inputs.forEach(function (input) {
+  //     input.addEventListener("change", function () {
+  //       updateUrl();
+  //     });
+  //   });
+  //
+  //   // Gọi hàm updateUrl() khi thanh trượt giá thay đổi
+  //   rangeSlider.on("slidechange", function () {
+  //     updateUrl();
+  //   });
+  // });
+  //
+  // var rangeSlider = $(".price-range"),
+  //         minamount = $("#minamount"),
+  //         maxamount = $("#maxamount"),
+  //         minPrice = rangeSlider.data('min'),
+  //         maxPrice = rangeSlider.data('max');
+  //
+  // rangeSlider.slider({
+  //   range: true,
+  //   min: minPrice,
+  //   max: maxPrice,
+  //   values: [minPrice, maxPrice],
+  //   slide: function (event, ui) {
+  //     minamount.val('$' + ui.values[0]);
+  //     maxamount.val('$' + ui.values[1]);
+  //   }
+  // });
+  //
+  // minamount.val('$' + rangeSlider.slider("values", 0));
+  // maxamount.val('$' + rangeSlider.slider("values", 1));
+
+  // function updateUrl() {
+  //   var filterForm = document.getElementById("filterForm");
+  //   var inputs = filterForm.querySelectorAll("input[type='text'], input[type='checkbox']");
+  //
+  //   var goldAgeIds = [];
+  //   $("input[name='goldAgeId']:checked").each(function () {
+  //     goldAgeIds.push($(this).val());
+  //   });
+  //
+  //   var brandIds = [];
+  //   $("input[name='brandId']:checked").each(function () {
+  //     brandIds.push($(this).val());
+  //   });
+  //
+  //   var currentMinPrice = rangeSlider.slider("values", 0);
+  //   var currentMaxPrice = rangeSlider.slider("values", 1);
+  //
+  //   var url = '@Url.Action("Category", "Page")' + '?minPrice=' + currentMinPrice + '&maxPrice=' + currentMaxPrice;
+  //
+  //   if (goldAgeIds.length > 0) {
+  //     url += '&goldAgeId=' + goldAgeIds.join(',');
+  //   }
+  //
+  //   if (brandIds.length > 0) {
+  //     url += '&brandId=' + brandIds.join(',');
+  //   }
+  //
+  //   window.location.href = url;
+  // }
+
+
+</script>
 
 <div th:insert="/include/fragments :: script"></div>
 

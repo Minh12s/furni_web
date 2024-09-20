@@ -32,6 +32,40 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                          @Param("priceTo") Double priceTo,
                                          @Param("avgRating") Double avgRating,
                                          Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE " +
+            " (:minPrice IS NULL OR p.price >= :minPrice) " +
+            "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
+            "AND (:size IS NULL OR p.size.sizeName = :size) " +
+            "AND (:color IS NULL OR p.color = :color) " +
+            "AND (:material IS NULL OR p.material.materialName = :material) " +
+            "AND (:brandId IS NULL OR p.brand.id = :brandId)")
+    Page<Product> filterProductsWithCriteria(
+                                             @Param("minPrice") Double minPrice,
+                                             @Param("maxPrice") Double maxPrice,
+                                             @Param("size") String size,
+                                             @Param("color") String color,
+                                             @Param("material") String material,
+                                             @Param("brandId") Integer brandId,
+                                             Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE " +
+            "(:slug IS NULL OR p.category.slug = :slug) AND " +
+            "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
+            "(:sizeFilter IS NULL OR p.size.sizeName = :sizeFilter) AND " +
+            "(:color IS NULL OR p.color = :color) AND " +
+            "(:material IS NULL OR p.material.materialName = :material) AND " +
+            "(:brandId IS NULL OR p.brand.id = :brandId)")
+    Page<Product> filterProductsByCategoryWithCriteria(@Param("slug") String slug,
+                                                       @Param("minPrice") Double minPrice,
+                                                       @Param("maxPrice") Double maxPrice,
+                                                       @Param("sizeFilter") String sizeFilter,
+                                                       @Param("color") String color,
+                                                       @Param("material") String material,
+                                                       @Param("brandId") Integer brandId,
+                                                       Pageable pageable);
+
     boolean existsByProductName(String productName);
     boolean existsByProductNameAndIdNot(String productName, int id);
     // Đếm tổng số sản phẩm
