@@ -40,153 +40,177 @@
   </div>
 </div>
 
-<section class="ftco-section">
+<section class="ftco-section" style="margin-left:300px;">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-xl-8 ftco-animate">
-        <form action="#" class="billing-form">
+      <form id="checkoutForm" method="post" th:action="@{/checkout}" enctype="multipart/form-data" class="billing-form">
+        <input type="hidden" id="provinceName" name="ProvinceName">
+        <input type="hidden" id="districtName" name="DistrictName">
+        <input type="hidden" id="wardName" name="WardName">
+
+        <div class="col-xl-8 ftco-animate">
           <h3 class="mb-4 billing-heading">Billing Details</h3>
           <div class="row align-items-end">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="firstname">Firt Name</label>
-                <input type="text" class="form-control" placeholder="">
+                <label>Full Name</label>
+                <input type="text" name="FullName" class="form-control" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="lastname">Last Name</label>
-                <input type="text" class="form-control" placeholder="">
+                <label >Email</label>
+                <input type="text" name="Email" class="form-control" required>
               </div>
             </div>
+
             <div class="w-100"></div>
             <div class="col-md-12">
               <div class="form-group">
-                <label for="country">State / Country</label>
-                <div class="select-wrap">
-                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                  <select name="" id="" class="form-control">
-                    <option value="">France</option>
-                    <option value="">Italy</option>
-                    <option value="">Philippines</option>
-                    <option value="">South Korea</option>
-                    <option value="">Hongkong</option>
-                    <option value="">Japan</option>
-                  </select>
-                </div>
+                <label >Street Address</label>
+                <input class="form-control" placeholder="House number and street name" type="text" name="AddressDetail" required>
+              </div>
+            </div>
+
+            <div class="w-100"></div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label >Province</label>
+                <select name="Province" id="provinces" class="form-control" required>
+                  <option value="">-- select provinces --</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label >District</label>
+                <select name="District" id="districts" class="form-control" required>
+                  <option value="">-- select districts --</option>
+                </select>
               </div>
             </div>
             <div class="w-100"></div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="streetaddress">Street Address</label>
-                <input type="text" class="form-control" placeholder="House number and street name">
+                <label >Ward</label>
+                <select name="Ward" id="wards" class="form-control" required>
+                  <option value="">-- select wards --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label >Phone</label>
+                <input type="number" name="Telephone" class="form-control" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
-              </div>
-            </div>
-            <div class="w-100"></div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="towncity">Town / City</label>
-                <input type="text" class="form-control" placeholder="">
+                <label >Note</label>
+                <textarea name="Note" class="form-control"  placeholder="Enter any special instructions or notes..."></textarea>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="postcodezip">Postcode / ZIP *</label>
-                <input type="text" class="form-control" placeholder="">
+                <label >Preferred Delivery Schedule</label>
+                <input type="datetime-local" name="Schedule" class="form-control">
               </div>
             </div>
-            <div class="w-100"></div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="phone">Phone</label>
-                <input type="text" class="form-control" placeholder="">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="emailaddress">Email Address</label>
-                <input type="text" class="form-control" placeholder="">
-              </div>
-            </div>
+
+
             <div class="w-100"></div>
             <div class="col-md-12">
               <div class="form-group mt-4">
                 <div class="radio">
-                  <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label>
-                  <label><input type="radio" name="optradio"> Ship to different address</label>
+                  <h5>Shipping method :</h5>
+                  <label class="mr-3"><input type="radio" name="ShippingMethod" value="J&T Express" onchange="updateShippingFee()"> J&T Express </label>
+                  <label><input type="radio" name="ShippingMethod" value="Ninja Van" onchange="updateShippingFee()"> Ninja Van</label>
                 </div>
               </div>
             </div>
           </div>
-        </form><!-- END -->
 
+          <div class="row mt-5 pt-3 d-flex">
+            <div class="col-md-6 d-flex">
+              <div class="cart-detail cart-total bg-light p-3 p-md-4">
+                <h3 class="billing-heading mb-4">Cart Total</h3>
+                <p class="d-flex">
+                  <span style="font-weight:800;">Product</span>
+                  <span style="font-weight:800;">Total</span>
+                </p>
 
+                <!-- Dynamic cart items start -->
+                <div th:each="item : ${cartItems}">
+                  <p class="d-flex">
+                    <span th:text="${item.product.productName}"></span>
+                    <span th:text="${item.total}"></span>
+                  </p>
+                </div>
+                <!-- Dynamic cart items end -->
 
-        <div class="row mt-5 pt-3 d-flex">
-          <div class="col-md-6 d-flex">
-            <div class="cart-detail cart-total bg-light p-3 p-md-4">
-              <h3 class="billing-heading mb-4">Cart Total</h3>
-              <p class="d-flex">
-                <span>Subtotal</span>
-                <span>$20.60</span>
-              </p>
-              <p class="d-flex">
-                <span>Delivery</span>
-                <span>$0.00</span>
-              </p>
-              <p class="d-flex">
-                <span>Discount</span>
-                <span>$3.00</span>
-              </p>
-              <hr>
-              <p class="d-flex total-price">
-                <span>Total</span>
-                <span>$17.60</span>
-              </p>
+                <hr>
+                <p class="d-flex">
+                  <span>Subtotal</span>
+                  <span id="subtotal" th:text="'$'+${subtotal}"></span>
+                </p>
+                <p class="d-flex">
+                  <span>Tax (10%)</span>
+                  <span id="tax" th:text="'$'+${tax}"></span>
+                </p>
+                <p class="d-flex">
+                  <span>Shipping Fee</span>
+                  <span id="shippingFee" th:text="'$'+${shippingFee}"></span>
+                </p>
+
+                <hr>
+                <p class="d-flex total-price">
+                  <span>Total</span>
+                  <span id="totalAmount" th:text="'$'+${totalAmount}"></span>
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="cart-detail bg-light p-3 p-md-4">
+                <h3 class="billing-heading mb-4">Payment Method</h3>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="radio">
+                      <label><input type="radio" name="PaymentMethod" value="PBB" class="mr-2" checked onchange="togglePaypalButton()"> Pay by balance</label>
+                    </div>
+                  </div>
+                </div>
+                <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="radio">
+                      <label><input type="radio" name="PaymentMethod" value="COD" class="mr-2" checked onchange="togglePaypalButton()"> COD</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="radio">
+                      <label><input type="radio" name="PaymentMethod" value="PayPal" class="mr-2" onchange="togglePaypalButton()"> PayPal</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="checkbox">
+                      <label><input type="checkbox" value="" class="mr-2"> I have read and accept the terms and conditions</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="paypal-button-container" style="display: none;"></div>
+                <button type="submit" class="btn btn-primary py-3 px-4">Place an order</button>
+              </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="cart-detail bg-light p-3 p-md-4">
-              <h3 class="billing-heading mb-4">Payment Method</h3>
-              <div class="form-group">
-                <div class="col-md-12">
-                  <div class="radio">
-                    <label><input type="radio" name="optradio" class="mr-2"> Direct Bank Tranfer</label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-12">
-                  <div class="radio">
-                    <label><input type="radio" name="optradio" class="mr-2"> Check Payment</label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-12">
-                  <div class="radio">
-                    <label><input type="radio" name="optradio" class="mr-2"> Paypal</label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-12">
-                  <div class="checkbox">
-                    <label><input type="checkbox" value="" class="mr-2"> I have read and accept the terms and conditions</label>
-                  </div>
-                </div>
-              </div>
-              <p><a href="thankyou"class="btn btn-primary py-3 px-4">Place an order</a></p>
-            </div>
-          </div>
-        </div>
-      </div> <!-- .col-md-8 -->
+        </div> <!-- .col-md-8 -->
+      </form>
     </div>
   </div>
 </section> <!-- .section -->
@@ -200,6 +224,86 @@
 
 <div th:insert="/include/fragments :: script"></div>
 
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Load Provinces
+    $.getJSON('https://provinces.open-api.vn/api/p/', function(data) {
+      $.each(data, function(key, value) {
+        $('#provinces').append('<option value="' + value.code + '" data-name="' + value.name + '">' + value.name + '</option>');
+      });
+    });
 
+    // Load Districts when Province changes
+    $('#provinces').change(function() {
+      var provinceCode = $(this).val();
+      var provinceName = $('#provinces option:selected').attr('data-name');
+      $('#provinceName').val(provinceName);
+
+      $('#districts').empty().append('<option value="">-- select districts --</option>');
+      $('#wards').empty().append('<option value="">-- select wards --</option>');
+
+      if (provinceCode) {
+        $.getJSON('https://provinces.open-api.vn/api/p/' + provinceCode + '?depth=2', function(data) {
+          $.each(data.districts, function(key, value) {
+            $('#districts').append('<option value="' + value.code + '" data-name="' + value.name + '">' + value.name + '</option>');
+          });
+        });
+      }
+    });
+
+    // Load Wards when District changes
+    $('#districts').change(function() {
+      var districtCode = $(this).val();
+      var districtName = $('#districts option:selected').attr('data-name');
+      $('#districtName').val(districtName);
+
+      $('#wards').empty().append('<option value="">-- select wards --</option>');
+
+      if (districtCode) {
+        $.getJSON('https://provinces.open-api.vn/api/d/' + districtCode + '?depth=2', function(data) {
+          $.each(data.wards, function(key, value) {
+            $('#wards').append('<option value="' + value.code + '" data-name="' + value.name + '">' + value.name + '</option>');
+          });
+        });
+      }
+    });
+
+    // Set ward name
+    $('#wards').change(function() {
+      var wardName = $('#wards option:selected').attr('data-name');
+      $('#wardName').val(wardName);
+    });
+  });
+
+</script>
+<script>
+  function updateShippingFee() {
+    // Lấy giá trị của phương thức vận chuyển được chọn
+    const shippingMethod = document.querySelector('input[name="ShippingMethod"]:checked').value;
+
+    // Thiết lập phí vận chuyển dựa trên phương thức đã chọn
+    let shippingFee = 10.00; // Mặc định J&T Express
+    if (shippingMethod === 'Ninja Van') {
+      shippingFee = 5.00;
+    }
+
+    // Cập nhật phí vận chuyển trên trang
+    document.getElementById('shippingFee').innerText = '$' + shippingFee.toFixed(2);
+
+    // Lấy giá trị của subtotal và tax, loại bỏ ký hiệu '$' nếu có
+    const subtotal = parseFloat(document.getElementById('subtotal').innerText.replace('$', ''));
+    const tax = parseFloat(document.getElementById('tax').innerText.replace('$', ''));
+
+    // Tính tổng số tiền mới
+    const totalAmount = subtotal + tax + shippingFee;
+
+    // Cập nhật tổng số tiền trên trang
+    document.getElementById('totalAmount').innerText = '$' + totalAmount.toFixed(2);
+  }
+
+
+</script>
 </body>
 </html>
