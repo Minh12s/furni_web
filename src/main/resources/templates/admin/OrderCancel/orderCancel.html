@@ -20,108 +20,40 @@
 </section>
 <section class="section main-section">
     <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
-        <div class="card">
+        <div th:each="entry : ${reasonCounts}" th:if="${reasonIcons.containsKey(entry.key)}" class="card">
             <div class="card-content">
                 <div class="flex items-center justify-between">
                     <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
+                        <h3 th:text="${entry.key}"></h3>
+                        <h1 th:text="${entry.value}"></h1>
                     </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
+                    <span>
+                <span class="icon widget-icon text-green-500">
+                    <i th:class="'mdi ' + ${reasonIcons[entry.key]} + ' mdi-48px'"></i>
+                </span>
+            </span>
                 </div>
             </div>
         </div>
-        <div class="card">
+
+        <!-- Card cho lý do "Khác" -->
+        <div th:if="${reasonCounts['Other'] > 0}" class="card">
             <div class="card-content">
                 <div class="flex items-center justify-between">
                     <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
+                        <h3>Other</h3>
+                        <h1 th:text="${reasonCounts['Other']}"></h1>
                     </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
+                    <span>
+                <span class="icon widget-icon text-green-500">
+                    <i class="mdi mdi-help-circle mdi-48px"></i>
+                </span>
+            </span>
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
+
+
     </div>
 <section class="is-hero-bar">
     <div class="flex flex-row items-center">
@@ -141,27 +73,6 @@
         </button>
     </div>
 </section>
-<form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;"  method="get">
-    <div class="input-group input-group-sm" style="margin-right: -23px; margin-bottom: 10px;">
-        <input value="" class="form-control" type="text" name="Email" placeholder="Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 2px;" />
-    </div>
-    <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-        <input value="" class="form-control" type="text" name="Telephone" placeholder="Telephone" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
-    </div>
-    <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-        <input value="" class="form-control" type="text" name="TotalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
-    </div>
-
-
-    <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
-        <input value="" type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 300px; margin-left:7px;" />
-    </div>
-    <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
-        <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
-            <i class="mdi mdi-magnify" style="padding: 10px;"></i>
-        </button>
-    </div>
-</form>
 <section class="section main-section">
     <div class="card has-table">
         <header class="card-header">
@@ -169,9 +80,17 @@
                 <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
                 Clients
             </p>
-            <a href="#" class="card-header-icon">
-                <span class="icon"><i class="mdi mdi-reload"></i></span>
-            </a>
+            <form class="card-header-icon" method="get" onchange="this.submit()">
+                <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+                    <option value="10" th:selected="${size == 10}">10</option>
+                    <option value="20" th:selected="${size == 20}">20</option>
+                    <option value="50" th:selected="${size == 50}">50</option>
+                    <option value="100" th:selected="${size == 100}">100</option>
+                </select>
+
+                <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
+                <input type="hidden" name="page" th:value="${ordersCancelPage.number}">
+            </form>
         </header>
         <div class="card-content">
             <table>
@@ -183,117 +102,44 @@
                             <span class="check"></span>
                         </label>
                     </th>
-                    <th class="image-cell"></th>
-                    <th>Name</th>
-                    <th>Company</th>
-                    <th>City</th>
-                    <th>Progress</th>
-                    <th>Created</th>
+                    <th>ID</th>
+                    <th>Order id</th>
+                    <th>Reason</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="orderCancel :${ordersCancelPage.content}">
                     <td class="checkbox-cell">
                         <label class="checkbox">
                             <input type="checkbox">
                             <span class="check"></span>
                         </label>
                     </td>
-                    <td class="image-cell">
-                        <div class="image">
-                            <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
-                        </div>
-                    </td>
-                    <td data-label="Name">Rebecca Bauch</td>
-                    <td data-label="Company">Daugherty-Daniel</td>
-                    <td data-label="City">South Cory</td>
-                    <td data-label="Progress" class="progress-cell">
-                        <progress max="100" value="79">79</progress>
-                    </td>
-                    <td data-label="Created">
-                        <small class="text-gray-500" title="Oct 25, 2021">Oct 25, 2021</small>
-                    </td>
+                    <td th:text="${orderCancel.id}"></td>
+                    <td th:text="${orderCancel.order.id}"></td>
+                    <td th:text="${orderCancel.reason}"></td>
                     <td class="actions-cell">
                         <div class="buttons right nowrap">
-
-                            <a href="/admin/orderCancelDetails" class="btn btn-primary" style="background-color:green; color:white;">
+                            <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                                 <span class="icon"><i class="mdi mdi-eye"></i></span>
                             </a>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td class="checkbox-cell">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            <span class="check"></span>
-                        </label>
-                    </td>
-                    <td class="image-cell">
-                        <div class="image">
-                            <img src="https://avatars.dicebear.com/v2/initials/felicita-yundt.svg" class="rounded-full">
-                        </div>
-                    </td>
-                    <td data-label="Name">Felicita Yundt</td>
-                    <td data-label="Company">Johns-Weissnat</td>
-                    <td data-label="City">East Ariel</td>
-                    <td data-label="Progress" class="progress-cell">
-                        <progress max="100" value="67">67</progress>
-                    </td>
-                    <td data-label="Created">
-                        <small class="text-gray-500" title="Jan 8, 2021">Jan 8, 2021</small>
-                    </td>
-                    <td class="actions-cell">
-                        <div class="buttons right nowrap">
-
-                            <a href="/admin/orderCancelDetails" class="btn btn-primary" style="background-color:green; color:white;">
-                                <span class="icon"><i class="mdi mdi-eye"></i></span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="checkbox-cell">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            <span class="check"></span>
-                        </label>
-                    </td>
-                    <td class="image-cell">
-                        <div class="image">
-                            <img src="https://avatars.dicebear.com/v2/initials/mr-larry-satterfield-v.svg" class="rounded-full">
-                        </div>
-                    </td>
-                    <td data-label="Name">Mr. Larry Satterfield V</td>
-                    <td data-label="Company">Hyatt Ltd</td>
-                    <td data-label="City">Windlerburgh</td>
-                    <td data-label="Progress" class="progress-cell">
-                        <progress max="100" value="16">16</progress>
-                    </td>
-                    <td data-label="Created">
-                        <small class="text-gray-500" title="Dec 18, 2021">Dec 18, 2021</small>
-                    </td>
-                    <td class="actions-cell">
-                        <div class="buttons right nowrap">
-
-                            <a href="/admin/orderCancelDetails" class="btn btn-primary" style="background-color:green; color:white;">
-                                <span class="icon"><i class="mdi mdi-eye"></i></span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-
                 </tbody>
             </table>
             <div class="table-pagination">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
-                        <button type="button" class="button active">1</button>
-                        <button type="button" class="button">2</button>
-                        <button type="button" class="button">3</button>
+                        <button type="button" class="button"
+                                th:each="i : ${#numbers.sequence(0, ordersCancelPage.totalPages - 1)}"
+                                th:classappend="${i == ordersCancelPage.number} ? ' active' : ''"
+                                th:text="${i + 1}"
+                                th:onclick="|window.location.href='/admin/orderCancel?page=' + [[${i}]] + '&size=' + [[${ordersCancelPage.size}]]|">
+                        </button>
                     </div>
-                    <small>Page 1 of 3</small>
+                    <small th:text="'Page ' + (${ordersCancelPage.number} + 1) + ' of ' + ${ordersCancelPage.totalPages}"></small>
                 </div>
             </div>
         </div>

@@ -130,6 +130,56 @@
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-cancel"></i></span>
+        Order Cancel
+      </p>
+      <a href="#" class="card-header-icon">
+        <span class="icon"><i class="mdi mdi-reload"></i></span>
+      </a>
+    </header>
+    <div class="card-content">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Order id</th>
+          <th>Reason</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderCancel : ${cancelledOrders}">
+          <td th:text="${orderCancel.id}"></td>
+          <td th:text="${orderCancel.order.id}"></td>
+          <td th:text="${orderCancel.reason}"></td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-eye"></i></span>
+              </a>
+            </div>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, totalOrderCancelPages - 1)}"
+                    th:text="${i + 1}"
+                    th:classappend="${i == currentCancelPage} ? 'active' : ''"
+                    th:onclick="|window.location='?cancelPage=' + ${i}|">
+            </button>
+          </div>
+          <small>Page [[${currentCancelPage + 1}]] of [[${totalOrderCancelPages}]]</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-clock-outline"></i></span>
         Review pending
       </p>

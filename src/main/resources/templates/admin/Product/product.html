@@ -98,8 +98,8 @@
                     <td>
                         <div class="button-group">
                             <a
-                               class="btn btn-success"
-                               th:href="@{/admin/products/productDetail/{id}(id=${product.id})}">
+                                    class="btn btn-success"
+                                    th:href="@{/admin/products/productDetail/{id}(id=${product.id})}">
                                 <span class="icon"><i class="mdi mdi-eye"></i></span>
                             </a>
                             <a class="btn btn-primary" th:href="@{/admin/editProduct/{id}(id=${product.id})}">
@@ -130,7 +130,7 @@
                 </div>
             </div>
         </div>
-        </div>
+    </div>
     </div>
 </section>
 <style>
@@ -171,12 +171,12 @@
         padding: 5px 20px;
     }
     .btn-success{
-      background-color: green;
-      color: white;
-      border-radius: .357rem;
-      border: none;
-      font-weight: 600;
-      padding: 5px 20px;}
+        background-color: green;
+        color: white;
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 5px 20px;}
 
     .btn-add {
         color: white;

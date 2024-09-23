@@ -1,11 +1,9 @@
 package com.example.furni.service;
 
+import com.example.furni.entity.OrderCancel;
 import com.example.furni.entity.Orders;
 import com.example.furni.entity.Review;
-import com.example.furni.repository.ProductRepository;
-import com.example.furni.repository.ReviewRepository;
-import com.example.furni.repository.UserRepository;
-import com.example.furni.repository.OrdersRepository;
+import com.example.furni.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +22,8 @@ public class DashboardService {
     private ProductRepository productRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private OrderCancelRepository orderCancelRepository;
 
     // lấy tổng tất cả khách hàng , trừ admin
     public long getTotalUsers() {
@@ -48,4 +48,10 @@ public class DashboardService {
         Pageable pageable = PageRequest.of(page, size);
         return reviewRepository.findByStatus("pending", pageable);
     }
+    // Lấy tất cả order bị huỷ
+    public Page<OrderCancel> getAllOrderCancels(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return orderCancelRepository.findAll(pageable);
+    }
+
 }
