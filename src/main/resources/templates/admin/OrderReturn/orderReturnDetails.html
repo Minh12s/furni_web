@@ -9,7 +9,7 @@
 <section class="is-hero-bar">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
         <h1 class="title">
-           Details product
+           Details return product
         </h1>
     </div>
 </section>
@@ -18,9 +18,9 @@
     <div class="card has-table">
         <header class="card-header">
             <p class="card-header-title">
-<!--                <span class="icon"><i class="mdi mdi-shopping"></i></span>-->
-                Review
+                Product name: <span th:text="${orderReturn.product.productName}"></span>
             </p>
+
 
             <a href="#" class="card-header-icon">
                 <span class="icon"><i class="mdi mdi-reload"></i></span>
@@ -30,9 +30,11 @@
             <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
                 <thead>
                 <tr>
+                    <th>ID </th>
                     <th>Order Id</th>
-                    <th>Product Id</th>
                     <th>User Id</th>
+                    <th>Product Id</th>
+                    <th>Return Date</th>
                     <th>Reason</th>
                     <th>Description</th>
                     <th>Refund Amount</th>
@@ -41,14 +43,15 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>22/012/1293</td>
-                    <td>bal</td>
-                    <td>asjc</td>
-                    <td>2102</td>
-                    <td>pending</td>
+                    <td th:text="${orderReturn.id}"></td>
+                    <td th:text="${orderReturn.order.id}"></td>
+                    <td th:text="${orderReturn.user.id}"></td>
+                    <td th:text="${orderReturn.product.id}"></td>
+                    <td th:text="${orderReturn.returnDate}"></td>
+                    <td th:text="${orderReturn.reason}"></td>
+                    <td th:text="${orderReturn.description}"></td>
+                    <td th:text="${orderReturn.refundAmount}"></td>
+                    <td th:text="${orderReturn.status}" class="text-pending"></td>
                 </tr>
                 </tbody>
             </table>
@@ -98,6 +101,34 @@
         background-color: #f0f0f0; /* Màu nền khi hover */
     }
 </style>
+<div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+    <div th:if="${orderReturn.status == 'pending'}">
+        <form method="post" th:action="@{'/admin/updateOrderReturn/' + ${orderReturn.id}}">
+            <input type="hidden" name="status" value="approved" />
+            <button onclick="return confirm('Are you sure you want to update the status to: Approved?')" type="submit" class="btn btn-warning"
+                    style="padding: 5px 10px; border-radius: 5px; background-color: green; color: white;">
+                Approve
+            </button>
+        </form>
+    </div>
+
+    <div th:if="${orderReturn.status == 'pending'}">
+        <form method="post" th:action="@{'/admin/updateOrderReturn/' + ${orderReturn.id}}">
+            <input type="hidden" name="status" value="rejected" />
+            <button onclick="return confirm('Are you sure you want to update the status to: Rejected?')" type="submit" class="btn btn-danger"
+                    style="padding: 5px 10px; border-radius: 5px; background-color: red; color: white;">
+                Reject
+            </button>
+        </form>
+    </div>
+
+    <div th:if="${orderReturn.status != 'pending'}">
+        <a th:href="@{/admin/orderReturn}" class="btn btn-warning"
+           style="padding: 8px 10px; border-radius: 5px; background-color: red; color: white;">
+            Back
+        </a>
+    </div>
+</div>
 
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 

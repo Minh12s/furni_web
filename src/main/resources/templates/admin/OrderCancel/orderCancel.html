@@ -10,7 +10,7 @@
     <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
         <ul>
             <li>Admin</li>
-            <li>Tables</li>
+            <li>Order Cancel</li>
         </ul>
         <a href="https://github.com/justboil/admin-one-tailwind" target="_blank" class="button blue">
             <span class="icon"><i class="mdi mdi-github-circle"></i></span>
@@ -20,42 +20,46 @@
 </section>
 <section class="section main-section">
     <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
-        <div th:each="entry : ${reasonCounts}" th:if="${reasonIcons.containsKey(entry.key)}" class="card">
+        <!-- Duyệt qua các lý do trong reasonIcons -->
+        <div th:each="iconEntry : ${reasonIcons}" class="card">
             <div class="card-content">
                 <div class="flex items-center justify-between">
                     <div class="widget-label">
-                        <h3 th:text="${entry.key}"></h3>
-                        <h1 th:text="${entry.value}"></h1>
+                        <!-- Hiển thị tên lý do -->
+                        <h3 th:text="${iconEntry.key}"></h3>
+                        <!-- Hiển thị số lượng, nếu không có thì là 0 -->
+                        <h1 th:text="${reasonCounts[iconEntry.key] != null ? reasonCounts[iconEntry.key] : 0}"></h1>
                     </div>
                     <span>
-                <span class="icon widget-icon text-green-500">
-                    <i th:class="'mdi ' + ${reasonIcons[entry.key]} + ' mdi-48px'"></i>
+                    <span class="icon widget-icon text-green-500">
+                        <!-- Hiển thị biểu tượng tương ứng -->
+                        <i th:class="'mdi ' + ${iconEntry.value} + ' mdi-48px'"></i>
+                    </span>
                 </span>
-            </span>
                 </div>
             </div>
         </div>
 
-        <!-- Card cho lý do "Khác" -->
-        <div th:if="${reasonCounts['Other'] > 0}" class="card">
+        <!-- Thẻ card cho lý do "Other" nếu tồn tại -->
+        <div th:if="${reasonCounts['Other'] != null ? reasonCounts['Other'] : 0}" class="card">
             <div class="card-content">
                 <div class="flex items-center justify-between">
                     <div class="widget-label">
                         <h3>Other</h3>
+                        <!-- Hiển thị số lượng lý do "Other" -->
                         <h1 th:text="${reasonCounts['Other']}"></h1>
                     </div>
                     <span>
-                <span class="icon widget-icon text-green-500">
-                    <i class="mdi mdi-help-circle mdi-48px"></i>
+                    <span class="icon widget-icon text-green-500">
+                        <i class="mdi mdi-help-circle mdi-48px"></i>
+                    </span>
                 </span>
-            </span>
                 </div>
             </div>
         </div>
-
-
     </div>
-<section class="is-hero-bar">
+
+    <section class="is-hero-bar">
     <div class="flex flex-row items-center">
         <!-- Nút "Print PDF" -->
         <button onclick="myApp.printTable()" class="btn btn-add ml-2">
@@ -73,12 +77,33 @@
         </button>
     </div>
 </section>
+    <form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;"  method="get">
+        <div class="input-group input-group-sm" style="margin-right: -23px; margin-bottom: 10px; margin-left: 19px;">
+            <input value="" class="form-control" type="text" name="Email" placeholder="Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 2px;" />
+        </div>
+        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
+            <input value="" class="form-control" type="text" name="Telephone" placeholder="Telephone" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+        </div>
+        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
+            <input value="" class="form-control" type="text" name="TotalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
+        </div>
+
+
+        <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
+            <input value="" type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 300px; margin-left:7px;" />
+        </div>
+        <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
+            <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+                <i class="mdi mdi-magnify" style="padding: 10px;"></i>
+            </button>
+        </div>
+    </form>
 <section class="section main-section">
     <div class="card has-table">
         <header class="card-header">
             <p class="card-header-title">
                 <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-                Clients
+                Order cancel
             </p>
             <form class="card-header-icon" method="get" onchange="this.submit()">
                 <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
@@ -104,6 +129,10 @@
                     </th>
                     <th>ID</th>
                     <th>Order id</th>
+                    <th>Full name</th>
+                    <th>Email</th>
+                    <th>Telephone</th>
+                    <th>Total amount</th>
                     <th>Reason</th>
                     <th></th>
                 </tr>
@@ -118,6 +147,10 @@
                     </td>
                     <td th:text="${orderCancel.id}"></td>
                     <td th:text="${orderCancel.order.id}"></td>
+                    <td th:text="${orderCancel.order.fullName}"></td>
+                    <td th:text="${orderCancel.order.email}"></td>
+                    <td th:text="${orderCancel.order.telephone}"></td>
+                    <td th:text="${orderCancel.order.totalAmount}"></td>
                     <td th:text="${orderCancel.reason}"></td>
                     <td class="actions-cell">
                         <div class="buttons right nowrap">

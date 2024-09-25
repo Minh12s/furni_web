@@ -6,6 +6,129 @@
 </head>
 <body>
 <div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<style>
+  .image-container {
+    margin: 10px; /* Khoảng cách giữa các ảnh */
+    width: calc(50% - 20px); /* Mỗi ảnh chiếm 50% chiều rộng - khoảng cách */
+    box-sizing: border-box; /* Để padding và border không làm ảnh hưởng đến kích thước */
+  }
+
+  .return-image {
+    width: 100%; /* Đảm bảo ảnh chiếm đầy chiều rộng của container */
+    height: auto; /* Giữ tỷ lệ khung hình của ảnh */
+    border-radius: 5px; /* Nếu bạn muốn bo góc cho ảnh */
+  }
+
+  .image-row {
+    display: flex; /* Sử dụng flexbox để căn chỉnh ảnh */
+    flex-wrap: wrap; /* Cho phép ảnh xuống dòng khi hết chỗ */
+    justify-content: center; /* Căn giữa các ảnh */
+  }
+  /* Các lớp CSS cho trạng thái */
+  .status-pending {
+    color: #FF6347; /* Màu đỏ cam cho pending */
+  }
+
+  .status-approved {
+    color: #28a745; /* Màu xanh lá cây cho approved */
+  }
+
+  .status-rejected {
+    color: #dc3545; /* Màu đỏ cho rejected */
+  }
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
+
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
+  .btn-primary {
+    color: rgb(245 157 57);
+    background-color: rgb(251 226 197);
+    border: none;
+    /* border-top-left-radius: 10px !important; */
+    /* border-bottom-right-radius: 10px !important; */
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 5px 20px; /* Điều chỉnh kích thước theo ý muốn */
+  }
+
+  .edit-button {
+    margin-top: 10px; /* Điều chỉnh giá trị margin-top theo ý muốn */
+  }
+
+  .btn-add {
+    color: white;
+    background-color: black;
+    border: none;
+    /* border-top-left-radius: 10px !important; */
+    /* border-bottom-right-radius: 10px !important; */
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px; /* Điều chỉnh kích thước theo ý muốn */
+  }
+
+  .btn-danger {
+    color: #FFF;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    border: none;
+    /* border-top-left-radius: 10px !important; */
+    /* border-bottom-right-radius: 10px !important; */
+    border-radius: .357rem;
+    border: none;
+    font-weight: 600;
+    padding: 5px 20px;
+  }
+
+  .btn-danger:hover {
+    color: #FFF;
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+  .btn-danger:focus, .btn-danger.focus {
+    -webkit-box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+  }
+
+  .btn-danger.disabled, .btn-danger:disabled {
+    color: #FFF;
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+
+  .button-group {
+    display: flex;
+  }
+
+  .button-group > * {
+    margin-right: 10px; /* Khoảng cách giữa các nút */
+  }
+</style>
 <section class="is-title-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
     <ul>
@@ -69,7 +192,64 @@
       </div>
     </div>
   </div>
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-cancel"></i></span>
+        Out of Stock Products
+      </p>
+      <a href="#" class="card-header-icon">
+        <span class="icon"><i class="mdi mdi-reload"></i></span>
+      </a>
+    </header>
+    <div class="card-content">
+      <table>
+        <thead>
+        <tr>
+          <th>ProductId</th>
+          <th>Thumbnail</th>
+          <th>ProductName</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Category</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${outOfStockProducts}">
+          <td th:text="${product.id}">1</td>
+          <td><img th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Thumbnail" width="100"
+                   height="100"></td>
+          <td th:text="${product.productName}">Sample Product 1</td>
+          <td th:text="${product.price}">$10</td>
+          <td th:text="${product.qty}">$10</td>
+          <td th:text="${product.category.categoryName}">Category Name</td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
 
+              <a th:href="@{/admin/products/productDetail/{id}(id=${product.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-eye"></i></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, totalOutOfStockPages - 1)}"
+                    th:text="${i + 1}"
+                    th:classappend="${i == currentOutOfStockPage} ? 'active' : ''"
+                    th:onclick="|window.location='?outOfStockPage=' + ${i}|">
+            </button>
+          </div>
+          <small>Page [[${currentOutOfStockPage + 1}]] of [[${totalOutOfStockPages}]]</small>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
@@ -130,56 +310,6 @@
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
-        <span class="icon"><i class="mdi mdi-cancel"></i></span>
-        Order Cancel
-      </p>
-      <a href="#" class="card-header-icon">
-        <span class="icon"><i class="mdi mdi-reload"></i></span>
-      </a>
-    </header>
-    <div class="card-content">
-      <table>
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Order id</th>
-          <th>Reason</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="orderCancel : ${cancelledOrders}">
-          <td th:text="${orderCancel.id}"></td>
-          <td th:text="${orderCancel.order.id}"></td>
-          <td th:text="${orderCancel.reason}"></td>
-          <td class="actions-cell">
-            <div class="buttons right nowrap">
-              <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.id})}" class="btn btn-primary" style="background-color:green; color:white;">
-                <span class="icon"><i class="mdi mdi-eye"></i></span>
-              </a>
-            </div>
-          </td>
-
-        </tr>
-        </tbody>
-      </table>
-      <div class="table-pagination">
-        <div class="flex items-center justify-between">
-          <div class="buttons">
-            <button type="button" class="button"
-                    th:each="i : ${#numbers.sequence(0, totalOrderCancelPages - 1)}"
-                    th:text="${i + 1}"
-                    th:classappend="${i == currentCancelPage} ? 'active' : ''"
-                    th:onclick="|window.location='?cancelPage=' + ${i}|">
-            </button>
-          </div>
-          <small>Page [[${currentCancelPage + 1}]] of [[${totalOrderCancelPages}]]</small>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card has-table">
-    <header class="card-header">
-      <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-clock-outline"></i></span>
         Review pending
       </p>
@@ -223,6 +353,133 @@
             </button>
           </div>
           <small>Page [[${currentReviewPage + 1}]] of [[${totalReviewPages}]]</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-refresh"></i></span>
+        Order Return
+      </p>
+      <a href="#" class="card-header-icon">
+        <span class="icon"><i class="mdi mdi-reload"></i></span>
+      </a>
+    </header>
+    <div class="card-content">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Return Date</th>
+          <th>Reason</th>
+          <th>Refund Amount</th>
+          <th>Images</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderReturn : ${returnOrders}">
+          <td th:text="${orderReturn.id}"></td>
+          <td th:text="${#temporals.format(orderReturn.returnDate, 'dd/MM/yyyy')}"></td>
+          <td th:text="${orderReturn.reason}"></td>
+          <td th:text="${orderReturn.refundAmount}"></td>
+          <td>
+            <div class="image-row">
+              <div th:each="image : ${orderReturn.returnImages}" class="image-container">
+                <img th:src="'data:image/jpeg;base64,' + ${image.imagePath}" alt="Return Image" class="return-image">
+              </div>
+            </div>
+          </td>
+          <td th:text="${orderReturn.status}"></td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a th:href="@{/admin/products/productDetail/{id}(id=${orderReturn.product.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-eye"></i></span>
+              </a>
+            </div>
+          </td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a th:href="@{/admin/orderReturnDetails/{id}(id=${orderReturn.id})}" class="btn btn-primary" style="background-color:#FBE2C5; color:#F59D39;">
+                <span class="icon"><i class="mdi mdi-refresh"></i></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, totalOrderReturnPages - 1)}"
+                    th:text="${i + 1}"
+                    th:classappend="${i == currentReturnPage} ? 'active' : ''"
+                    th:onclick="|window.location='?returnPage=' + ${i}|">
+            </button>
+          </div>
+          <small>Page [[${currentReturnPage + 1}]] of [[${totalOrderReturnPages}]]</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-cancel"></i></span>
+        Order Cancel
+      </p>
+      <a href="#" class="card-header-icon">
+        <span class="icon"><i class="mdi mdi-reload"></i></span>
+      </a>
+    </header>
+    <div class="card-content">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Order id</th>
+          <th>Full name</th>
+          <th>Email</th>
+          <th>Telephone</th>
+          <th>Total amount</th>
+          <th>Reason</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderCancel : ${cancelledOrders}">
+          <td th:text="${orderCancel.id}"></td>
+          <td th:text="${orderCancel.order.id}"></td>
+          <td th:text="${orderCancel.order.fullName}"></td>
+          <td th:text="${orderCancel.order.email}"></td>
+          <td th:text="${orderCancel.order.telephone}"></td>
+          <td th:text="${orderCancel.order.totalAmount}"></td>
+          <td th:text="${orderCancel.reason}"></td>
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+                <span class="icon"><i class="mdi mdi-eye"></i></span>
+              </a>
+            </div>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+      <div class="table-pagination">
+        <div class="flex items-center justify-between">
+          <div class="buttons">
+            <button type="button" class="button"
+                    th:each="i : ${#numbers.sequence(0, totalOrderCancelPages - 1)}"
+                    th:text="${i + 1}"
+                    th:classappend="${i == currentCancelPage} ? 'active' : ''"
+                    th:onclick="|window.location='?cancelPage=' + ${i}|">
+            </button>
+          </div>
+          <small>Page [[${currentCancelPage + 1}]] of [[${totalOrderCancelPages}]]</small>
         </div>
       </div>
     </div>

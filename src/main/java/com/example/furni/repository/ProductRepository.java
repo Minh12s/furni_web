@@ -6,6 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByCategory_Id(int categoryId, Pageable pageable);
     Page<Product> findByCategory_IdAndIdNot(int categoryId, int productId, Pageable pageable);
@@ -70,5 +73,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     boolean existsByProductNameAndIdNot(String productName, int id);
     // Đếm tổng số sản phẩm
     long count();
+    // Phương thức để tìm các sản phẩm hết hàng
+    Page<Product> findByQty(int qty, Pageable pageable);
 }
 

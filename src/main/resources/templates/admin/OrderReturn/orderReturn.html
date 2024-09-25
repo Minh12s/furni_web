@@ -5,324 +5,63 @@
     <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
-<section class="is-title-bar">
-    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-        <ul>
-            <li>Admin</li>
-            <li>Tables</li>
-        </ul>
-        <a href="https://github.com/justboil/admin-one-tailwind" target="_blank" class="button blue">
-            <span class="icon"><i class="mdi mdi-github-circle"></i></span>
-            <span>GitHub</span>
-        </a>
-    </div>
-</section>
-<section class="section main-section">
-    <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                        <h3>
-                            <a href="/Admin/Customer">
-                                User
-                            </a>
-                        </h3>
-                        <h1>
-                            45
-                        </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <section class="is-hero-bar">
-        <div class="flex flex-row items-center">
-            <!-- Nút "Print PDF" -->
-            <button onclick="myApp.printTable()" class="btn btn-add ml-2">
-                <i class="fas fa-file-pdf"></i>
-                Print PDF
-            </button>
-            <!-- Nút "Export Excel" -->
-            <button onclick="exportReviewToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
-                <i class="fas fa-file-excel"></i>
-                Export Excel
-            </button>
-            <button onclick="exportExcel()" class="btn btn-add" style="margin-left:10px;">
-                <i class="fas fa-file-excel"></i>
-                Excel Filtered
-            </button>
-        </div>
-    </section>
-    <form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;"  method="get">
-        <div class="input-group input-group-sm" style="margin-right: -23px; margin-bottom: 10px;">
-            <input value="" class="form-control" type="text" name="Email" placeholder="Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 2px;" />
-        </div>
-        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-            <input value="" class="form-control" type="text" name="Telephone" placeholder="Telephone" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
-        </div>
-        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-            <input value="" class="form-control" type="text" name="TotalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
-        </div>
-
-
-        <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
-            <input value="" type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 300px; margin-left:7px;" />
-        </div>
-        <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
-            <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
-                <i class="mdi mdi-magnify" style="padding: 10px;"></i>
-            </button>
-        </div>
-    </form>
-    <section class="section main-section">
-        <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-                    Clients
-                </p>
-                <a href="#" class="card-header-icon">
-                    <span class="icon"><i class="mdi mdi-reload"></i></span>
-                </a>
-            </header>
-            <div class="card-content">
-                <table>
-                    <thead>
-                    <tr>
-                        <th class="checkbox-cell">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                <span class="check"></span>
-                            </label>
-                        </th>
-                        <th class="image-cell"></th>
-                        <th>Name</th>
-                        <th>Company</th>
-                        <th>City</th>
-                        <th>Progress</th>
-                        <th>Created</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td class="checkbox-cell">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                <span class="check"></span>
-                            </label>
-                        </td>
-                        <td class="image-cell">
-                            <div class="image">
-                                <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
-                            </div>
-                        </td>
-                        <td data-label="Name">Rebecca Bauch</td>
-                        <td data-label="Company">Daugherty-Daniel</td>
-                        <td data-label="City">South Cory</td>
-                        <td data-label="Progress" class="progress-cell">
-                            <progress max="100" value="79">79</progress>
-                        </td>
-                        <td data-label="Created">
-                            <small class="text-gray-500" title="Oct 25, 2021">Oct 25, 2021</small>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
-
-                                <a href="/admin/detailsProductReturn" class="btn btn-primary" style="background-color:green; color:white;">
-                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
-                                <a href="/admin/orderReturnDetails" class="btn btn-primary" style="background-color:#FBE2C5; color:#F59D39;">
-                                    <span class="icon"><i class="mdi mdi-refresh"></i></span>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="checkbox-cell">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                <span class="check"></span>
-                            </label>
-                        </td>
-                        <td class="image-cell">
-                            <div class="image">
-                                <img src="https://avatars.dicebear.com/v2/initials/felicita-yundt.svg" class="rounded-full">
-                            </div>
-                        </td>
-                        <td data-label="Name">Felicita Yundt</td>
-                        <td data-label="Company">Johns-Weissnat</td>
-                        <td data-label="City">East Ariel</td>
-                        <td data-label="Progress" class="progress-cell">
-                            <progress max="100" value="67">67</progress>
-                        </td>
-                        <td data-label="Created">
-                            <small class="text-gray-500" title="Jan 8, 2021">Jan 8, 2021</small>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
-
-                                <a href="/admin/detailsProductReturn" class="btn btn-primary" style="background-color:green; color:white;">
-                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
-                                <a href="/admin/orderReturnDetails" class="btn btn-primary" style="background-color:#FBE2C5; color:#F59D39;">
-                                    <span class="icon"><i class="mdi mdi-refresh"></i></span>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="checkbox-cell">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                <span class="check"></span>
-                            </label>
-                        </td>
-                        <td class="image-cell">
-                            <div class="image">
-                                <img src="https://avatars.dicebear.com/v2/initials/mr-larry-satterfield-v.svg" class="rounded-full">
-                            </div>
-                        </td>
-                        <td data-label="Name">Mr. Larry Satterfield V</td>
-                        <td data-label="Company">Hyatt Ltd</td>
-                        <td data-label="City">Windlerburgh</td>
-                        <td data-label="Progress" class="progress-cell">
-                            <progress max="100" value="16">16</progress>
-                        </td>
-                        <td data-label="Created">
-                            <small class="text-gray-500" title="Dec 18, 2021">Dec 18, 2021</small>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
-
-                                <a href="/admin/detailsProductReturn" class="btn btn-primary" style="background-color:green; color:white;">
-                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
-                                <a href="/admin/orderReturnDetails" class="btn btn-primary" style="background-color:#FBE2C5; color:#F59D39;">
-                                    <span class="icon"><i class="mdi mdi-refresh"></i></span>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                </table>
-                <div class="table-pagination">
-                    <div class="flex items-center justify-between">
-                        <div class="buttons">
-                            <button type="button" class="button active">1</button>
-                            <button type="button" class="button">2</button>
-                            <button type="button" class="button">3</button>
-                        </div>
-                        <small>Page 1 of 3</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</section>
 <style>
+    .image-container {
+        margin: 10px; /* Khoảng cách giữa các ảnh */
+        width: calc(50% - 20px); /* Mỗi ảnh chiếm 50% chiều rộng - khoảng cách */
+        box-sizing: border-box; /* Để padding và border không làm ảnh hưởng đến kích thước */
+    }
 
+    .return-image {
+        width: 100%; /* Đảm bảo ảnh chiếm đầy chiều rộng của container */
+        height: auto; /* Giữ tỷ lệ khung hình của ảnh */
+        border-radius: 5px; /* Nếu bạn muốn bo góc cho ảnh */
+    }
+
+    .image-row {
+        display: flex; /* Sử dụng flexbox để căn chỉnh ảnh */
+        flex-wrap: wrap; /* Cho phép ảnh xuống dòng khi hết chỗ */
+        justify-content: center; /* Căn giữa các ảnh */
+    }
+    /* Các lớp CSS cho trạng thái */
+    .status-pending {
+        color: #FF6347; /* Màu đỏ cam cho pending */
+    }
+
+    .status-approved {
+        color: #28a745; /* Màu xanh lá cây cho approved */
+    }
+
+    .status-rejected {
+        color: #dc3545; /* Màu đỏ cho rejected */
+    }
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: none;
+        color: #fff; /* Text color */
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: green; /* Blue background color */
+        border: 1px solid green;
+        color: white;
+    }
+
+    .alert-show {
+        display: block;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
     .btn-primary {
         color: rgb(245 157 57);
         background-color: rgb(251 226 197);
@@ -389,6 +128,188 @@
         margin-right: 10px; /* Khoảng cách giữa các nút */
     }
 </style>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <ul>
+            <li>Admin</li>
+            <li>Order Return</li>
+        </ul>
+        <a href="https://github.com/justboil/admin-one-tailwind" target="_blank" class="button blue">
+            <span class="icon"><i class="mdi mdi-github-circle"></i></span>
+            <span>GitHub</span>
+        </a>
+    </div>
+</section>
+<section class="section main-section">
+    <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
+        <div th:each="iconEntry : ${reasonIcons}" class="card">
+            <div class="card-content">
+                <div class="flex items-center justify-between">
+                    <div class="widget-label">
+                        <h3 th:text="${iconEntry.key}"></h3>
+                        <h1 th:text="${reasonCounts[iconEntry.key] != null ? reasonCounts[iconEntry.key] : 0}"></h1>
+                    </div>
+                    <span>
+                    <span class="icon widget-icon text-green-500">
+                        <i th:class="'mdi ' + ${iconEntry.value} + ' mdi-48px'"></i>
+                    </span>
+                </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="is-hero-bar">
+        <div class="flex flex-row items-center">
+            <!-- Nút "Print PDF" -->
+            <button onclick="myApp.printTable()" class="btn btn-add ml-2">
+                <i class="fas fa-file-pdf"></i>
+                Print PDF
+            </button>
+            <!-- Nút "Export Excel" -->
+            <button onclick="exportReviewToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
+                <i class="fas fa-file-excel"></i>
+                Export Excel
+            </button>
+            <button onclick="exportExcel()" class="btn btn-add" style="margin-left:10px;">
+                <i class="fas fa-file-excel"></i>
+                Excel Filtered
+            </button>
+        </div>
+    </section>
+    <div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+        <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+        <span th:text="${successMessage}"></span>
+    </div>
+    <form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;"  method="get">
+        <div class="input-group input-group-sm" style="margin-right: -23px; margin-bottom: 10px;">
+            <input value="" class="form-control" type="text" name="Email" placeholder="Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 2px;" />
+        </div>
+        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
+            <input value="" class="form-control" type="text" name="Telephone" placeholder="Telephone" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+        </div>
+        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
+            <input value="" class="form-control" type="text" name="TotalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
+        </div>
+
+
+        <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
+            <input value="" type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 300px; margin-left:7px;" />
+        </div>
+        <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
+            <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+                <i class="mdi mdi-magnify" style="padding: 10px;"></i>
+            </button>
+        </div>
+    </form>
+    <section class="section main-section">
+        <div class="card has-table">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+                    Order Return
+                </p>
+                <form class="card-header-icon" method="get" onchange="this.submit()">
+                    <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+                        <option value="10" th:selected="${size == 10}">10</option>
+                        <option value="20" th:selected="${size == 20}">20</option>
+                        <option value="50" th:selected="${size == 50}">50</option>
+                        <option value="100" th:selected="${size == 100}">100</option>
+                    </select>
+
+                    <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
+                    <input type="hidden" name="page" th:value="${orderReturnPage.number}">
+                </form>
+            </header>
+            <div class="card-content">
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="checkbox-cell">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                <span class="check"></span>
+                            </label>
+                        </th>
+                        <th>ID</th>
+                        <th>Return Date</th>
+                        <th>Reason</th>
+                        <th>Refund Amount</th>
+                        <th>Images</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="orderReturn : ${orderReturnPage.content}">
+                        <td class="checkbox-cell">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                <span class="check"></span>
+                            </label>
+                        </td>
+                        <td th:text="${orderReturn.id}"></td>
+                        <td th:text="${#temporals.format(orderReturn.returnDate, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${orderReturn.reason}"></td>
+                        <td th:text="${orderReturn.refundAmount}"></td>
+                        <td>
+                            <div class="image-row">
+                                <div th:each="image : ${orderReturn.returnImages}" class="image-container">
+                                    <img th:src="'data:image/jpeg;base64,' + ${image.imagePath}" alt="Return Image" class="return-image">
+                                </div>
+                            </div>
+                        </td>
+                        <td th:class="${'status-' + orderReturn.status.toLowerCase()}" th:text="${orderReturn.status}"></td>
+                        <td class="actions-cell">
+                            <div class="buttons right nowrap">
+                                <a th:href="@{/admin/products/productDetail/{id}(id=${orderReturn.product.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="actions-cell">
+                            <div class="buttons right nowrap">
+                                <a th:href="@{/admin/orderReturnDetails/{id}(id=${orderReturn.id})}" class="btn btn-primary" style="background-color:#FBE2C5; color:#F59D39;">
+                                    <span class="icon"><i class="mdi mdi-refresh"></i></span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+                <div class="table-pagination">
+                    <div class="flex items-center justify-between">
+                        <div class="buttons">
+                            <button type="button" class="button"
+                                    th:each="i : ${#numbers.sequence(0, orderReturnPage.totalPages - 1)}"
+                                    th:classappend="${i == orderReturnPage.number} ? ' active' : ''"
+                                    th:text="${i + 1}"
+                                    th:onclick="|window.location.href='/admin/orderReturn?page=' + ${i} + '&size=' + ${orderReturnPage.size}|">
+                            </button>
+                        </div>
+                        <small th:text="'Page ' + (${orderReturnPage.number} + 1) + ' of ' + ${orderReturnPage.totalPages}"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var alert = document.getElementById('successAlert');
+        if (alert) {
+            alert.classList.add('alert-show');
+            setTimeout(function() {
+                alert.classList.add('fade-out');
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 1000); // match the duration of the fade-out transition
+            }, 3000); // display duration in milliseconds
+        }
+    });
+</script>
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 
 </body>

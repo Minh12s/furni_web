@@ -1,8 +1,6 @@
 package com.example.furni.service;
 
-import com.example.furni.entity.OrderCancel;
-import com.example.furni.entity.Orders;
-import com.example.furni.entity.Review;
+import com.example.furni.entity.*;
 import com.example.furni.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +22,8 @@ public class DashboardService {
     private ReviewRepository reviewRepository;
     @Autowired
     private OrderCancelRepository orderCancelRepository;
+    @Autowired
+    private OrderReturnRepository orderReturnRepository;
 
     // lấy tổng tất cả khách hàng , trừ admin
     public long getTotalUsers() {
@@ -43,6 +43,12 @@ public class DashboardService {
         Pageable pageable = PageRequest.of(page, size);
         return ordersRepository.findPendingOrders(pageable);
     }
+    // Lấy danh sách các sản phẩm đã hết hàng
+    public Page<Product> getOutOfStockProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByQty(0, pageable);
+    }
+
     // Lấy danh sách các review có trạng thái 'pending' và phân trang
     public Page<Review> getPendingReviews(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -52,6 +58,11 @@ public class DashboardService {
     public Page<OrderCancel> getAllOrderCancels(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return orderCancelRepository.findAll(pageable);
+    }
+    // Lấy tất cả order bị huỷ
+    public Page<OrderReturn> getAllOrderReturn(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return orderReturnRepository.findAll(pageable);
     }
 
 }
