@@ -31,6 +31,10 @@ public class Orders {
     private String ward;
     @Column(name = "address_detail")
     private String addressDetail;
+    public String getFullAddress() {
+        return String.format("%s, %s, %s - %s", province, district, ward, addressDetail);
+    }
+
     @Column(name = "full_name")
     private String fullName;
     @Column(name = "email")
@@ -204,4 +208,5 @@ public class Orders {
 
     public Orders(){
     }
+
 }

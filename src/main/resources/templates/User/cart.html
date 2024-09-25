@@ -83,7 +83,7 @@
 
               </td>
 
-              <td class="price" th:text="${item.product.price}">Price</td>
+              <td class="price" th:text="'$'+${item.product.price}">Price</td>
 
               <td class="quantity">
                 <form th:action="@{/update-cart}" method="post">
@@ -95,7 +95,7 @@
                 </form>
               </td>
 
-              <td class="total" th:text="${item.total}">Total</td>
+              <td class="total" th:text="'$'+${item.total}">Total</td>
             </tr><!-- END TR-->
 
             </tbody>

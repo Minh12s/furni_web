@@ -1,9 +1,6 @@
 package com.example.furni.controllers.User;
 
-import com.example.furni.entity.Cart;
-import com.example.furni.entity.Orders;
-import com.example.furni.entity.Product;
-import com.example.furni.entity.User;
+import com.example.furni.entity.*;
 import com.example.furni.service.CartService;
 import com.example.furni.service.OrderService;
 import com.example.furni.service.ProductService;
@@ -33,6 +30,16 @@ public class CheckOutController extends BaseController {
     @Autowired
     private ProductService productService;
 
+    private double GetShippingFee(String shippingMethod) {
+        switch (shippingMethod) {
+            case "J&T Express":
+                return 10.00; // Phí vận chuyển cho J&T Express
+            case "Ninja Van":
+                return 5.00; // Phí vận chuyển cho Ninja Van
+            default:
+                return 0.00; // Phí vận chuyển mặc định
+        }
+    }
     @GetMapping("/checkouts")
     public String checkout(HttpServletRequest request, Model model) {
         Integer userId = (Integer) request.getSession().getAttribute("userId");
@@ -75,7 +82,6 @@ public class CheckOutController extends BaseController {
             HttpServletRequest request,
             Model model) {
 
-        // Lấy userId từ session
         Integer userId = (Integer) request.getSession().getAttribute("userId");
 
         if (userId == null) {
@@ -91,10 +97,9 @@ public class CheckOutController extends BaseController {
 
         double subtotal = cartItems.stream().mapToDouble(Cart::getTotal).sum();
         double tax = subtotal * 0.10;
-        double shippingFee = 10.00;
+        double shippingFee = GetShippingFee(shippingMethod);
         double totalAmount = subtotal + tax + shippingFee;
 
-        // Tạo đối tượng Orders và thiết lập thông tin
         Orders order = new Orders();
         User user = userService.findById(userId);
         order.setUser(user);
@@ -115,27 +120,26 @@ public class CheckOutController extends BaseController {
         order.setIsPaid("0");
         order.setTotalAmount(totalAmount);
 
-        // Lưu đơn hàng
         orderService.saveOrder(order);
 
-        // Cập nhật số lượng sản phẩm
         for (Cart cartItem : cartItems) {
-            Product product = cartItem.getProduct(); // Lấy Product từ Cart
-            int quantity = cartItem.getQty();   // Lấy số lượng từ giỏ hàng
+            Product product = cartItem.getProduct();
+            int quantity = cartItem.getQty();
 
-            // Trừ số lượng sản phẩm
+            OrderProduct orderProduct = new OrderProduct(order, product, product.getPrice(), quantity, 0);
+            orderService.saveOrderProduct(orderProduct);
+
             int updatedQuantity = product.getQty() - quantity;
             product.setQty(updatedQuantity);
-
-            // Cập nhật thông tin sản phẩm trong cơ sở dữ liệu
             productService.save(product);
         }
 
-
-        // Xóa giỏ hàng sau khi đặt hàng thành công
         cartService.clearCartByUserId(userId);
+
+        orderService.sendThankYouEmail(fullName, email, order, cartItems,tax,subtotal,shippingFee, totalAmount);
 
         return "redirect:/thankyou";
     }
+
 
 }

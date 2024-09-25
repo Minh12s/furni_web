@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Confirmation</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .row-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .col-md-4 {
+      width: calc(33.33% - 2px); /* Adjust width as needed, considering the 20px gap */
+      background-color: white; /* Set the background color to white */
+      border: 1px solid #ddd; /* Add a 1px solid border with #ddd color */
+      border-radius: 5px; /* Add a 5px border radius for rounded corners */
+      text-align: center;
+      padding: 20px 0 20px 0;
+    }
+
+
+
+    .container {
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+
+
+    .order-details table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-details table th, .order-details table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .order-details table th {
+      background-color: #f2f2f2;
+    }
+
+
+
+    .order-summary table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-summary table th, .order-summary table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .order-summary table th {
+      background-color: #f2f2f2;
+    }
+
+
+
+    body {
+      margin-top: 20px;
+    }
+
+
+
+    .order-list th, .order-list td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .order-list th {
+      background-color: #f2f2f2;
+    }
+
+    .cart__total {
+      background: white;
+      padding: 3px 40px 40px;
+      width: 30%;
+      border: 1px solid #ddd;
+      margin-left: 20px;
+    }
+
+    .cart__total h4 {
+      font-size: 23px;
+      border-bottom: 1px solid #ddd;
+      padding: 1px 0 20px 20px;
+    }
+
+
+
+    .cart__total ul {
+      margin-bottom: 5px;
+      padding-left: 1px
+    }
+
+
+    .cart__total ul li {
+      list-style: none;
+      font-size: 16px;
+      color: #444444;
+      line-height: 50px;
+      overflow: hidden;
+    }
+
+    .cart__total ul li span {
+      font-weight: 700;
+      /*color: #e53637;*/
+      float: right;
+    }
+
+    .Order {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .Order_list {
+      width: 60%;
+      background-color: white;
+      justify-content: space-between;
+      border: 1px solid #ddd;
+    }
+
+    .Order_list h4 {
+      font-size: 23px;
+      border-bottom: 1px solid #ddd;
+      padding: 3px 0 20px 20px;
+    }
+
+
+    .Order_list_product {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+
+    .Order_list_product1 {
+      flex: 2;
+      max-width: 30%; /* Điều chỉnh max-width theo cần thiết */
+      word-wrap: break-word;
+      margin-left: 30px;
+      width: 300px;
+    }
+
+    .Order_list_product1 h5 {
+      font-size: 18px;
+      font-weight: normal; /* Loại bỏ kiểu in đậm */
+    }
+
+    .Order_list_product p {
+      padding: 17px 5px 0 0;
+      text-align: right; /* Canh giá trị giá bên phải */
+    }
+
+    .Order_list_product {
+      display: flex;
+    }
+
+    .Order_list_product img {
+      margin-right: 10px;
+    }
+
+    .Order_list_product1 {
+      flex-grow: 1;
+    }
+
+    .quantity, .total {
+      margin-left: auto;
+    }
+
+    .cart__total ul li.vat {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .navbar-brand {
+      display: inline-block;
+      padding-top: 0.3125rem;
+      padding-bottom: 0.3125rem;
+      margin-right: 1rem;
+      font-size: 1.25rem;
+      line-height: inherit;
+      white-space: nowrap;
+      margin-top:22px;
+      margin-left:20px;
+    }
+
+    .navbar-brand:hover, .navbar-brand:focus {
+      text-decoration: none;
+    }
+
+    .ftco-navbar-light .navbar-brand {
+      color: #000000;
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a class="navbar-brand">Furni</a>
+  <div class="header">
+    <h1>Your Order #<strong><span th:text="${order.id}"></span></strong></h1>
+    <p>
+      Thank you for your purchase<br>
+      We sent an email to <strong><span th:text="${order.email}"></span></strong> with your order confirmation and receipt. If the email hasn't arrived<br>
+      within two minutes, please check your spam folder to see if the email was routed there.
+    </p>
+    <p><span style="margin-right: 5px;"><i class="fa-regular fa-clock"></i></span><strong>Time Placed</strong>: <span th:text="${orderDate}"></span></p>
+  </div>
+  <div class="row-container">
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <i class="fas fa-map-marked-alt fa-3x mx-auto mt-3"></i>
+        <div class="card-body text-center">
+          <strong style="font-size: 23px;" class="card-title">Order Info</strong>
+          <p class="card-text">Order number: <span th:text="${order.id}"></span></p>
+          <p class="card-text">Date: <span th:text="${orderDate}"></span></p>
+          <p class="card-text">Payment method: <span th:text="${order.paymentMethod}"></span></p>
+          <p class="card-text">Status: <span th:text="${order.status}"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <i class="fa-regular fa-credit-card fa-3x mx-auto mt-3"></i>
+        <div class="card-body text-center">
+          <strong style="font-size: 23px;" class="card-title">Customer Information</strong>
+          <p class="card-text">Full Name: <span th:text="${fullName}"></span></p>
+          <p class="card-text">Telephone: <span th:text="${order.telephone}"></span></p>
+          <p class="card-text">Email: <span th:text="${order.email}"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <i class="fa-solid fa-truck-moving fa-3x mx-auto mt-3"></i>
+        <div class="card-body text-center">
+          <strong style="font-size: 23px;" class="card-title">Shipping</strong>
+          <p class="card-text">Shipping method: <span th:text="${order.shippingMethod}"></span></p>
+          <p class="card-text">Address: <span th:text="${order.getFullAddress}"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="Order">
+    <div class="Order_list">
+      <h4>Order List</h4>
+      <div th:each="item : ${cartItems}" class='Order_list_product'>
+        <div class='Order_list_product1'>
+          <h5 th:text="${item.product.productName}"></h5>
+        </div>
+        <div class='quantity'>
+          <p th:text="'Qty: ' + ${item.qty}"></p>
+        </div>
+        <div class='total'>
+          <p th:text="'$'+${item.product.price}"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart__total">
+      <h4>Order Summary</h4>
+      <ul>
+        <li>Subtotal <span th:text="'$'+${subtotal}">$300.00</span></li>
+        <li >Tax <span th:text="'$'+ ${tax}">$20.00</span></li>
+        <li class="vat">Shipping fee <span th:text="'$'+${shippingFee}">$20.00</span></li>
+        <li>Total <span th:text="'$'+${totalAmount}">$320.00</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
