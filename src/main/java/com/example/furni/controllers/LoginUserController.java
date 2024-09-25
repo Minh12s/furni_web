@@ -49,14 +49,13 @@
             public String register(@ModelAttribute("user") User user, Model model) {
                 List<String> errorRegister = new ArrayList<>();
 
-                // Kiểm tra Full Name
+                // Kiểm tra và thêm lỗi nếu cần thiết
                 if (user.getFullName().trim().isEmpty()) {
-                    errorRegister.add("Full name cannot be  blank.");
+                    errorRegister.add("Full name cannot be blank.");
                 } else if (userService.isFullNameExists(user.getFullName())) {
                     errorRegister.add("This Full Name already exists.");
                 }
 
-                // Kiểm tra Email
                 if (user.getEmail().trim().isEmpty()) {
                     errorRegister.add("Email cannot be blank.");
                 } else if (!userService.isValidEmail(user.getEmail())) {
@@ -65,20 +64,24 @@
                     errorRegister.add("This email already exists.");
                 }
 
-                // Kiểm tra Password
                 if (user.getPassword().trim().isEmpty()) {
                     errorRegister.add("Password cannot be blank.");
                 }
 
-                // Nếu có lỗi, trả về trang đăng ký và hiển thị lỗi
+                // Nếu có lỗi, trả về trang đăng ký
                 if (!errorRegister.isEmpty()) {
                     model.addAttribute("errorRegister", errorRegister);
                     return "User/register";
                 }
 
-                // Nếu không có lỗi, lưu user và điều hướng tới trang đăng nhập
-                userService.saveUser(user);
-                return "redirect:/Page/Login";
+                // Gán fullName làm username
+                user.setUserName(user.getFullName());
+
+                // Gọi phương thức `registerUser` để lưu user
+                userService.registerUser(user);
+
+                return "redirect:/loginPage";
             }
+
 
         }
