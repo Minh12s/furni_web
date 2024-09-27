@@ -61,12 +61,16 @@ public class OrderReturnController {
         return "admin/OrderReturn/orderReturnDetails";
     }
     @PostMapping("/updateOrderReturn/{orderReturnId}")
-    public String updateReviewStatus(@PathVariable int orderReturnId, @RequestParam String status, HttpSession session) {
-        boolean updated = orderReturnService.updateOrderReturnStatus(orderReturnId, status);
+    public String updateOrderReturnStatus(@PathVariable("orderReturnId") int orderReturnId,
+                                          @RequestParam("status") String status,
+                                          RedirectAttributes redirectAttributes,
+                                          HttpSession session) {
+        try {
+            // Gọi service để cập nhật trạng thái và hồi lại qty
+            orderReturnService.updateOrderReturnStatus(orderReturnId, status);
 
-        if (updated) {
             session.setAttribute("successMessage", "Order return status updated successfully.");
-        } else {
+        } catch (Exception e) {
             session.setAttribute("errorMessage", "Unable to update Order return status.");
         }
 

@@ -36,6 +36,7 @@
                     <th>Product Id</th>
                     <th>Return Date</th>
                     <th>Reason</th>
+                    <th>Qty</th>
                     <th>Description</th>
                     <th>Refund Amount</th>
                     <th>Status</th>
@@ -49,6 +50,7 @@
                     <td th:text="${orderReturn.product.id}"></td>
                     <td th:text="${orderReturn.returnDate}"></td>
                     <td th:text="${orderReturn.reason}"></td>
+                    <td th:text="${orderReturn.qty}"></td>
                     <td th:text="${orderReturn.description}"></td>
                     <td th:text="${orderReturn.refundAmount}"></td>
                     <td th:text="${orderReturn.status}" class="text-pending"></td>

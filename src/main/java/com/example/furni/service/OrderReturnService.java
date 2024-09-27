@@ -1,10 +1,8 @@
 package com.example.furni.service;
 
-import com.example.furni.entity.Material;
-import com.example.furni.entity.OrderReturn;
-import com.example.furni.entity.ReturnImages;
-import com.example.furni.entity.Review;
+import com.example.furni.entity.*;
 import com.example.furni.repository.OrderReturnRepository;
+import com.example.furni.repository.ProductRepository;
 import com.example.furni.repository.ReturnImagesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +23,8 @@ public class OrderReturnService {
 
     @Autowired
     private ReturnImagesRepository returnImagesRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     // Lấy tất cả OrderReturn cùng với ảnh liên quan
     public List<OrderReturn> getAllOrderReturns() {
@@ -61,16 +61,19 @@ public class OrderReturnService {
         return reasonCounts;
     }
     // Cập nhật trạng thái đơn trả hàng
-    public boolean updateOrderReturnStatus(int orderReturnId, String status) {
-        Optional<OrderReturn> OrderReturnOptional = orderReturnRepository.findById(orderReturnId);
-        if (OrderReturnOptional.isPresent()) {
-            OrderReturn orderReturn = OrderReturnOptional.get();
-            if ("pending".equals(orderReturn.getStatus())) {
-                orderReturn.setStatus(status);  // Update status to "approved" or "rejected"
-                orderReturnRepository.save(orderReturn);
-                return true;
-            }
+    public void updateOrderReturnStatus(int orderReturnId, String newStatus) {
+        OrderReturn orderReturn = orderReturnRepository.findById(orderReturnId)
+                .orElseThrow(() -> new RuntimeException("Order return not found"));
+
+        // Chỉ hồi qty nếu trạng thái mới là "approved"
+        if ("approved".equalsIgnoreCase(newStatus) && "pending".equalsIgnoreCase(orderReturn.getStatus())) {
+            Product product = orderReturn.getProduct();
+            product.setQty(product.getQty() + orderReturn.getQty());
+            productRepository.save(product);
         }
-        return false;
+
+        // Cập nhật trạng thái mới cho order return
+        orderReturn.setStatus(newStatus);
+        orderReturnRepository.save(orderReturn);
     }
 }

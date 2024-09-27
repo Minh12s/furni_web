@@ -29,6 +29,8 @@ public class OrderReturn {
     private String status;
     @Column(name = "reason")
     private String reason;
+    @Column(name = "qty")
+    private int qty;
     @Column(name = "return_amount")
     private double refundAmount;
     @Column(name = "description")
@@ -42,6 +44,20 @@ public class OrderReturn {
     }
 
     public void setReturnImages(List<ReturnImages> returnImages) {
+        this.returnImages = returnImages;
+    }
+
+    public OrderReturn(int id, Orders order, User user, Product product, LocalDateTime returnDate, String status, String reason, int qty, double refundAmount, String description, List<ReturnImages> returnImages) {
+        this.id = id;
+        this.order = order;
+        this.user = user;
+        this.product = product;
+        this.returnDate = returnDate;
+        this.status = status;
+        this.reason = reason;
+        this.qty = qty;
+        this.refundAmount = refundAmount;
+        this.description = description;
         this.returnImages = returnImages;
     }
 
@@ -101,6 +117,14 @@ public class OrderReturn {
         this.reason = reason;
     }
 
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
     public double getRefundAmount() {
         return refundAmount;
     }
@@ -115,19 +139,6 @@ public class OrderReturn {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public OrderReturn(int id, Orders order, User user, Product product, LocalDateTime returnDate, String status, String reason, double refundAmount, String description, List<ReturnImages> returnImages) {
-        this.id = id;
-        this.order = order;
-        this.user = user;
-        this.product = product;
-        this.returnDate = returnDate;
-        this.status = status;
-        this.reason = reason;
-        this.refundAmount = refundAmount;
-        this.description = description;
-        this.returnImages = returnImages;
     }
 
     public OrderReturn(){
