@@ -71,14 +71,12 @@
     <div class="content">
         <div class="content-top">
             <div class="content-top-title">
-                <p style="color: black">My order </p>
+                <p style="color: black">My order</p>
             </div>
             <div class="content-top-title">
-                <p style="color: black"> 0 order </p>
+                <p style="color: black" th:text="${orders.size()} + ' order'"></p> <!-- Hiển thị số lượng đơn hàng -->
             </div>
         </div>
-        <style>
-        </style>
         <div class="content-top1 d-flex">
             <a style="color:#FFA45C; font-weight: bold" href="/MyAccount/MyOrder" class="btn">All</a>
             <a href="/MyOrder/OrderPending" class="btn">Pending</a>
@@ -89,11 +87,10 @@
             <a type="button" href="/MyOrder/OrderCancel" class="btn cancel-btn">Cancel</a>
         </div>
 
-
         <table class="order-table">
             <thead>
             <tr>
-                <th>ID </th>
+                <th>ID</th>
                 <th>Created At</th>
                 <th>Grand Total</th>
                 <th>Full Name</th>
@@ -105,36 +102,59 @@
             </tr>
             </thead>
             <tbody>
-
-            <tr>
-
-                <td>s</td>
-                <td>sss</td>
-                <td>jjj</td>
-
-                <td>aaa</td>
-
-                <td>g</td>
-
-                <td>paa</td>
-                <td>sssd</td>
-                <td>j</td>
+            <!-- Sử dụng th:each để lặp qua danh sách orders -->
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
+                <td th:text="${order.totalAmount}"></td>
+                <td th:text="${order.fullName}"></td>
+                <td th:text="${order.shippingMethod}"></td>
+                <td th:text="${order.paymentMethod}"></td>
+                <td th:text="${order.isPaid}"></td>
+                <td th:text="${order.status}"></td>
                 <td>
-
-                    <button href="/MyOrder/OrderDetail" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" href="/MyOrder/OrderDetail">Detail</a>
+                    <button style="padding: 7px 7px;" class="site-btn">
+                        <a style="color: white;" th:href="@{/MyOrder/OrderDetail/{id}(id=${order.id})}">Detail</a>
                     </button>
                 </td>
-
             </tr>
-
             </tbody>
-
         </table>
-        <div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        <!-- Nút để quay lại trang trước đó -->
+                        <li th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                            <a th:href="@{/MyOrder/MyOrder(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                            <li th:classappend="${i == currentPage} ? 'active' : ''">
+                                <a th:href="@{/MyOrder/MyOrder(page=${i}, size=${pageSize})}" th:text="${i + 1}"></a>
+                            </li>
+                        </th:block>
+
+                        <!-- Nút để chuyển đến trang tiếp theo -->
+                        <li th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                            <a th:href="@{/MyOrder/MyOrder(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
+
+</div>
+
+</div>
 </div>
 
 <div th:insert="/include/fragments :: footer"></div>

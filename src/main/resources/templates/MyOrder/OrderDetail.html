@@ -80,34 +80,22 @@
         <table class="order-table">
             <thead>
             <tr>
-                <th style="width: 10%;">ID</th>
-                <th style="width: 15%;">Thumbnail</th>
-                <th style="width: 15%;">Name</th>
-                <th style="width: 10%;">Price</th>
-                <th style="width: 10%;">Quantity</th>
-                <th style="width: 15%;">Total</th>
-                <th style="width: 10%;"></th>
-                <th style="width: 15%;"></th>
+                <th style="width:100px;" scope="col">ID</th>
+                <th style="width:200px;" scope="col">Thumbnail</th>
+                <th style="width:300px;" scope="col">Name</th>
+                <th style="width:200px;" scope="col">Price</th>
+                <th style="width:200px;" scope="col">Quantity</th>
+                <th style="width:200px;" scope="col">Total</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td><img src="/images/product1.jpg" width="120" /></td>
-                <td>Product 1</td>
-                <td>$50.00</td>
-                <td>2</td>
-                <td>$100.00</td>
-                <td>
-                    <div class="col-sm-2">
-                        <a class="btn btn-dark" href="/MyOrder/Review">Review</a>
-                    </div>
-                </td>
-                <td>
-                    <div class="col-sm-2">
-                        <a style="color:white; width:100px;" class="btn btn-warning" href="/MyOrder/RequestRefund">Request a refund</a>
-                    </div>
-                </td>
+            <tr th:each="orderProduct : ${orderProducts}">
+                <td th:text="${orderProduct.product.id}"></td>
+                <td><img th:src="'data:image/jpeg;base64,' + ${orderProduct.product.thumbnail}" width="120" /></td>
+                <td th:text="${orderProduct.product.productName}"></td>
+                <td th:text="${orderProduct.price}"></td>
+                <td th:text="${orderProduct.qty}"></td>
+                <td th:text="${orderProduct.price * orderProduct.qty}"></td>
             </tr>
             <!-- Add more rows as needed -->
             </tbody>
@@ -116,18 +104,42 @@
     </div>
     <input type="hidden" id="returnUrl" name="returnUrl" value="/MyOrder/MyOrder" />
     <div style="float:right; display: flex; gap: 10px;">
-        <div>
-            <a href="/MyOrder/MyOrder" class="btn btn-warning">Back</a>
-        </div>
-        <div>
-            <form method="post" action="/MyOrder/UpdateStatus/1?status=complete&returnUrl=/MyOrder/MyOrder">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-warning">Complete</button>
+
+        <div th:if="${order.status == 'Pending'}" style="display: flex; gap: 10px;">
+            <form method="post" th:action="@{/MyOrder/updateStatus(id=${order.id}, status='cancel')}" th:attr="returnUrl=@{/MyOrder/MyOrder}">
+                <button onclick="return confirm('Surely you want to cancel your order')" type="submit" class="btn btn-danger"
+                        style="padding: 5px 10px; border-radius: 5px; height: 47px; background-color: red; color: white;">
+                    Cancel
+                </button>
             </form>
+
         </div>
-        <div>
-            <button onclick="cancelOrder()" class="btn btn-danger">Cancel</button>
+        <div th:if="${order.status == 'Shipped'}" style="display: flex; gap: 10px;">
+            <form method="post" th:action="@{/MyOrder/updateStatus(id=${order.id}, status='complete')}" th:attr="returnUrl=@{/MyOrder/MyOrder}">
+                <button onclick="return confirm('Surely you want to complete your order')"
+                        type="submit"
+                        class="btn btn-danger"
+                        style="
+        padding: 5px 10px;
+        border-radius: 5px;
+        height: 47px;
+        background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+        color: white;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    "
+                        onmouseover="this.style.transform='scale(1.05)';"
+                        onmouseout="this.style.transform='scale(1)';"
+                >
+                    Complete
+                </button>
+
+            </form>
+
         </div>
+
     </div>
 </div>
 

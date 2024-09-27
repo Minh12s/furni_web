@@ -40,7 +40,9 @@ public class OrderService {
         Pageable pageable = PageRequest.of(page, size);
         return ordersRepository.findAll(pageable);
     }
-
+    public Page<Orders> findOderByUserId(int userId, Pageable pageable) {
+        return ordersRepository.findOderByUserId(userId, pageable); // Gọi phương thức với phân trang
+    }
     // Lấy danh sách sản phẩm theo orderId
     public List<OrderProduct> getOrderProductsByOrderId(int orderId) {
         return orderProductRepository.findByOrderId(orderId);
