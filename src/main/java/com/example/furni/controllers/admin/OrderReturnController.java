@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,11 @@ public class OrderReturnController {
     @GetMapping("/orderReturn")
     public String OrderReturn(Model model,HttpSession session,
                               @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size){
-        Page<OrderReturn> orderReturnPage = orderReturnService.getOrderReturnPaginated(page, size);
+                              @RequestParam(defaultValue = "10") int size,
+                              @RequestParam(required = false) String status,
+                              @RequestParam(required = false) Double refundAmount,
+                              @RequestParam(required = false) String search){
+        Page<OrderReturn> orderReturnPage = orderReturnService.filterOrderReturns(page, size, status, refundAmount, search);
         Map<String, Long> reasonCounts = orderReturnService.getReasonCounts();
 
         // Biểu tượng cho từng lý do

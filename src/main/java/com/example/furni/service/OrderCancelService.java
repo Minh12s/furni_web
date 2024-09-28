@@ -5,6 +5,7 @@ import com.example.furni.repository.OrderCancelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -34,4 +35,16 @@ public class OrderCancelService {
     public Page<OrderCancel> getAllOrderCancels(int page, int size) {
         return orderCancelRepository.findAll(PageRequest.of(page, size));
     }
+    public Page<OrderCancel> filterOrderCancels(int page, int size, String email, String telephone, Double totalAmount, String search) {
+        // Tạo Pageable object
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Thực hiện logic tìm kiếm và lọc
+        if (email != null || telephone != null || totalAmount != null || search != null) {
+            return orderCancelRepository.findByFilters(email, telephone, totalAmount, search, pageable);
+        } else {
+            return orderCancelRepository.findAll(pageable);
+        }
+    }
+
 }

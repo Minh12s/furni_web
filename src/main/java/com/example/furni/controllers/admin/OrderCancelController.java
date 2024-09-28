@@ -24,13 +24,17 @@ public class OrderCancelController {
     private OrderCancelService orderCancelService;
 
     @GetMapping("/orderCancel")
-    public String orderCancel(Model model ,
+    public String orderCancel(Model model,
                               @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size) {
-        Page<OrderCancel> ordersCancelPage = orderCancelService.getAllOrderCancels(page, size);
+                              @RequestParam(defaultValue = "10") int size,
+                              @RequestParam(required = false) String email,
+                              @RequestParam(required = false) String telephone,
+                              @RequestParam(required = false) Double totalAmount,
+                              @RequestParam(required = false) String search) {
+
+        Page<OrderCancel> ordersCancelPage = orderCancelService.filterOrderCancels(page, size, email, telephone, totalAmount, search);
         Map<String, Long> reasonCounts = orderCancelService.getReasonCounts();
 
-        // Biểu tượng cho từng lý do
         Map<String, String> reasonIcons = new HashMap<>();
         reasonIcons.put("Order takes a long time to confirm", "mdi-clock");
         reasonIcons.put("I don't need to buy anymore", "mdi-cancel");
@@ -38,7 +42,6 @@ public class OrderCancelController {
         reasonIcons.put("I found a better place to buy (Cheaper, more reputable, faster delivery...)", "mdi-thumb-up");
         reasonIcons.put("I don't have enough money to buy it", "mdi-currency-usd");
 
-        // Tính số lượng lý do "Khác"
         long otherReasonsCount = reasonCounts.entrySet().stream()
                 .filter(entry -> !reasonIcons.containsKey(entry.getKey()))
                 .mapToLong(Map.Entry::getValue)
@@ -47,11 +50,11 @@ public class OrderCancelController {
         if (otherReasonsCount > 0) {
             reasonCounts.put("Other", otherReasonsCount);
         }
+
         model.addAttribute("reasonCounts", reasonCounts);
         model.addAttribute("reasonIcons", reasonIcons);
         model.addAttribute("ordersCancelPage", ordersCancelPage);
         model.addAttribute("size", size);
-
 
         return "admin/OrderCancel/orderCancel";
     }

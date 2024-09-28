@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,11 @@ public class OrderReturnService {
     public Page<OrderReturn> getOrderReturnPaginated(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return orderReturnRepository.findAll(pageable);
+    }
+    public Page<OrderReturn> filterOrderReturns(int page, int size, String status, Double refundAmount, String search) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return orderReturnRepository.findByFilters(status, refundAmount, search, pageable);
     }
     public Map<String, Long> getReasonCounts() {
         List<Object[]> results = orderReturnRepository.countByReason();

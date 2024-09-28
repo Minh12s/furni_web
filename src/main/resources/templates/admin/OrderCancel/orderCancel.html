@@ -77,23 +77,21 @@
         </button>
     </div>
 </section>
-    <form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;"  method="get">
+    <form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" method="get" action="/admin/orderCancel">
         <div class="input-group input-group-sm" style="margin-right: -23px; margin-bottom: 10px; margin-left: 19px;">
-            <input value="" class="form-control" type="text" name="Email" placeholder="Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 2px;" />
+            <input value="" class="form-control" type="text" name="email" placeholder="Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 2px;" />
         </div>
-        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-            <input value="" class="form-control" type="text" name="Telephone" placeholder="Telephone" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
+        <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+            <input value="" class="form-control" type="text" name="telephone" placeholder="Telephone" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 28px;" />
         </div>
-        <div class="input-group input-group-sm" style=" margin-right: 5px; margin-bottom: 10px;">
-            <input value="" class="form-control" type="text" name="TotalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
+        <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
+            <input value="" class="form-control" type="number" step="0.01" name="totalAmount" placeholder="Total Amount" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-right: -10px;" />
         </div>
-
-
         <div class="input-group input-group-sm" style="margin-left: 5px; margin-bottom: 10px;">
             <input value="" type="text" name="search" class="form-control" placeholder="Search" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 300px; margin-left:7px;" />
         </div>
         <div class="input-group input-group-sm" style="margin-bottom: 10px; margin-left: -5px;">
-            <button style=" margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
+            <button style="margin-left:10px; height: 45px; background-color: #F1F1F1; border: none; border-radius: 5px;" type="submit" class="btn btn-default">
                 <i class="mdi mdi-magnify" style="padding: 10px;"></i>
             </button>
         </div>
