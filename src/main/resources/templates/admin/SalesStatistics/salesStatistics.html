@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <title>Sales Statistics</title>
+    <style>
+        .input-row {
+            display: flex;
+        }
+
+        .input-col {
+            margin-right: 10px; /* Điều chỉnh khoảng cách giữa các cột nếu cần */
+        }
+    </style>
+</head>
+<body>
+<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <ul>
+            <li>Admin</li>
+            <li>Dashboard</li>
+        </ul>
+        <a href="https://justboil.me/" onclick="alert('Coming soon'); return false" target="_blank" class="button blue">
+            <span class="icon"><i class="mdi mdi-credit-card-outline"></i></span>
+            <span>Premium Demo</span>
+        </a>
+    </div>
+</section>
+<section class="is-hero-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <h1 class="title">
+            Dashboard
+        </h1>
+        <button class="button light">Button</button>
+    </div>
+</section>
+<section class="section main-section">
+<div class="card mb-6">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-finance"></i></span>
+            Order Status Statistics
+        </p>
+        <a href="#" class="card-header-icon">
+            <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+    </header>
+    <div class="card-content">
+        <canvas id="orderStatusChart"></canvas>
+    </div>
+</div>
+<div class="card mb-6">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-finance"></i></span>
+            SALES STATISTICS BY YEAR
+        </p>
+        <a href="#" class="card-header-icon">
+            <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+    </header>
+    <div class="card-content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+                    <form autocomplete="off" class="input-row">
+                        <div class="input-col">
+                            <p style="margin-bottom:-28px;" class="input-label">
+                                Filter by:
+                            </p>
+                            <select style="border: 1px solid black; padding: 5px 10px; margin-left: 70px;" id="yearSelect1" onchange="changeYearProductSold(this.value)" class="dashboard-filter form-control">
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024" selected>2024</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="col-md-12">
+                        <canvas id="productSoldChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-6">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-finance"></i></span>
+            REVENUE STATISTICS BY YEAR
+        </p>
+        <a href="#" class="card-header-icon">
+            <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+    </header>
+    <div class="card-content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+                    <form autocomplete="off" class="input-row">
+                        <div class="input-col">
+                            <p style="margin-bottom:-28px;" class="input-label">
+                                Filter by:
+                            </p>
+                            <select style="border: 1px solid black; padding: 5px 10px; margin-left: 70px;" id="yearSelectRevenue" onchange="changeYearRevenue(this.value)" class="dashboard-filter form-control">
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024" selected>2024</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="col-md-12">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-6">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-finance"></i></span>
+            SALES STATISTICS BY DAY
+        </p>
+        <a href="#" class="card-header-icon">
+            <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+    </header>
+    <div class="card-content">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+
+                    <form autocomplete="off" class="input-row">
+
+                        <div style="margin-bottom:10px;" class="input-row">
+                            <div class="input-col">
+                                <p class="input-label">Since:</p>
+                                <input style="border: 1px solid black;" type="text" id="datepicker1" class="form-control">
+                            </div>
+                            <div class="input-col">
+                                <p class="input-label">To date:</p>
+                                <input style="border: 1px solid black;" type="text" id="datepicker2" class="form-control">
+                            </div>
+
+                        </div>
+                    </form>
+                    <input style="margin-bottom: 15px; border-radius: 5px; padding: 5px 10px; border: 1px solid white; margin-top: 15px; background-color: #FFA45C; color: white;" type="button" id="btn-dashboard-filter"
+                           class="btn btn-primary btn-sm" value="Filter">
+                    <div class="col-md-12">
+                        <canvas id="productSoldChartDay"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="card mb-6">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-finance"></i></span>
+            REVENUE STATISTICS BY DAY
+        </p>
+        <a href="#" class="card-header-icon">
+            <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+    </header>
+    <div class="card-content">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+
+                    <form autocomplete="off" class="input-row">
+
+                        <div style="margin-bottom:10px;" class="input-row">
+                            <div class="input-col">
+                                <p class="input-label">Since:</p>
+                                <input style="border: 1px solid black;" type="text" id="datepicker3" class="form-control">
+                            </div>
+                            <div class="input-col">
+                                <p class="input-label">To date:</p>
+                                <input style="border: 1px solid black;" type="text" id="datepicker4" class="form-control">
+                            </div>
+
+                        </div>
+                    </form>
+                    <input style="margin-bottom: 15px; border-radius: 5px; padding: 5px 10px; border: 1px solid white; margin-top: 15px; background-color: #FFA45C; color: white;" type="button" id="btn-dashboard-filter1"
+                           class="btn btn-primary btn-sm" value="Filter">
+                    <div class="col-md-12">
+                        <canvas id="revenueDay"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+</section>
+<!-- Script dependencies -->
+<script type="text/javascript" th:src="@{/admin/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/admin/js/plugins/jquery.dataTables.min.js}"></script>
+<script type="text/javascript" th:src="@{/admin/js/plugins/dataTables.bootstrap.min.js}"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    $(function () {
+        const datePickerOptions = {
+            prevText: "Tháng trước",
+            nextText: "Tháng sau",
+            dateFormat: "yy-mm-dd",
+            dayNamesMin: ["thứ 2", "thứ 3", "thứ 4", "thứ 5", "thứ 6", "thứ 7", "chủ nhật"],
+            duration: "slow"
+        };
+
+        // Khởi tạo datepicker cho tất cả các phần tử có id bắt đầu bằng "datepicker"
+        $("input[id^='datepicker']").datepicker(datePickerOptions);
+    });
+</script>
+
+<!-- Chart.js code with DOMContentLoaded -->
+<script>
+    let ctxSoldChart = document.getElementById('productSoldChart').getContext('2d');
+    let chartSold;
+
+    // Fetch dữ liệu từ server và cập nhật biểu đồ
+    function fetchSoldChartData(year) {
+        fetch(`/admin/RevenueChart?year=${year}`)
+            .then(response => response.json())
+            .then(data => {
+                if (chartSold) {
+                    chartSold.data.labels = data.labels;
+                    chartSold.data.datasets[0].data = data.productsSold;
+                    chartSold.update();
+                } else {
+                    createSoldChart(data); // Tạo biểu đồ nếu chưa có
+                }
+            })
+            .catch(error => console.error('Error fetching chart data:', error));
+    }
+
+    // Hàm thay đổi năm cho biểu đồ
+    function changeYearProductSold(year) {
+        fetchSoldChartData(year);
+    }
+
+    // Hàm tạo biểu đồ Chart.js
+    function createSoldChart(data) {
+        chartSold = new Chart(ctxSoldChart, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Products sold',
+                    data: data.productsSold,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 10,
+                        max: 50,
+                        min: 0,
+                    }
+                }
+            }
+        });
+    }
+
+    // Fetch dữ liệu mặc định khi trang được load
+    fetchSoldChartData(2024); // Năm mặc định là 2024
+</script>
+<script>
+    let ctxRevenueChart = document.getElementById('revenueChart').getContext('2d');
+    let chartRevenue;
+
+    // Fetch dữ liệu từ server và cập nhật biểu đồ doanh thu
+    function fetchRevenueChartData(year) {
+        fetch(`/admin/RevenueByYearChart?year=${year}`)
+            .then(response => response.json())
+            .then(data => {
+                if (chartRevenue) {
+                    chartRevenue.data.labels = data.labels;
+                    chartRevenue.data.datasets[0].data = data.revenue;
+                    chartRevenue.update();
+                } else {
+                    createRevenueChart(data); // Tạo biểu đồ nếu chưa có
+                }
+            })
+            .catch(error => console.error('Error fetching revenue chart data:', error));
+    }
+
+    // Hàm thay đổi năm cho biểu đồ doanh thu
+    function changeYearRevenue(year) {
+        fetchRevenueChartData(year);
+    }
+
+    // Hàm tạo biểu đồ Chart.js cho doanh thu
+    function createRevenueChart(data) {
+        chartRevenue = new Chart(ctxRevenueChart, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Revenue (USD)',
+                    data: data.revenue,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 1000, // Tùy chỉnh theo đơn vị doanh thu của bạn
+                        max: Math.max(...data.revenue) + 1000, // Tự động điều chỉnh theo doanh thu lớn nhất
+                        min: 0,
+                    }
+                }
+            }
+        });
+    }
+
+    // Fetch dữ liệu mặc định khi trang được load
+    fetchRevenueChartData(2024); // Năm mặc định là 2024
+</script>
+<script>
+    let ctxSoldChartDay = document.getElementById('productSoldChartDay').getContext('2d');
+    let chartSoldDay;
+
+    // Hàm khởi tạo biểu đồ với ngày cố định
+    function initCharts() {
+        const fixedStartDate = '2024-09-10';
+        const fixedEndDate = '2024-09-30';
+        fetchSoldChartDayData(fixedStartDate, fixedEndDate);
+        fetchRevenueDayData(fixedStartDate, fixedEndDate);
+    }
+
+    // Fetch dữ liệu từ server và cập nhật biểu đồ doanh số theo ngày
+    function fetchSoldChartDayData(startDate, endDate) {
+        fetch(`/admin/SalesByDateChart?startDate=${startDate}&endDate=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.labels;
+                const productsSold = data.productsSold;
+
+                if (chartSoldDay) {
+                    chartSoldDay.data.labels = labels;
+                    chartSoldDay.data.datasets[0].data = productsSold;
+                    chartSoldDay.update();
+                } else {
+                    createSoldChartDay(labels, productsSold); // Tạo biểu đồ nếu chưa có
+                }
+            })
+            .catch(error => console.error('Error fetching sold chart day data:', error));
+    }
+
+    // Hàm tạo biểu đồ doanh số theo ngày
+    function createSoldChartDay(labels, productsSold) {
+        chartSoldDay = new Chart(ctxSoldChartDay, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Products sold by day',
+                    data: productsSold,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
+                        stepSize: 10
+                    }
+                }
+            }
+        });
+    }
+
+    // Xử lý sự kiện khi nhấn nút filter
+    document.getElementById('btn-dashboard-filter').addEventListener('click', () => {
+        const startDate = document.getElementById('datepicker1').value;
+        const endDate = document.getElementById('datepicker2').value;
+        fetchSoldChartDayData(startDate, endDate);
+    });
+
+    let ctxRevenueDay = document.getElementById('revenueDay').getContext('2d');
+    let chartRevenueDay;
+
+    // Fetch dữ liệu từ server và cập nhật biểu đồ doanh thu theo ngày
+    function fetchRevenueDayData(startDate, endDate) {
+        fetch(`/admin/RevenueByDateChart?startDate=${startDate}&endDate=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.labels;
+                const revenue = data.revenue;
+
+                if (chartRevenueDay) {
+                    chartRevenueDay.data.labels = labels;
+                    chartRevenueDay.data.datasets[0].data = revenue;
+                    chartRevenueDay.update();
+                } else {
+                    createRevenueDayChart(labels, revenue);
+                }
+            })
+            .catch(error => console.error('Error fetching revenue day data:', error));
+    }
+
+    // Hàm tạo biểu đồ doanh thu theo ngày
+    function createRevenueDayChart(labels, revenue) {
+        chartRevenueDay = new Chart(ctxRevenueDay, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Revenue by day (USD)',
+                    data: revenue,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 5000,
+                        stepSize: 500
+                    }
+                }
+            }
+        });
+    }
+
+    // Xử lý sự kiện khi nhấn nút filter cho doanh thu
+    document.getElementById('btn-dashboard-filter1').addEventListener('click', () => {
+        const startDate = document.getElementById('datepicker3').value;
+        const endDate = document.getElementById('datepicker4').value;
+        fetchRevenueDayData(startDate, endDate);
+    });
+
+    // Gọi hàm khởi tạo khi trang được tải
+    window.onload = initCharts;
+
+</script>
+<script>
+    // Gửi yêu cầu AJAX để lấy dữ liệu từ phương thức OrderStatusStatistics
+    fetch('/admin/OrderStatusStatistics')
+        .then(response => response.json())
+        .then(data => {
+            // Dữ liệu sẽ có dạng { pending: 10, confirmed: 20, ... }
+
+            // Tạo mảng nhãn (labels) và mảng dữ liệu (data) cho biểu đồ tròn
+            const labels = Object.keys(data); // Các trạng thái đơn hàng
+            const counts = Object.values(data); // Số lượng đơn hàng theo trạng thái
+
+            // Vẽ biểu đồ tròn
+            var ctx = document.getElementById('orderStatusChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '# of Orders',
+                        data: counts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Order Status Statistics'
+                        },
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data => {
+                                    sum += data;
+                                });
+                                let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                return percentage;
+                            },
+                            color: '#fff',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+</script>
+
+
+<div th:insert="/include/fragmentsAdmin :: script"></div>
+</body>
+</html>
+

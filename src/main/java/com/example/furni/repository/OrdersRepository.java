@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -34,4 +36,38 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o FROM Orders o WHERE o.status = 'pending'")
     Page<Orders> findPendingOrders(Pageable pageable);
 
+    // thống kê doanh số theo năm
+    @Query("SELECT MONTH(o.orderDate), SUM(op.qty) " +
+            "FROM Orders o JOIN OrderProduct op ON o.id = op.order.id " +
+            "WHERE o.status = 'complete' AND YEAR(o.orderDate) = :year " +
+            "GROUP BY MONTH(o.orderDate) " +
+            "ORDER BY MONTH(o.orderDate)")
+    List<Object[]> findCompletedOrdersByYear(@Param("year") int year);
+    // thống kê doanh thu theo năm
+    @Query("SELECT MONTH(o.orderDate), SUM(o.totalAmount) " +
+            "FROM Orders o " +
+            "WHERE o.status = 'complete' AND YEAR(o.orderDate) = :year " +
+            "GROUP BY MONTH(o.orderDate) " +
+            "ORDER BY MONTH(o.orderDate)")
+    List<Object[]> findTotalRevenueByYear(@Param("year") int year);
+    // Thống kê doanh số theo ngày
+    @Query("SELECT o.orderDate, SUM(op.qty) " +
+            "FROM Orders o JOIN OrderProduct op ON o.id = op.order.id " +
+            "WHERE o.status = 'complete' AND o.orderDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY o.orderDate " +
+            "ORDER BY o.orderDate")
+    List<Object[]> findProductsSoldByDate(@Param("startDate") LocalDateTime startDate,
+                                          @Param("endDate") LocalDateTime endDate);
+
+    // Thống kê doanh thu theo ngày
+    @Query("SELECT o.orderDate, SUM(o.totalAmount) " +
+            "FROM Orders o " +
+            "WHERE o.status = 'complete' AND o.orderDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY o.orderDate " +
+            "ORDER BY o.orderDate")
+    List<Object[]> findRevenueByDate(@Param("startDate") LocalDateTime startDate,
+                                     @Param("endDate") LocalDateTime endDate);
+    // thống kê biểu đò tròn tính số lượng status order
+    @Query("SELECT o.status, COUNT(o) FROM Orders o GROUP BY o.status")
+    List<Object[]> countOrdersByStatus();
 }
