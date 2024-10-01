@@ -6,9 +6,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.furni.entity.Category;
 import com.example.furni.service.CategoryService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,7 +32,6 @@ public class CategoryController {
         model.addAttribute("categoriesPage", categoriesPage);
         model.addAttribute("size", size);
 
-        // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");
         if (successMessage != null) {
             model.addAttribute("successMessage", successMessage);
@@ -36,7 +41,6 @@ public class CategoryController {
         return "admin/Category/category";
     }
 
-
     @GetMapping("/addCategory")
     public String showAddCategoryForm(Model model) {
         model.addAttribute("category", new Category());
@@ -44,12 +48,15 @@ public class CategoryController {
     }
 
     @PostMapping("/addCategory")
-    public String addCategory(@ModelAttribute("category") Category category, HttpSession session,Model model) {
+    public String addCategory(@ModelAttribute("category") Category category,
+                              @RequestParam("imageFile") MultipartFile file,
+                              HttpSession session, Model model) {
 
         String slug = category.getCategoryName()
-                .toLowerCase()             // Chuyển toàn bộ thành chữ thường
-                .replaceAll("\\s+", "-");   // Thay thế khoảng trắng bằng dấu gạch nối
+                .toLowerCase()
+                .replaceAll("\\s+", "-");
         category.setSlug(slug);
+
         // Kiểm tra tính hợp lệ
         if (category.getCategoryName().trim().isEmpty()) {
             model.addAttribute("errorMessage", "Category name cannot be empty.");
@@ -60,12 +67,24 @@ public class CategoryController {
             model.addAttribute("errorMessage", "Category name already exists.");
             return "admin/Category/addCategory";
         }
+
+        // Xử lý ảnh
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                String base64Image = Base64.getEncoder().encodeToString(bytes);
+                category.setImage(base64Image);
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("errorMessage", "Error processing the image.");
+                return "admin/Category/addCategory";
+            }
+        }
+
         categoryService.saveCategory(category);
         session.setAttribute("successMessage", "Category added successfully!");
         return "redirect:/admin/category";
     }
-
-
 
     @GetMapping("/editCategory/{id}")
     public String showEditCategoryForm(@PathVariable int id, Model model) {
@@ -77,7 +96,9 @@ public class CategoryController {
 
     @PostMapping("/editCategory/{id}")
     public String editCategory(@PathVariable int id,
-                               @ModelAttribute("category") Category category, HttpSession session, Model model) {
+                               @ModelAttribute("category") Category category,
+                               @RequestParam("imageFile") MultipartFile file,
+                               HttpSession session, Model model) {
         Category existingCategory = categoryService.getCategoryById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
@@ -86,6 +107,20 @@ public class CategoryController {
         // Update the slug based on the new category name
         String newSlug = category.getCategoryName().toLowerCase().replaceAll("\\s+", "-");
         existingCategory.setSlug(newSlug);
+
+        // Xử lý ảnh
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                String base64Image = Base64.getEncoder().encodeToString(bytes);
+                existingCategory.setImage(base64Image);
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("errorMessage", "Error processing the image.");
+                model.addAttribute("category", existingCategory);
+                return "admin/Category/editCategory";
+            }
+        }
 
         // Kiểm tra tính hợp lệ
         if (category.getCategoryName().trim().isEmpty()) {
@@ -98,12 +133,10 @@ public class CategoryController {
             return "admin/Category/editCategory";
         }
 
-        categoryService.updateCategory(id, existingCategory);
-        // Add success message to session
+        categoryService.saveCategory(existingCategory);
         session.setAttribute("successMessage", "Category updated successfully!");
         return "redirect:/admin/category";
     }
-
 
     @PostMapping("/deleteCategory/{id}")
     public String deleteCategory(@PathVariable int id, HttpSession session) {

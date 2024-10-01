@@ -55,6 +55,7 @@
         <tr>
           <th width="10"><input type="checkbox" id="all"></th>
           <th>Id</th>
+          <th>Image</th>
           <th>Category Name</th>
           <th>Slug</th>
           <th></th>
@@ -64,6 +65,9 @@
         <tr th:each="category : ${categoriesPage}">
           <td width="10"><input type="checkbox" name="check1" th:value="${category.id}"></td>
           <td th:text="${category.id}"></td>
+          <td>
+            <img th:src="'data:image/jpeg;base64,' + ${category.image}" alt="Thumbnail" width="100" height="100"/>
+          </td>
           <td th:text="${category.categoryName}"></td>
           <td th:text="${category.slug}"></td>
           <td>

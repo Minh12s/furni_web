@@ -95,14 +95,14 @@ public class DataSeeder {
     private void seedCategories() {
         if (categoryRepository.count() == 0) {
             List<Category> categories = List.of(
-                    new Category("Corner Sofa", "corner-sofa"),
-                    new Category("Sofa Bed", "sofa-bed"),
-                    new Category("Single Sofa", "single-sofa"),
-                    new Category("Sleeper Sofa", "sleeper-sofa"),
-                    new Category("L-Shaped Sofa", "l-shaped-sofa"),
-                    new Category("Bench Sofa", "bench-sofa"),
-                    new Category("Recliner Sofa", "recliner-sofa"),
-                    new Category("Classic Sofa", "classic-sofa")
+                    new Category(1,"Corner Sofa", "corner-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
+                    new Category(2,"Sofa Bed", "sofa-bed", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
+                    new Category(3,"Single Sofa", "single-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
+                    new Category(4,"Sleeper Sofa", "sleeper-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
+                    new Category(5,"L-Shaped Sofa", "l-shaped-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
+                    new Category(6,"Bench Sofa", "bench-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
+                    new Category(7,"Recliner Sofa", "recliner-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
+                    new Category(8,"Classic Sofa", "classic-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1))
             );
             categoryRepository.saveAll(categories);
         }
