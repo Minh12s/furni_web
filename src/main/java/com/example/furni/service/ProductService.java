@@ -4,6 +4,7 @@ import com.example.furni.entity.Category;
 import com.example.furni.entity.Product;
 import com.example.furni.repository.CategoryRepository;
 import com.example.furni.repository.ProductRepository;
+import com.example.furni.repository.OrderProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,9 @@ public class ProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private OrderProductRepository orderProductRepository;
 
     public Page<Product> getProductsPaginated(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

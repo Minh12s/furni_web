@@ -16,4 +16,7 @@ public class OrderProductService {
     public List<OrderProduct> getOrderProductsByOrderId(int orderId) {
         return orderProductRepository.findByOrderId(orderId);
     }
+    public boolean isProductUsedInOrders(int productId) {
+        return orderProductRepository.existsByProductId(productId);
+    }
 }

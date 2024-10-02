@@ -36,6 +36,8 @@ public class ProductController {
 
     @Autowired
     private SizeService sizeService;
+    @Autowired
+    private OrderProductService orderProductService;
 
     @GetMapping("/products")
     public String getAllProducts(Model model,
@@ -56,6 +58,13 @@ public class ProductController {
             model.addAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
         }
+        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
+
         return "admin/Product/product";
     }
     @GetMapping("/products/productDetail/{id}")
@@ -242,7 +251,12 @@ public class ProductController {
 
 
     @PostMapping("/deleteProduct/{id}")
-    public String deleteProduct(@PathVariable("id") int id,HttpSession session) {
+    public String deleteProduct(@PathVariable("id") int id, HttpSession session) {
+        if (orderProductService.isProductUsedInOrders(id)) {
+            session.setAttribute("errorMessage", "Product cannot be deleted because it has been ordered.");
+            return "redirect:/admin/products";
+        }
+
         productService.delete(id);
         session.setAttribute("successMessage", "Product deleted successfully!");
         return "redirect:/admin/products";
