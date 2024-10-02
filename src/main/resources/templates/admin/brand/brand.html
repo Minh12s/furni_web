@@ -102,16 +102,46 @@
       <div class="table-pagination">
         <div class="flex items-center justify-between">
           <div class="buttons">
+            <!-- Nút về trang đầu tiên với icon -->
+            <button type="button" class="button"
+                    th:disabled="${brandsPage.number == 0}"
+                    th:onclick="|window.location.href='/admin/brand?page=0&size=' + ${brandsPage.size}|">
+              <span class="icon"><i class="mdi mdi-page-first"></i></span>
+            </button>
+
+            <!-- Nút sang trang trước với icon -->
+            <button type="button" class="button"
+                    th:disabled="${brandsPage.number == 0}"
+                    th:onclick="|window.location.href='/admin/brand?page=' + (${brandsPage.number} - 1) + '&size=' + ${brandsPage.size}|">
+              <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
+            </button>
+
+            <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, brandsPage.totalPages - 1)}"
-                    th:classappend="${i == brandsPage.number} ? ' active' : ''"
                     th:text="${i + 1}"
+                    th:classappend="${i == brandsPage.number} ? 'active' : ''"
                     th:onclick="|window.location.href='/admin/brand?page=' + ${i} + '&size=' + ${brandsPage.size}|">
+            </button>
+
+            <!-- Nút sang trang tiếp theo với icon -->
+            <button type="button" class="button"
+                    th:disabled="${brandsPage.number + 1 == brandsPage.totalPages}"
+                    th:onclick="|window.location.href='/admin/brand?page=' + (${brandsPage.number} + 1) + '&size=' + ${brandsPage.size}|">
+              <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
+            </button>
+
+            <!-- Nút tới trang cuối với icon -->
+            <button type="button" class="button"
+                    th:disabled="${brandsPage.number + 1 == brandsPage.totalPages}"
+                    th:onclick="|window.location.href='/admin/brand?page=' + (${brandsPage.totalPages - 1}) + '&size=' + ${brandsPage.size}|">
+              <span class="icon"><i class="mdi mdi-page-last"></i></span>
             </button>
           </div>
           <small th:text="'Page ' + (${brandsPage.number} + 1) + ' of ' + ${brandsPage.totalPages}"></small>
         </div>
       </div>
+
     </div>
     </div>
 </section>

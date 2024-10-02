@@ -123,16 +123,46 @@
             <div class="table-pagination">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
+                        <!-- Nút về trang đầu tiên với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${productPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/products?page=0&size=' + ${productPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-first"></i></span>
+                        </button>
+
+                        <!-- Nút sang trang trước với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${productPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/products?page=' + (${productPage.number} - 1) + '&size=' + ${productPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
+                        </button>
+
+                        <!-- Các nút phân trang -->
                         <button type="button" class="button"
                                 th:each="i : ${#numbers.sequence(0, productPage.totalPages - 1)}"
-                                th:classappend="${i == productPage.number} ? ' active' : ''"
                                 th:text="${i + 1}"
-                                th:onclick="|window.location.href='/admin/products?page=' + [[${i}]] + '&size=' + [[${productPage.size}]]|">
+                                th:classappend="${i == productPage.number} ? 'active' : ''"
+                                th:onclick="|window.location.href='/admin/products?page=' + ${i} + '&size=' + ${productPage.size}|">
+                        </button>
+
+                        <!-- Nút sang trang tiếp theo với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${productPage.number + 1 == productPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/products?page=' + (${productPage.number} + 1) + '&size=' + ${productPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
+                        </button>
+
+                        <!-- Nút tới trang cuối với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${productPage.number + 1 == productPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/products?page=' + (${productPage.totalPages - 1}) + '&size=' + ${productPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-last"></i></span>
                         </button>
                     </div>
                     <small th:text="'Page ' + (${productPage.number} + 1) + ' of ' + ${productPage.totalPages}"></small>
                 </div>
             </div>
+
         </div>
     </div>
     </div>

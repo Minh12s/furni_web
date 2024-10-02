@@ -94,16 +94,46 @@
             <div class="table-pagination">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
+                        <!-- Nút về trang đầu tiên với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${sizesPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/sizes?page=0&size=' + ${sizesPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-first"></i></span>
+                        </button>
+
+                        <!-- Nút sang trang trước với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${sizesPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/sizes?page=' + (${sizesPage.number} - 1) + '&size=' + ${sizesPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
+                        </button>
+
+                        <!-- Các nút phân trang -->
                         <button type="button" class="button"
                                 th:each="i : ${#numbers.sequence(0, sizesPage.totalPages - 1)}"
-                                th:classappend="${i == sizesPage.number} ? ' active' : ''"
                                 th:text="${i + 1}"
+                                th:classappend="${i == sizesPage.number} ? 'active' : ''"
                                 th:onclick="|window.location.href='/admin/sizes?page=' + ${i} + '&size=' + ${sizesPage.size}|">
+                        </button>
+
+                        <!-- Nút sang trang tiếp theo với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${sizesPage.number + 1 == sizesPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/sizes?page=' + (${sizesPage.number} + 1) + '&size=' + ${sizesPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
+                        </button>
+
+                        <!-- Nút tới trang cuối với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${sizesPage.number + 1 == sizesPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/sizes?page=' + (${sizesPage.totalPages - 1}) + '&size=' + ${sizesPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-last"></i></span>
                         </button>
                     </div>
                     <small th:text="'Page ' + (${sizesPage.number} + 1) + ' of ' + ${sizesPage.totalPages}"></small>
                 </div>
             </div>
+
         </div>
     </div>
 </section>

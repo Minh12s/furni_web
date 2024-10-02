@@ -152,7 +152,7 @@
                     <td th:text="${orderCancel.reason}"></td>
                     <td class="actions-cell">
                         <div class="buttons right nowrap">
-                            <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+                            <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.order.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                                 <span class="icon"><i class="mdi mdi-eye"></i></span>
                             </a>
                         </div>
@@ -163,16 +163,46 @@
             <div class="table-pagination">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
+                        <!-- Nút về trang đầu tiên với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${ordersCancelPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/orderCancel?page=0&size=' + ${ordersCancelPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-first"></i></span>
+                        </button>
+
+                        <!-- Nút sang trang trước với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${ordersCancelPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/orderCancel?page=' + (${ordersCancelPage.number} - 1) + '&size=' + ${ordersCancelPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
+                        </button>
+
+                        <!-- Các nút phân trang -->
                         <button type="button" class="button"
                                 th:each="i : ${#numbers.sequence(0, ordersCancelPage.totalPages - 1)}"
-                                th:classappend="${i == ordersCancelPage.number} ? ' active' : ''"
                                 th:text="${i + 1}"
-                                th:onclick="|window.location.href='/admin/orderCancel?page=' + [[${i}]] + '&size=' + [[${ordersCancelPage.size}]]|">
+                                th:classappend="${i == ordersCancelPage.number} ? 'active' : ''"
+                                th:onclick="|window.location.href='/admin/orderCancel?page=' + ${i} + '&size=' + ${ordersCancelPage.size}|">
+                        </button>
+
+                        <!-- Nút sang trang tiếp theo với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${ordersCancelPage.number + 1 == ordersCancelPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/orderCancel?page=' + (${ordersCancelPage.number} + 1) + '&size=' + ${ordersCancelPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
+                        </button>
+
+                        <!-- Nút tới trang cuối với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${ordersCancelPage.number + 1 == ordersCancelPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/orderCancel?page=' + (${ordersCancelPage.totalPages - 1}) + '&size=' + ${ordersCancelPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-last"></i></span>
                         </button>
                     </div>
                     <small th:text="'Page ' + (${ordersCancelPage.number} + 1) + ' of ' + ${ordersCancelPage.totalPages}"></small>
                 </div>
             </div>
+
         </div>
     </div>
 </section>

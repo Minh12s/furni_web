@@ -27,7 +27,7 @@ public class AdminController {
                             @RequestParam(value = "cancelPage", defaultValue = "0") int cancelPage,
                             @RequestParam(value = "returnPage", defaultValue = "0") int returnPage,
                             @RequestParam(value = "outOfStockPage", defaultValue = "0") int outOfStockPage,
-                            @RequestParam(value = "size", defaultValue = "1") int size,
+                            @RequestParam(value = "size", defaultValue = "5") int size,
                             Model model) {
         long totalUsers = dashboardService.getTotalUsers();
         double totalOrderAmount = dashboardService.getTotalOrderAmount();

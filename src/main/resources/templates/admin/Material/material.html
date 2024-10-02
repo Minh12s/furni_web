@@ -87,16 +87,46 @@
       <div class="table-pagination">
         <div class="flex items-center justify-between">
           <div class="buttons">
+            <!-- Nút về trang đầu tiên với icon -->
+            <button type="button" class="button"
+                    th:disabled="${materialsPage.number == 0}"
+                    th:onclick="|window.location.href='/admin/materials?page=0&size=' + ${materialsPage.size}|">
+              <span class="icon"><i class="mdi mdi-page-first"></i></span>
+            </button>
+
+            <!-- Nút sang trang trước với icon -->
+            <button type="button" class="button"
+                    th:disabled="${materialsPage.number == 0}"
+                    th:onclick="|window.location.href='/admin/materials?page=' + (${materialsPage.number} - 1) + '&size=' + ${materialsPage.size}|">
+              <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
+            </button>
+
+            <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, materialsPage.totalPages - 1)}"
-                    th:classappend="${i == materialsPage.number} ? ' active' : ''"
                     th:text="${i + 1}"
+                    th:classappend="${i == materialsPage.number} ? 'active' : ''"
                     th:onclick="|window.location.href='/admin/materials?page=' + ${i} + '&size=' + ${materialsPage.size}|">
+            </button>
+
+            <!-- Nút sang trang tiếp theo với icon -->
+            <button type="button" class="button"
+                    th:disabled="${materialsPage.number + 1 == materialsPage.totalPages}"
+                    th:onclick="|window.location.href='/admin/materials?page=' + (${materialsPage.number} + 1) + '&size=' + ${materialsPage.size}|">
+              <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
+            </button>
+
+            <!-- Nút tới trang cuối với icon -->
+            <button type="button" class="button"
+                    th:disabled="${materialsPage.number + 1 == materialsPage.totalPages}"
+                    th:onclick="|window.location.href='/admin/materials?page=' + (${materialsPage.totalPages - 1}) + '&size=' + ${materialsPage.size}|">
+              <span class="icon"><i class="mdi mdi-page-last"></i></span>
             </button>
           </div>
           <small th:text="'Page ' + (${materialsPage.number} + 1) + ' of ' + ${materialsPage.totalPages}"></small>
         </div>
       </div>
+
 
     </div>
   </div>

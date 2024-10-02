@@ -118,16 +118,46 @@
             <div class="table-pagination">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
+                        <!-- Nút về trang đầu tiên với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${blogsPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/blogs?page=0&size=' + ${blogsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-first"></i></span>
+                        </button>
+
+                        <!-- Nút sang trang trước với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${blogsPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/blogs?page=' + (${blogsPage.number} - 1) + '&size=' + ${blogsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
+                        </button>
+
+                        <!-- Các nút phân trang -->
                         <button type="button" class="button"
                                 th:each="i : ${#numbers.sequence(0, blogsPage.totalPages - 1)}"
-                                th:classappend="${i == blogsPage.number} ? ' active' : ''"
                                 th:text="${i + 1}"
-                                th:onclick="|window.location.href='/admin/blogs?page=' + [[${i}]] + '&size=' + [[${blogsPage.size}]]|">
+                                th:classappend="${i == blogsPage.number} ? 'active' : ''"
+                                th:onclick="|window.location.href='/admin/blogs?page=' + ${i} + '&size=' + ${blogsPage.size}|">
+                        </button>
+
+                        <!-- Nút sang trang tiếp theo với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${blogsPage.number + 1 == blogsPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/blogs?page=' + (${blogsPage.number} + 1) + '&size=' + ${blogsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
+                        </button>
+
+                        <!-- Nút tới trang cuối với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${blogsPage.number + 1 == blogsPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/blogs?page=' + (${blogsPage.totalPages - 1}) + '&size=' + ${blogsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-last"></i></span>
                         </button>
                     </div>
                     <small th:text="'Page ' + (${blogsPage.number} + 1) + ' of ' + ${blogsPage.totalPages}"></small>
                 </div>
             </div>
+
 
 
         </div>
