@@ -70,4 +70,6 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
     // thống kê biểu đò tròn tính số lượng status order
     @Query("SELECT o.status, COUNT(o) FROM Orders o GROUP BY o.status")
     List<Object[]> countOrdersByStatus();
+    Orders findFirstByOrderByIdDesc();
+
 }

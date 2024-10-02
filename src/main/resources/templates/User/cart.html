@@ -89,8 +89,9 @@
                 <form th:action="@{/update-cart}" method="post">
                   <input type="hidden" name="cartId" th:value="${item.id}">
                   <div class="input-group mb-3">
-                    <input style="margin-top:30px;" type="number" name="qty" class="quantity form-control input-number" th:value="${item.qty}">
+                    <input id="quantity" style="margin-top:30px;" type="number" name="qty" class="quantity form-control input-number" th:value="${item.qty}" min="1" required>
                   </div>
+
                   <button type="submit" style="border: none; padding: 20px 20px;" class="btn btn-primary py-3 px-5 btn-update">Update</button>
                 </form>
               </td>
@@ -123,10 +124,10 @@
             <span>Subtotal</span>
             <span th:text="'$'+${subtotal}">$0.00</span>
           </p>
-<!--          <p class="d-flex">-->
-<!--            <span>Delivery</span>-->
-<!--            <span th:text="${delivery}">$0.00</span>-->
-<!--          </p>-->
+          <!--          <p class="d-flex">-->
+          <!--            <span>Delivery</span>-->
+          <!--            <span th:text="${delivery}">$0.00</span>-->
+          <!--          </p>-->
           <hr>
           <p class="d-flex total-price">
             <span>Total</span>
@@ -152,39 +153,36 @@
 
 
 <script>
-  $(document).ready(function(){
-
-    var quantitiy=0;
-    $('.quantity-right-plus').click(function(e){
-
-      // Stop acting like a button
+  $(document).ready(function() {
+    $('.quantity-right-plus').click(function(e) {
+      // Dừng hành động mặc định
       e.preventDefault();
-      // Get the field name
+      // Lấy giá trị trường số lượng
       var quantity = parseInt($('#quantity').val());
 
-      // If is not undefined
-
+      // Tăng giá trị lên 1
       $('#quantity').val(quantity + 1);
-
-
-      // Increment
-
     });
 
-    $('.quantity-left-minus').click(function(e){
-      // Stop acting like a button
+    $('.quantity-left-minus').click(function(e) {
+      // Dừng hành động mặc định
       e.preventDefault();
-      // Get the field name
+      // Lấy giá trị trường số lượng
       var quantity = parseInt($('#quantity').val());
 
-      // If is not undefined
-
-      // Increment
-      if(quantity>0){
+      // Kiểm tra nếu số lượng lớn hơn 1 thì mới giảm
+      if (quantity > 1) {
         $('#quantity').val(quantity - 1);
       }
     });
 
+    // Ngăn người dùng nhập giá trị âm hoặc số lượng nhỏ hơn 1
+    $('#quantity').on('input', function() {
+      var value = $(this).val();
+      if (value < 1) {
+        $(this).val(1); // Đặt lại giá trị về 1 nếu người dùng nhập số nhỏ hơn 1
+      }
+    });
   });
 </script>
 <style>

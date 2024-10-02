@@ -204,8 +204,10 @@
                   </div>
                 </div>
 
-                <div id="paypal-button-container" style="display: none;"></div>
-                <button type="submit" class="btn btn-primary py-3 px-4">Place an order</button>
+                <div id="paypal-button-container" style="display: none;">
+
+                </div>
+                <button type="submit" class="btn btn-primary py-3 px-4" id="placeOrderButton">Place an order</button>
               </div>
             </div>
           </div>
@@ -214,6 +216,46 @@
     </div>
   </div>
 </section> <!-- .section -->
+<script src="https://www.paypal.com/sdk/js?client-id=AWvcIeV4fzJa8pqpjlXS9hwtUS1a0iQK1j_FG9nB1YQXxvwRC00KkDIgaEVpKJqNDZqSubCmmvVyNoMq&currency=USD"></script>
+
+<script>
+  function togglePaypalButton() {
+    const paymentMethod = document.querySelector('input[name="PaymentMethod"]:checked').value;
+    const paypalButtonContainer = document.getElementById("paypal-button-container");
+    const placeOrderButton = document.getElementById("placeOrderButton");
+
+    if (paymentMethod === "PayPal") {
+      // Xóa nội dung cũ của paypal-button-container
+      paypalButtonContainer.innerHTML = "";
+      paypalButtonContainer.style.display = "block"; // Hiển thị nút PayPal
+      placeOrderButton.style.display = "none"; // Ẩn nút "Place an order"
+      paypal.Buttons({
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: document.getElementById("totalAmount").textContent.replace('$', '').trim()
+              }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            // Gửi thông tin thanh toán về server
+            document.getElementById("checkoutForm").submit();
+          });
+        },
+        onError: function(err) {
+          console.error(err);
+        }
+      }).render(paypalButtonContainer);
+    } else {
+      paypalButtonContainer.style.display = "none"; // Ẩn nút PayPal
+      placeOrderButton.style.display = "block"; // Hiển thị nút "Place an order"
+
+    }
+  }
+</script>
 
 <div th:insert="/include/fragments :: footer"></div>
 
@@ -305,5 +347,8 @@
 
 
 </script>
+
+
+
 </body>
 </html>

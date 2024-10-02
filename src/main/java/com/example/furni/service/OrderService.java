@@ -83,5 +83,9 @@ public class OrderService {
             e.printStackTrace(); // Xử lý lỗi gửi email
         }
     }
+    public Orders getLatestOrder() {
+        return ordersRepository.findFirstByOrderByIdDesc();
+    }
+
 
 }
