@@ -31,19 +31,16 @@
         <div class="col-md-12">
             <div class="tile">
                 <div class="tile-body">
-                    <form method="post"  class="bg-white p-5 contact-form">
+                    <form method="post" th:action="@{/admin/rejectReason}" class="bg-white p-5 contact-form">
                         <div class="form-group col-md-6">
                             <label class="control-label">Reason</label>
                             <textarea class="form-control" id="rejectreason" name="rejectreason" rows="3" placeholder="Reason for rejection"></textarea>
                         </div>
                         <div class="form-group col-md-6 submit-button">
-                            <input type="hidden" name="orderId" value="">
+                            <input type="hidden" name="orderId" value="12345"> <!-- Ví dụ về orderId -->
                             <input type="submit" value="Submit" class="btn btn-add">
                         </div>
-
-
                     </form>
-
                 </div>
             </div>
         </div>
