@@ -2,6 +2,8 @@ package com.example.furni.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "product")
 public class Product {
@@ -43,6 +45,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
     @Transient
     private double averageRating;
     public Product() {
@@ -54,6 +58,26 @@ public class Product {
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
     }
+
+    public Product(int id, String productName, String slug, double price, String thumbnail, int qty, String color, double weight, double height, double length, Category category, Brand brand, Material material, Size size, LocalDateTime deletedAt, double averageRating) {
+        this.id = id;
+        this.productName = productName;
+        this.slug = slug;
+        this.price = price;
+        this.thumbnail = thumbnail;
+        this.qty = qty;
+        this.color = color;
+        this.weight = weight;
+        this.height = height;
+        this.length = length;
+        this.category = category;
+        this.brand = brand;
+        this.material = material;
+        this.size = size;
+        this.deletedAt = deletedAt;
+        this.averageRating = averageRating;
+    }
+
     public int getId() {
         return id;
     }
@@ -166,21 +190,12 @@ public class Product {
         this.size = size;
     }
 
-    public Product(int id, String productName, String slug, double price, String thumbnail, int qty, String color, double weight, double height, double length, Category category, Brand brand, Material material, Size size) {
-        this.id = id;
-        this.productName = productName;
-        this.slug = slug;
-        this.price = price;
-        this.thumbnail = thumbnail;
-        this.qty = qty;
-        this.color = color;
-        this.weight = weight;
-        this.height = height;
-        this.length = length;
-        this.category = category;
-        this.brand = brand;
-        this.material = material;
-        this.size = size;
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     @PrePersist

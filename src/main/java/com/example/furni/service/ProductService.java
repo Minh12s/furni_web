@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -83,8 +85,9 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional
     public void delete(int id) {
-        productRepository.deleteById(id);
+        productRepository.softDelete(id, LocalDateTime.now());
     }
 
     public boolean isProductNameExists(String productName) {

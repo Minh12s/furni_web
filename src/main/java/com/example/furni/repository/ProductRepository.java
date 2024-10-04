@@ -4,17 +4,22 @@ import com.example.furni.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByCategory_Id(int categoryId, Pageable pageable);
     Page<Product> findByCategory_IdAndIdNot(int categoryId, int productId, Pageable pageable);
-
+    // Phương thức xóa mềm
+    @Modifying
+    @Query("UPDATE Product p SET p.deletedAt = :deletedAt WHERE p.id = :id")
+    void softDelete(@Param("id") int id, @Param("deletedAt") LocalDateTime deletedAt);
     Product findBySlug(String slug);
-    @Query("SELECT p FROM Product p WHERE (:name IS NULL OR p.productName LIKE %:name%) " +
+    @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND (:name IS NULL OR p.productName LIKE %:name%) " +
             "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
             "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
