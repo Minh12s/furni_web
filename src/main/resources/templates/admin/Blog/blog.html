@@ -133,12 +133,15 @@
                         </button>
 
                         <!-- Các nút phân trang -->
+                        <span th:if="${blogsPage.number > 3}">...</span> <!-- Dấu "..." trước nếu cần -->
                         <button type="button" class="button"
                                 th:each="i : ${#numbers.sequence(0, blogsPage.totalPages - 1)}"
+                                th:if="${i == 0 || i == blogsPage.totalPages - 1 || (i >= blogsPage.number - 2 && i <= blogsPage.number + 2)}"
                                 th:text="${i + 1}"
                                 th:classappend="${i == blogsPage.number} ? 'active' : ''"
                                 th:onclick="|window.location.href='/admin/blogs?page=' + ${i} + '&size=' + ${blogsPage.size}|">
                         </button>
+                        <span th:if="${blogsPage.number < blogsPage.totalPages - 4}">...</span> <!-- Dấu "..." sau nếu cần -->
 
                         <!-- Nút sang trang tiếp theo với icon -->
                         <button type="button" class="button"
@@ -157,9 +160,6 @@
                     <small th:text="'Page ' + (${blogsPage.number} + 1) + ' of ' + ${blogsPage.totalPages}"></small>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 

@@ -102,12 +102,15 @@
             </button>
 
             <!-- Các nút phân trang -->
+            <span th:if="${materialsPage.number > 3}">...</span> <!-- Dấu "..." trước nếu cần -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, materialsPage.totalPages - 1)}"
+                    th:if="${i == 0 || i == materialsPage.totalPages - 1 || (i >= materialsPage.number - 2 && i <= materialsPage.number + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == materialsPage.number} ? 'active' : ''"
                     th:onclick="|window.location.href='/admin/materials?page=' + ${i} + '&size=' + ${materialsPage.size}|">
             </button>
+            <span th:if="${materialsPage.number < materialsPage.totalPages - 4}">...</span> <!-- Dấu "..." sau nếu cần -->
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -126,7 +129,6 @@
           <small th:text="'Page ' + (${materialsPage.number} + 1) + ' of ' + ${materialsPage.totalPages}"></small>
         </div>
       </div>
-
 
     </div>
   </div>

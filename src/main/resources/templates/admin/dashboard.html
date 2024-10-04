@@ -255,10 +255,17 @@
             <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, totalOutOfStockPages - 1)}"
+                    th:if="${i == 0 || i == totalOutOfStockPages - 1 || (i >= currentOutOfStockPage - 2 && i <= currentOutOfStockPage + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == currentOutOfStockPage} ? 'active' : ''"
                     th:onclick="|window.location='?outOfStockPage=' + ${i}|">
             </button>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang đầu tiên -->
+            <span th:if="${currentOutOfStockPage > 3}">...</span>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang cuối cùng -->
+            <span th:if="${currentOutOfStockPage < totalOutOfStockPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -277,6 +284,7 @@
           <small>Page [[${currentOutOfStockPage + 1}]] of [[${totalOutOfStockPages}]]</small>
         </div>
       </div>
+
 
     </div>
   </div>
@@ -342,10 +350,17 @@
             <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, totalOrderPages - 1)}"
+                    th:if="${i == 0 || i == totalOrderPages - 1 || (i >= currentOrderPage - 2 && i <= currentOrderPage + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == currentOrderPage} ? 'active' : ''"
                     th:onclick="|window.location='?orderPage=' + ${i}|">
             </button>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang đầu tiên -->
+            <span th:if="${currentOrderPage > 3}">...</span>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang cuối cùng -->
+            <span th:if="${currentOrderPage < totalOrderPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -364,6 +379,7 @@
           <small>Page [[${currentOrderPage + 1}]] of [[${totalOrderPages}]]</small>
         </div>
       </div>
+
 
     </div>
   </div>
@@ -422,10 +438,17 @@
             <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, totalReviewPages - 1)}"
+                    th:if="${i == 0 || i == totalReviewPages - 1 || (i >= currentReviewPage - 2 && i <= currentReviewPage + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == currentReviewPage} ? 'active' : ''"
                     th:onclick="|window.location='?reviewPage=' + ${i}|">
             </button>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang đầu tiên -->
+            <span th:if="${currentReviewPage > 3}">...</span>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang cuối cùng -->
+            <span th:if="${currentReviewPage < totalReviewPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -521,10 +544,17 @@
             <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, totalOrderReturnPages - 1)}"
+                    th:if="${i == 0 || i == totalOrderReturnPages - 1 || (i >= currentReturnPage - 2 && i <= currentReturnPage + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == currentReturnPage} ? 'active' : ''"
                     th:onclick="|window.location='?returnPage=' + ${i}|">
             </button>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang đầu tiên -->
+            <span th:if="${currentReturnPage > 3}">...</span>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang cuối cùng -->
+            <span th:if="${currentReturnPage < totalOrderReturnPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -543,6 +573,7 @@
           <small>Page [[${currentReturnPage + 1}]] of [[${totalOrderReturnPages}]]</small>
         </div>
       </div>
+
     </div>
   </div>
   <div class="card has-table">
@@ -608,10 +639,17 @@
             <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, totalOrderCancelPages - 1)}"
+                    th:if="${i == 0 || i == totalOrderCancelPages - 1 || (i >= currentCancelPage - 2 && i <= currentCancelPage + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == currentCancelPage} ? 'active' : ''"
                     th:onclick="|window.location='?cancelPage=' + ${i}|">
             </button>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang đầu tiên -->
+            <span th:if="${currentCancelPage > 3}">...</span>
+
+            <!-- Thêm "..." nếu trang hiện tại cách xa trang cuối cùng -->
+            <span th:if="${currentCancelPage < totalOrderCancelPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -630,6 +668,7 @@
           <small>Page [[${currentCancelPage + 1}]] of [[${totalOrderCancelPages}]]</small>
         </div>
       </div>
+
 
     </div>
   </div>

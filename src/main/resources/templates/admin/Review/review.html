@@ -131,13 +131,20 @@
               <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
             </button>
 
+            <!-- Dấu "..." trước nếu cần -->
+            <span th:if="${productsPage.number > 3}">...</span>
+
             <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, productsPage.totalPages - 1)}"
+                    th:if="${i == 0 || i == productsPage.totalPages - 1 || (i >= productsPage.number - 2 && i <= productsPage.number + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == productsPage.number} ? 'active' : ''"
                     th:onclick="|window.location.href='/admin/products?page=' + ${i} + '&size=' + ${productsPage.size}|">
             </button>
+
+            <!-- Dấu "..." sau nếu cần -->
+            <span th:if="${productsPage.number < productsPage.totalPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -156,6 +163,7 @@
           <small th:text="'Page ' + (${productsPage.number} + 1) + ' of ' + ${productsPage.totalPages}"></small>
         </div>
       </div>
+
 
     </div>
   </div>

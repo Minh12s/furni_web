@@ -108,13 +108,20 @@
                             <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
                         </button>
 
+                        <!-- Dấu "..." trước nếu cần -->
+                        <span th:if="${sizesPage.number > 3}">...</span>
+
                         <!-- Các nút phân trang -->
                         <button type="button" class="button"
                                 th:each="i : ${#numbers.sequence(0, sizesPage.totalPages - 1)}"
+                                th:if="${i == 0 || i == sizesPage.totalPages - 1 || (i >= sizesPage.number - 2 && i <= sizesPage.number + 2)}"
                                 th:text="${i + 1}"
                                 th:classappend="${i == sizesPage.number} ? 'active' : ''"
                                 th:onclick="|window.location.href='/admin/sizes?page=' + ${i} + '&size=' + ${sizesPage.size}|">
                         </button>
+
+                        <!-- Dấu "..." sau nếu cần -->
+                        <span th:if="${sizesPage.number < sizesPage.totalPages - 4}">...</span>
 
                         <!-- Nút sang trang tiếp theo với icon -->
                         <button type="button" class="button"
@@ -133,6 +140,7 @@
                     <small th:text="'Page ' + (${sizesPage.number} + 1) + ' of ' + ${sizesPage.totalPages}"></small>
                 </div>
             </div>
+
 
         </div>
     </div>

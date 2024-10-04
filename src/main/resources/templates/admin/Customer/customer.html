@@ -136,10 +136,17 @@
             <!-- Các nút phân trang -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, customerPage.totalPages - 1)}"
+                    th:if="${i == 0 || i == customerPage.totalPages - 1 || (i >= customerPage.number - 2 && i <= customerPage.number + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == customerPage.number} ? 'active' : ''"
                     th:onclick="|window.location.href='/admin/customers?page=' + ${i} + '&size=' + ${customerPage.size}|">
             </button>
+
+            <!-- Dấu "..." nếu trang hiện tại cách xa trang đầu -->
+            <span th:if="${customerPage.number > 3}">...</span>
+
+            <!-- Dấu "..." nếu trang hiện tại cách xa trang cuối -->
+            <span th:if="${customerPage.number < customerPage.totalPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -158,8 +165,6 @@
           <small th:text="'Page ' + (${customerPage.number} + 1) + ' of ' + ${customerPage.totalPages}"></small>
         </div>
       </div>
-
-
 
     </div>
   </div>
