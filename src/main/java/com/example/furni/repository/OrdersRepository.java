@@ -22,13 +22,15 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
             "(:TotalAmount IS NULL OR o.totalAmount = :TotalAmount) AND " +
             "(:PaymentMethod IS NULL OR o.paymentMethod LIKE %:PaymentMethod%) AND " +
             "(:IsPaid IS NULL OR o.isPaid = :IsPaid) AND " +
-            "(:Status IS NULL OR o.status = :Status)")
+            "(:Status IS NULL OR o.status = :Status) " +
+            "ORDER BY CASE WHEN o.status = 'pending' THEN 0 ELSE 1 END, o.orderDate DESC")
     Page<Orders> filterOrders(@Param("ShippingMethod") String ShippingMethod,
                               @Param("TotalAmount") Double TotalAmount,
                               @Param("PaymentMethod") String PaymentMethod,
                               @Param("IsPaid") String IsPaid,
                               @Param("Status") String Status,
                               Pageable pageable);
+
     // tính tổng total amount tất cả đơn hàng có status là complete
     @Query("SELECT SUM(o.totalAmount) FROM Orders o WHERE o.status = 'complete'")
     Double getTotalAmountOfCompletedOrders();

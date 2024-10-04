@@ -77,66 +77,63 @@
     </div>
 
 </section>
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modalMessage"></p>
+        <button id="confirmButton" class="btn btn-danger">Yes, Proceed</button>
+        <button id="closeModalButton" class="btn btn-secondary">No, Keep</button>
+    </div>
+</div>
+
 <div>
     <input type="hidden" id="returnUrl" name="returnUrl" value="#" />
 
     <div style="float:right; margin-top: 10px; position: relative;">
         <!-- Nếu trạng thái là "pending" -->
         <div th:if="${order.status == 'pending'}" style="display: flex; gap: 10px;">
-            <form method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='cancel')}" th:attr="returnUrl=@{/admin/orders}">
-                <button onclick="return confirm('Surely you want to cancel your order')" type="submit" class="btn btn-danger"
+            <form id="cancelForm1" method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='cancel')}">
+                <button type="button" class="btn btn-danger" onclick="openModal1()"
                         style="padding: 5px 10px; border-radius: 5px; background-color: red; color: white;">
                     Cancel
                 </button>
             </form>
-
-            <form method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='confirmed')}" th:attr="returnUrl=@{/admin/orders}">
-                <button onclick="return confirm('Surely you want to confirm the order')" type="submit" class="btn btn-warning"
+            <form id="confirmForm" method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='confirmed')}">
+                <button type="button" class="btn btn-warning" onclick="openModal('confirm', 'Are you sure you want to confirm the order?')"
                         style="padding: 5px 10px; border-radius: 5px; background-color: blue; color: white;">
                     Confirm
                 </button>
             </form>
         </div>
-
         <!-- Nếu trạng thái là "confirmed" -->
         <div th:if="${order.status == 'confirmed'}" style="display: flex; gap: 10px;">
-            <form method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='cancel')}" th:attr="returnUrl=@{/admin/orders}">
-                <button onclick="return confirm('Surely you want to cancel your order')" type="submit" class="btn btn-danger"
-                        style="padding: 5px 10px; border-radius: 5px; background-color: red; color: white;">
-                    Cancel
-                </button>
-            </form>
-
-            <form method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='shipping')}" th:attr="returnUrl=@{/admin/orders}">
-                <button onclick="return confirm('Surely you want to start shipping the order')" type="submit" class="btn btn-warning"
+            <form id="shippingForm" method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='shipping')}">
+                <button type="button" class="btn btn-warning" onclick="openModal('shipping', 'Are you sure you want to start shipping the order?')"
                         style="padding: 5px 10px; border-radius: 5px; background-color: black; color: white;">
                     Shipping
                 </button>
             </form>
-        </div>
 
-        <!-- Nếu trạng thái là "shipping" -->
+            <!-- Thêm nút Cancel khi trạng thái là confirmed -->
+            <form id="cancelForm2" method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='cancel')}">
+                <button type="button" class="btn btn-danger" onclick="openModal2()"
+                        style="padding: 5px 10px; border-radius: 5px; background-color: red; color: white;">
+                    Cancel
+                </button>
+            </form>
+        </div>
+        <!-- Trạng thái "shipping" -->
         <div th:if="${order.status == 'shipping'}" style="display: flex; gap: 10px;">
-            <form method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='shipped')}" th:attr="returnUrl=@{/admin/orders}">
-                <button onclick="return confirm('Surely you want to mark the order as shipped')" type="submit" class="btn btn-warning"
+            <form id="shippedForm" method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='shipped')}">
+                <button type="button" class="btn btn-warning" onclick="openModal('shipped', 'Are you sure you want to mark the order as shipped?')"
                         style="padding:5px 10px; border-radius:5px; background-color: orange; color: black;">
                     Shipped
                 </button>
             </form>
         </div>
 
-        <!-- Nếu trạng thái là "shipped" -->
-        <div th:if="${order.status == 'shipped'}" style="display: flex; gap: 10px;">
-            <form method="post" th:action="@{/admin/updateStatus(id=${order.id}, status='complete')}" th:attr="returnUrl=@{/admin/orders}">
-                <button onclick="return confirm('Surely you want to mark the order as complete')" type="submit" class="btn btn-warning"
-                        style="padding: 5px 10px; border-radius: 5px; background-color: green; color: white;">
-                    Complete
-                </button>
-            </form>
-        </div>
-
         <!-- Nếu trạng thái là "cancel", "complete", "shipping", hoặc "shipped", hiển thị nút Back -->
-        <div th:if="${order.status == 'cancel' || order.status == 'complete' || order.status == 'shipping' || order.status == 'shipped'}" style="position: absolute; bottom: 5px; right: 100px; z-index: 10;" >
+        <div th:if="${order.status == 'cancel' || order.status == 'complete' || order.status == 'shipping' || order.status == 'shipped'}" style="position: absolute; bottom: 15px; right: 100px; z-index: 10;" >
             <a href="/admin/orders" class="btn btn-warning"
                style="padding: 8px 10px; border-radius: 5px; background-color: red; color: white;">
                 Back
@@ -146,8 +143,60 @@
 </div>
 
 
-
 <style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        overflow: auto;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover, .close:focus {
+        color: black;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    .btn-danger {
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .btn-secondary {
+        background-color: gray;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
     .row {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -165,6 +214,109 @@
         max-width: 33.3333333333%;
     }
 </style>
+<script>
+    // Lấy phần modal
+    var modal = document.getElementById("confirmationModal");
+    var modalMessage = document.getElementById("modalMessage");
+
+    // Lấy nút đóng modal
+    var closeModal = document.getElementsByClassName("close")[0];
+
+    // Nút xác nhận
+    var confirmButton = document.getElementById("confirmButton");
+
+    // Nút hủy đóng modal
+    var closeModalButton = document.getElementById("closeModalButton");
+
+    // Khi nhấn vào nút cancel
+    function openModal(action, message) {
+        event.preventDefault();
+        modalMessage.innerText = message;
+        modal.style.display = "block";
+
+        // Khi xác nhận thì submit form
+        confirmButton.onclick = function() {
+            // Kiểm tra xem form có tồn tại không
+            var form = document.getElementById(action + "Form");
+            if (form) {
+                form.submit();
+            } else {
+                console.error("Form with id " + action + "Form not found.");
+            }
+        };
+    }
+
+    // Khi nhấn vào nút close (X) hoặc hủy thì đóng modal
+    closeModal.onclick = closeModalButton.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Đóng modal khi nhấn ngoài modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+<script>
+    // Lấy phần modal
+    var modal = document.getElementById("confirmationModal");
+    var modalMessage = document.getElementById("modalMessage");
+
+    // Lấy nút đóng modal
+    var closeModal = document.getElementsByClassName("close")[0];
+
+    // Nút xác nhận
+    var confirmButton = document.getElementById("confirmButton");
+
+    // Nút hủy đóng modal
+    var closeModalButton = document.getElementById("closeModalButton");
+
+    // Hàm mở modal cho cancelForm1
+    function openModal1() {
+        modalMessage.innerText = 'Are you sure you want to cancel the order?';
+        modal.style.display = "block";
+
+        confirmButton.onclick = function() {
+            var form = document.getElementById("cancelForm1");
+            if (form) {
+                form.submit();
+            } else {
+                console.error("Form with id cancelForm1 not found.");
+            }
+        };
+    }
+
+    // Hàm mở modal cho cancelForm2
+    function openModal2() {
+        modalMessage.innerText = 'Are you sure you want to cancel the order?';
+        modal.style.display = "block";
+
+        confirmButton.onclick = function() {
+            var form = document.getElementById("cancelForm2");
+            if (form) {
+                form.submit();
+            } else {
+                console.error("Form with id cancelForm2 not found.");
+            }
+        };
+    }
+
+    // Khi nhấn vào nút close (X) hoặc hủy thì đóng modal
+    closeModal.onclick = closeModalButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // Đóng modal khi nhấn ngoài modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+</script>
+
+
 <div th:insert="/include/fragmentsAdmin :: script"></div>
 
 </body>
