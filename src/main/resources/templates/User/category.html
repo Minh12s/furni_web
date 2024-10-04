@@ -220,7 +220,7 @@
 
           <div th:each="product : ${products}" class="col-sm-6 col-md-6 col-lg-4 ftco-animate">
             <div class="product">
-              <a href="/details" class="img-prod"><img class="img-fluid" th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Colorlib Template">
+              <a th:href="@{/product/details/{slug}(slug=${product.slug})}" class="img-prod"><img class="img-fluid" th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Colorlib Template">
                 <span class="status">30%</span>
                 <div class="overlay"></div>
               </a>

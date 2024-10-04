@@ -94,5 +94,7 @@ public class CartService {
     public void clearCartByUserId(Integer userId) {
         cartRepository.deleteByUserId(userId);
     }
-
+    public Cart findById(int cartId) {
+        return cartRepository.findById(cartId).orElse(null);
+    }
 }

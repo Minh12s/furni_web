@@ -128,11 +128,18 @@ public class CartController extends BaseController {
                              @RequestParam int cartId,
                              @RequestParam int qty,
                              Model model) {
+        Cart cartItem = cartService.findById(cartId);
+        int maxQty = cartItem.getProduct().getQty();
+
+        Product product = cartItem.getProduct();
+        if (qty > maxQty) {
+            model.addAttribute("errorMessage", "Sorry, you can only purchase a maximum of " + product.getQty() + " of this product.");
+            model.addAttribute("cartItems", cartService.getCartItemsByUserId((Integer) request.getSession().getAttribute("userId")));
+            return "redirect:/carts";
+        }
 
         cartService.updateCartQuantityById(cartId, qty);
-
         request.getSession().setAttribute("cartMessage", "Product quantity has been updated.");
-
         return "redirect:/carts";
     }
 

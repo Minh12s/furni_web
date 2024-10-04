@@ -49,8 +49,10 @@ public class Orders {
     private String note;
     @Column(name = "schedule")
     private LocalDateTime schedule;
+    @Column(name = "order_code", unique = true)
+    private String orderCode;
 
-    public Orders(int id, User user, LocalDateTime orderDate, double totalAmount, String status, String isPaid, String province, String district, String ward, String addressDetail, String fullName, String email, String telephone, String paymentMethod, String shippingMethod, String note, LocalDateTime schedule) {
+    public Orders(int id, User user, LocalDateTime orderDate, double totalAmount, String status, String isPaid, String province, String district, String ward, String addressDetail, String fullName, String email, String telephone, String paymentMethod, String shippingMethod, String note, LocalDateTime schedule, String orderCode) {
         this.id = id;
         this.user = user;
         this.orderDate = orderDate;
@@ -68,6 +70,7 @@ public class Orders {
         this.shippingMethod = shippingMethod;
         this.note = note;
         this.schedule = schedule;
+        this.orderCode = orderCode;
     }
 
     public int getId() {
@@ -205,7 +208,13 @@ public class Orders {
     public void setSchedule(LocalDateTime schedule) {
         this.schedule = schedule;
     }
+    public String getOrderCode() {
+        return orderCode;
+    }
 
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
     public Orders(){
     }
 

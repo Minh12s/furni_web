@@ -86,13 +86,14 @@
               <td class="price" th:text="'$'+${item.product.price}">Price</td>
 
               <td class="quantity">
+                <!-- Form cập nhật số lượng sản phẩm -->
                 <form th:action="@{/update-cart}" method="post">
                   <input type="hidden" name="cartId" th:value="${item.id}">
+                  <input type="hidden" name="maxQty" th:value="${item.product.qty}">
                   <div class="input-group mb-3">
-                    <input id="quantity" style="margin-top:30px;" type="number" name="qty" class="quantity form-control input-number" th:value="${item.qty}" min="1" required>
+                    <input id="quantity" type="number" name="qty" class="form-control input-number" th:value="${item.qty}" min="1" data-original-qty="${item.qty}" required>
                   </div>
-
-                  <button type="submit" style="border: none; padding: 20px 20px;" class="btn btn-primary py-3 px-5 btn-update">Update</button>
+                  <button type="submit" class="btn btn-primary py-3 px-5 btn-update">Update</button>
                 </form>
               </td>
 
@@ -135,17 +136,98 @@
           </p>
         </div>
         <p class="text-center">
-          <a th:href="@{/checkouts}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a>
+          <a th:href="@{/checkouts}" class="btn btn-primary py-3 px-4"
+             th:disabled="${#lists.size(outOfStockProductIds) > 0}"
+             th:classappend="${#lists.size(outOfStockProductIds) > 0} ? 'disabled' : ''">
+            Proceed to Checkout
+          </a>
         </p>
+
       </div>
     </div>
   </div>
 </section>
 
+
 <div th:insert="/include/fragments :: footer"></div>
 
 
+<!-- Modal for quantity error -->
+<div class="modal fade" id="quantityErrorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
 
+      </div>
+      <div class="modal-body">
+        <p id="errorMessage"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-custom" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .btn-custom {
+    background-color: #ffa45c;
+    border-color: #ffa45c;
+    color: white; /* Màu chữ trắng */
+  }
+
+  .btn-custom:hover {
+    background-color: #e6954f; /* Màu khi hover */
+    border-color: #e6954f;
+  }
+
+</style>
+<!-- Các liên kết tới JavaScript và Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- Script xử lý hiển thị modal nếu số lượng sản phẩm vượt quá tồn kho -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-update').forEach(function(updateButton) {
+      updateButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Ngăn việc gửi form ngay lập tức
+
+        const form = this.closest('form');
+        const qtyInput = form.querySelector('input[name="qty"]');
+        const cartId = form.querySelector('input[name="cartId"]').value;
+        const qty = qtyInput.value;
+        const maxQty = this.closest('tr').querySelector('input[name="maxQty"]').value;
+
+        // Lấy giá trị ban đầu (original quantity)
+        const originalQty = qtyInput.getAttribute('data-original-qty');
+
+        if (parseInt(qty) > parseInt(maxQty)) {
+          // Hiển thị modal nếu số lượng vượt quá tồn kho
+          const errorMessage = `Sorry, you can only purchase a maximum of ${maxQty}.`;
+          document.getElementById('errorMessage').innerText = errorMessage;
+          $('#quantityErrorModal').modal('show');
+
+          // Xóa sự kiện "hidden.bs.modal" cũ (nếu có) và thêm mới
+          $('#quantityErrorModal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+            qtyInput.value = originalQty; // Đặt lại giá trị ban đầu sau khi modal bị đóng
+
+            // Load lại trang khi modal bị đóng
+            location.reload(); // Tải lại trang sau khi modal đóng
+          });
+
+        } else {
+          // Nếu số lượng hợp lệ, cập nhật lại giá trị ban đầu
+          qtyInput.setAttribute('data-original-qty', qty);
+          // Gửi form nếu số lượng hợp lệ
+          form.submit();
+        }
+      });
+    });
+  });
+
+</script>
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 

@@ -105,7 +105,7 @@
     <input type="hidden" id="returnUrl" name="returnUrl" value="/MyOrder/MyOrder" />
     <div style="float:right; display: flex; gap: 10px;">
 
-        <div th:if="${order.status == 'Pending'}" style="display: flex; gap: 10px;">
+        <div th:if="${order.status == 'pending'}" style="display: flex; gap: 10px;">
             <form method="post" th:action="@{/MyOrder/updateStatus(id=${order.id}, status='cancel')}" th:attr="returnUrl=@{/MyOrder/MyOrder}">
                 <button onclick="return confirm('Surely you want to cancel your order')" type="submit" class="btn btn-danger"
                         style="padding: 5px 10px; border-radius: 5px; height: 47px; background-color: red; color: white;">
@@ -114,7 +114,7 @@
             </form>
 
         </div>
-        <div th:if="${order.status == 'Shipped'}" style="display: flex; gap: 10px;">
+        <div th:if="${order.status == 'shipped'}" style="display: flex; gap: 10px;">
             <form method="post" th:action="@{/MyOrder/updateStatus(id=${order.id}, status='complete')}" th:attr="returnUrl=@{/MyOrder/MyOrder}">
                 <button onclick="return confirm('Surely you want to complete your order')"
                         type="submit"

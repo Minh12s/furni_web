@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -132,6 +129,9 @@ public class CheckOutController extends BaseController {
         LocalDateTime scheduleDateTime = LocalDateTime.parse(schedule);
         order.setSchedule(scheduleDateTime);
         order.setStatus("pending");
+        // Sinh mã đơn hàng ngẫu nhiên
+        String orderCode = generateOrderCode();
+        order.setOrderCode(orderCode);
 
         // Lưu đơn hàng vào cơ sở dữ liệu nhưng không đánh dấu là đã thanh toán ngay
         order.setIsPaid("0"); // Chưa thanh toán
@@ -210,6 +210,16 @@ public class CheckOutController extends BaseController {
         orderService.sendThankYouEmail(fullName, email, order, cartItems,tax,subtotal,shippingFee, totalAmount);
 
         return "redirect:/thankyou";
+    }
+    private String generateOrderCode() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder orderCode = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 8; i++) { // Mã đơn hàng 8 ký tự
+            int index = random.nextInt(characters.length());
+            orderCode.append(characters.charAt(index));
+        }
+        return orderCode.toString();
     }
 
     // Phương thức lấy APIContext
