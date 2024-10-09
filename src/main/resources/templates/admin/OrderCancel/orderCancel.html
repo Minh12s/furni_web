@@ -126,7 +126,7 @@
                         </label>
                     </th>
                     <th>ID</th>
-                    <th>Order id</th>
+                    <th>Order code</th>
                     <th>Full name</th>
                     <th>Email</th>
                     <th>Telephone</th>
@@ -144,7 +144,7 @@
                         </label>
                     </td>
                     <td th:text="${orderCancel.id}"></td>
-                    <td th:text="${orderCancel.order.id}"></td>
+                    <td th:text="${orderCancel.order.orderCode != null ? orderCancel.order.orderCode : 'null'}"></td>
                     <td th:text="${orderCancel.order.fullName}"></td>
                     <td th:text="${orderCancel.order.email}"></td>
                     <td th:text="${orderCancel.order.telephone}"></td>

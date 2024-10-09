@@ -53,7 +53,7 @@ public class OrderService {
     }
 
     // lọc đơn hàng theo chỉ tiêu
-    public Page<Orders> filterOrders(int page, int size, String ShippingMethod, Double TotalAmount, String PaymentMethod, String IsPaid, String Status) {
+    public Page<Orders> filterOrders(int page, int size, String ShippingMethod, Double TotalAmount, String PaymentMethod, String IsPaid, String Status, String orderCode) {
         Pageable pageable = PageRequest.of(page, size);
 
         // Thay thế null cho các tham số không điền
@@ -61,9 +61,10 @@ public class OrderService {
         PaymentMethod = (PaymentMethod == null || PaymentMethod.isEmpty()) ? null : PaymentMethod;
         IsPaid = (IsPaid == null || IsPaid.isEmpty()) ? null : IsPaid;
         Status = (Status == null || Status.isEmpty()) ? null : Status;
+        orderCode = (orderCode == null || orderCode.isEmpty()) ? null : orderCode; // Thêm xử lý cho orderCode
 
         // Gọi đến repository để lọc đơn hàng
-        return ordersRepository.filterOrders(ShippingMethod, TotalAmount, PaymentMethod, IsPaid, Status, pageable);
+        return ordersRepository.filterOrders(ShippingMethod, TotalAmount, PaymentMethod, IsPaid, Status, orderCode, pageable);
     }
 
     public void saveOrderProduct(OrderProduct orderProduct) {

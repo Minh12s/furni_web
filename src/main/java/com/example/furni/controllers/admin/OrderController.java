@@ -30,9 +30,10 @@ public class OrderController {
                         @RequestParam(required = false) Double TotalAmount,
                         @RequestParam(required = false) String PaymentMethod,
                         @RequestParam(required = false) String IsPaid,
-                        @RequestParam(required = false) String Status) {
+                        @RequestParam(required = false) String Status,
+                        @RequestParam(required = false) String orderCode) {
         // Gọi đến service để lấy danh sách đơn hàng đã được lọc
-        Page<Orders> ordersPage = orderService.filterOrders(page, size, ShippingMethod, TotalAmount, PaymentMethod, IsPaid, Status);
+        Page<Orders> ordersPage = orderService.filterOrders(page, size, ShippingMethod, TotalAmount, PaymentMethod, IsPaid, Status, orderCode);
 
         model.addAttribute("ordersPage", ordersPage);
         model.addAttribute("size", size);
