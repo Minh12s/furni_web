@@ -129,45 +129,66 @@
         </ul>
 
         <div class="row mt-4">
-          <div class="w-100"></div>
-          <div class="input-group col-md-6 d-flex mb-3">
+          <div class="col-md-6">
+            <div class="input-group col-md-6 d-flex mb-3">
             <span class="input-group-btn mr-2">
               <button type="button" class="quantity-left-minus btn btn-outline-secondary" data-type="minus">
                 <i class="ion-ios-remove"></i>
               </button>
             </span>
-            <input style="margin-top:-40px; margin-left:42px;width:230px;" type="text" id="quantity-input" name="quantity" class="form-control input-number" value="1" min="1" max="${product.stockQuantity}">
-            <span class="input-group-btn ml-2">
+              <input style="margin-top:-40px; margin-left:42px;width:230px;" type="text" id="quantity-input" name="quantity" class="form-control input-number" value="1" min="1" max="${product.stockQuantity}">
+              <span class="input-group-btn ml-2">
               <button style="position: relative; top: -40px; margin-left: 234px; " type="button" class="quantity-right-plus btn btn-outline-secondary" data-type="plus">
                 <i class="ion-ios-add"></i>
               </button>
             </span>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-12">
+              <p style="color: #000;" th:text="${product.getQty} + ' pieces available'">80 pieces available</p>
+            </div>
+            <div class="button-container">
+
+              <form id="add-to-cart-form" th:action="@{/add-to-cart}" method="post">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <!-- Trường ẩn để lưu số lượng sản phẩm được chọn -->
+                <input type="hidden" name="qty" id="hidden-quantity">
+
+                <!-- Nút ADD TO CART -->
+                <input type="submit" class="btn btn-primary py-3 px-5" value="ADD TO CART"
+                       th:disabled="${product.qty == 0}">
+              </form>
+
+              <!-- Thông báo nếu sản phẩm hết hàng -->
+              <div th:if="${product.qty == 0}">
+                <p class="text-danger">This product is currently out of stock.</p>
+              </div>
+
+            </div>
+
           </div>
-          <div class="w-100"></div>
-          <div class="col-md-12">
-            <p style="color: #000;" th:text="${product.getQty} + ' pieces available'">80 pieces available</p>
+          <div class="col-md-6" style="margin-top: 140px; margin-left: -60px;">
+            <!-- Mã HTML của nút yêu thích -->
+            <form method="post" th:action="@{/add-to-favorite}" class="favoriteForm">
+              <input type="hidden" name="productId" th:value="${product.id}">
+              <input type="hidden" name="slug" th:value="${product.slug}">
+              <button type="submit" style="border:1px solid white;" class="heart-icon">
+                <svg height="32" width="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0H24V24H0z" fill="none"></path>
+                  <path class="heart-path" d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z" th:classappend="${isFavorite} ? 'favorite' : ''"></path>
+                </svg>
+              </button>
+            </form>
+
           </div>
+
         </div>
-        <form id="add-to-cart-form" th:action="@{/add-to-cart}" method="post">
-          <input type="hidden" name="productId" th:value="${product.id}">
-          <!-- Trường ẩn để lưu số lượng sản phẩm được chọn -->
-          <input type="hidden" name="qty" id="hidden-quantity">
-
-          <!-- Nút ADD TO CART -->
-          <input type="submit" class="btn btn-primary py-3 px-5" value="ADD TO CART"
-                 th:disabled="${product.qty == 0}">
-        </form>
-
-        <!-- Thông báo nếu sản phẩm hết hàng -->
-        <div th:if="${product.qty == 0}">
-          <p class="text-danger">This product is currently out of stock.</p>
-        </div>
-
 
 
 
 
       </div>
+
     </div>
   </div>
 </section>
@@ -351,6 +372,40 @@
     background: rgba(0, 0, 0, 0.5);
     opacity: 0;
     transition: opacity 0.3s ease;
+  }
+  .favoriteForm button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 27px 30px 27px;
+    box-shadow: rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    background-color: #e8e8e8;
+    border-color: #ffe2e2;
+    border-style: solid;
+    border-width: 9px;
+    border-radius: 35px;
+    transition: transform 400ms cubic-bezier(.68,-0.55,.27,2.5), border-color 400ms ease-in-out, background-color 400ms ease-in-out;
+    word-spacing: -2px;
+  }
+
+
+
+  .favoriteForm button:hover {
+    background-color: #eee;
+    transform: scale(105%);
+    animation: movingBorders 3s infinite;
+  }
+
+  .favoriteForm button svg {
+    fill: rgb(255, 110, 110);
+  }
+
+
+
+  .favoriteForm button:hover svg {
+    transform: scale(105%);
+    border-color: #ffd8d8;
+    animation: beatingHeart 1.2s infinite;
   }
 </style>
 

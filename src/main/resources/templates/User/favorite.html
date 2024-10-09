@@ -38,14 +38,16 @@
     </div>
   </div>
 </div>
-
+<div id="successAlert" class="alert alert-success" th:if="${favoriteMessage}">
+  <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+  <span th:text="${favoriteMessage}"></span>
+</div>
 
 <section class="ftco-section ftco-cart">
   <div class="container">
     <div class="row">
       <div class="col-md-12 ftco-animate">
-        @if (true)  <!-- Bạn có thể thay thế true bằng điều kiện kiểm tra khác nếu cần -->
-        {
+
         <div class="cart-list">
           <table class="table">
             <thead class="thead-primary">
@@ -57,76 +59,43 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="text-center">
+            <tr th:if="${#lists.isEmpty(favoriteList)}">
+              <td colspan="7" class="text-center">No items in the favorite!</td>
+            </tr>
+            <!-- Bắt đầu lặp qua danh sách favoriteList -->
+            <tr th:each="favorite : ${favoriteList}" class="text-center">
               <td class="product-remove">
-                <form method="post" asp-controller="Favorite" asp-action="RemoveFromFavorites" asp-route-favoriteId="1">
+                <form method="post" th:action="@{/favorite/remove}" th:object="${favorite}">
+                  <input type="hidden" name="favoriteId" th:value="${favorite.id}">
                   <button style="width: 30px; height: 30px; background-color: white; border: 1px solid #ccc; border-radius: 0;" type="submit" class="btn btn-danger">
                     <span class="ion-ios-close"></span>
                   </button>
                 </form>
               </td>
               <td class="image-prod">
-                <img src="/images/product-1.jpg" alt="" style="width:150px; height:150px;">
+                <img th:src="'data:image/jpeg;base64,' + ${favorite.thumbnail}" alt="" style="width:150px; height:150px;">
               </td>
               <td class="product-name">
-                <h3><a style="color:black;" href="@Url.Action("Details", "Page", new { id = 1 })">Product 1</a></h3>
+                <h3><a style="color:black;" th:href="@{/product/details/{id}(id=${favorite.product.id})}">[[${favorite.productName}]]</a></h3>
               </td>
               <td class="price">
-                $100.00
+                $[[${favorite.price}]]
               </td>
             </tr><!-- END TR-->
-
-            <tr class="text-center">
-              <td class="product-remove">
-                <form method="post" asp-controller="Favorite" asp-action="RemoveFromFavorites" asp-route-favoriteId="2">
-                  <button style="width: 30px; height: 30px; background-color: white; border: 1px solid #ccc; border-radius: 0;" type="submit" class="btn btn-danger">
-                    <span class="ion-ios-close"></span>
-                  </button>
-                </form>
-              </td>
-              <td class="image-prod">
-                <img src="/images/product-2.jpg" alt="" style="width:150px; height:150px;">
-              </td>
-              <td class="product-name">
-                <h3><a style="color:black;" href="@Url.Action("Details", "Page", new { id = 2 })">Product 2</a></h3>
-              </td>
-              <td class="price">
-                $150.00
-              </td>
-            </tr><!-- END TR-->
-
-            <tr class="text-center">
-              <td class="product-remove">
-                <form method="post" asp-controller="Favorite" asp-action="RemoveFromFavorites" asp-route-favoriteId="3">
-                  <button style="width: 30px; height: 30px; background-color: white; border: 1px solid #ccc; border-radius: 0;" type="submit" class="btn btn-danger">
-                    <span class="ion-ios-close"></span>
-                  </button>
-                </form>
-              </td>
-              <td class="image-prod">
-                <img src="/images/product-3.jpg" alt="" style="width:150px; height:150px;">
-              </td>
-              <td class="product-name">
-                <h3><a style="color:black;" href="@Url.Action("Details", "Page", new { id = 3 })">Product 3</a></h3>
-              </td>
-              <td class="price">
-                $200.00
-              </td>
-            </tr><!-- END TR-->
+            <!-- Kết thúc lặp -->
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
     <div class="shoping__cart__btns d-flex justify-content-between">
       <p class="mb-0">
-        <button style="border: 1px solid white; background-color:white; width:200px;" type="submit" class="primary-btn cart-btn" href="#">CONTINUE SHOPPING</button>
+        <a style="border: 1px solid white; background-color:white; width:200px;" href="/category" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
       </p>
-      <form method="post" asp-controller="Favorite" asp-action="ClearFavorites">
+      <form method="post" th:action="@{/favorite/clear}">
         <button style="border: 1px solid white; background-color:white; width:200px;" type="submit" class="primary-btn cart-btn">
           <span class="icon_loading"></span>
-          CLEAR Favorites
+          CLEAR FAVORITES
         </button>
       </form>
     </div>
@@ -137,7 +106,66 @@
 
 
 <div th:insert="/include/fragments :: script"></div>
+<style>
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
 
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+  .alert-danger {
+    background-color: red; /* Blue background color */
+    border: 1px solid red;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var successAlert = document.getElementById('successAlert');
+    var errorAlert = document.getElementById('errorAlert');
+
+    if (successAlert) {
+      successAlert.classList.add('alert-show');
+      setTimeout(function() {
+        successAlert.classList.add('fade-out');
+        setTimeout(function() {
+          successAlert.style.display = 'none';
+        }, 1000); // thời gian khớp với hiệu ứng fade-out
+      }, 3000); // thời gian hiển thị thông báo thành công
+    }
+
+    if (errorAlert) {
+      errorAlert.classList.add('alert-show');
+      setTimeout(function() {
+        errorAlert.classList.add('fade-out');
+        setTimeout(function() {
+          errorAlert.style.display = 'none';
+        }, 1000); // thời gian khớp với hiệu ứng fade-out
+      }, 3000); // thời gian hiển thị thông báo lỗi
+    }
+  });
+</script>
 
 </body>
 </html>

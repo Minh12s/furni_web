@@ -41,10 +41,7 @@ public class HomeController extends BaseController {
     public String Thankyou(){
         return "User/thankyou";
     }
-    @GetMapping("/favorite")
-    public String Favorite(){
-        return "User/favorite";
-    }
+
 
     @GetMapping("/search")
     public String search(@RequestParam("searchString") String searchString, Model model) {
