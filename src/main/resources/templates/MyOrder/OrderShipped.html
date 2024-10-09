@@ -103,66 +103,75 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>2024-07-01</td>
-                <td>$150.00</td>
-                <td>John Doe</td>
-                <td>Express</td>
-                <td>Credit Card</td>
-                <td>Yes</td>
-                <td>Confirmed</td>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
+                <td th:text="${order.totalAmount}"></td>
+                <td th:text="${order.fullName}"></td>
+                <td th:text="${order.shippingMethod}"></td>
+                <td th:text="${order.paymentMethod}"></td>
+                <td th:text="${order.isPaid}"></td>
+                <td th:text="${order.status}"></td>
                 <td>
-                    <button asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="1" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="1">Detail</a>
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>2024-07-05</td>
-                <td>$250.00</td>
-                <td>Jane Smith</td>
-                <td>Standard</td>
-                <td>PayPal</td>
-                <td>No</td>
-                <td>Pending</td>
-                <td>
-                    <button asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="2" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="2">Detail</a>
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>2024-07-10</td>
-                <td>$75.00</td>
-                <td>Mike Johnson</td>
-                <td>Express</td>
-                <td>Bank Transfer</td>
-                <td>Yes</td>
-                <td>Shipping</td>
-                <td>
-                    <button asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="3" style="padding: 7px 7px;" class="site-btn" type="submit">
-                        <a style="color: white;" asp-controller="MyOrder" asp-action="OrderDetail" asp-route-id="3">Detail</a>
+                    <button style="padding: 7px 7px;" class="site-btn">
+                        <a style="color: white;" th:href="@{/MyOrder/OrderDetail/{id}(id=${order.id})}">Detail</a>
                     </button>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 20px;">
-        <ul class="pagination">
-            <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">3</a>
-            </li>
-        </ul>
+    <div class="row mt-5">
+        <div class="col text-center">
+            <div class="block-27">
+                <ul>
+                    <!-- Nút quay lại trang trước đó -->
+                    <li th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a th:href="@{/MyOrder/OrderShipped(page=${currentPage - 1}, size=${pageSize})}" th:if="${currentPage > 0}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Hiển thị trang đầu tiên nếu trang hiện tại không phải trang đầu -->
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{/MyOrder/OrderShipped(page=0, size=${pageSize})}" th:text="1"></a>
+                    </li>
+
+                    <!-- Hiển thị ba chấm nếu trang hiện tại lớn hơn 2 -->
+                    <li th:if="${currentPage > 2}">
+                        <span>...</span>
+                    </li>
+
+                    <!-- Hiển thị trang trước, hiện tại, và sau -->
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/MyOrder/OrderShipped(page=${currentPage - 1}, size=${pageSize})}" th:text="${currentPage}"></a>
+                    </li>
+                    <li th:classappend="active">
+                        <a th:text="${currentPage + 1}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/MyOrder/OrderShipped(page=${currentPage + 1}, size=${pageSize})}" th:text="${currentPage + 2}"></a>
+                    </li>
+
+                    <!-- Hiển thị ba chấm nếu có thêm các trang phía sau -->
+                    <li th:if="${currentPage < totalPages - 3}">
+                        <span>...</span>
+                    </li>
+
+                    <!-- Hiển thị trang cuối -->
+                    <li th:if="${currentPage < totalPages - 2}">
+                        <a th:href="@{/MyOrder/OrderShipped(page=${totalPages - 1}, size=${pageSize})}" th:text="${totalPages}"></a>
+                    </li>
+
+                    <!-- Nút chuyển đến trang tiếp theo -->
+                    <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a th:href="@{/MyOrder/OrderShipped(page=${currentPage + 1}, size=${pageSize})}" th:if="${currentPage < totalPages - 1}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 

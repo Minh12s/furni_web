@@ -17,6 +17,9 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
     List<Orders> findByUserId(int userId);
     Page<Orders> findOderByUserId(int userId, Pageable pageable); // Thêm tham số Pageable
 
+    Page<Orders> findByUserIdAndStatus(Integer userId, String status, Pageable pageable);
+
+
     @Query("SELECT o FROM Orders o WHERE " +
             "(:ShippingMethod IS NULL OR o.shippingMethod LIKE %:ShippingMethod%) AND " +
             "(:TotalAmount IS NULL OR o.totalAmount = :TotalAmount) AND " +
