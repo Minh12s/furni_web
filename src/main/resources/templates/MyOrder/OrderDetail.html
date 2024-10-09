@@ -120,24 +120,32 @@
                         type="submit"
                         class="btn btn-danger"
                         style="
-        padding: 5px 10px;
-        border-radius: 5px;
-        height: 47px;
-        background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
-        color: white;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-    "
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    height: 47px;
+ background: linear-gradient(90deg,
+                        red, orange, yellow, green, blue, indigo, violet,
+                        pink, cyan, lime, magenta, teal, coral, navy,
+                        lightblue, lightgreen, peachpuff, gold, plum, chocolate,
+                        darkred, darkorange, darkkhaki, darkgreen, darkblue, purple,
+                        maroon, olive, silver, lavender, salmon, tomato,
+                        khaki, ivory, seashell, wheat, mintcream, azure,
+                        skyblue, royalblue, steelblue, orchid, deeppink, mediumvioletred,
+                        springgreen, forestgreen, lemonchiffon, beige, bisque, papayawhip
+                    );                    background-size: 400% 400%; /* Kích thước gradient để tạo hiệu ứng chuyển động */
+                    color: white;
+                    border: none;
+                    font-weight: bold;
+                    cursor: pointer;
+                  transition: transform 0.2s ease, background-position 2s ease;
+                    animation: gradient-animation 6s ease infinite;
+                "
                         onmouseover="this.style.transform='scale(1.05)';"
                         onmouseout="this.style.transform='scale(1)';"
                 >
                     Complete
                 </button>
-
             </form>
-
         </div>
 
     </div>
@@ -155,6 +163,17 @@
 <div th:insert="/include/fragments :: script"></div>
 
 <style>
+    @keyframes gradient-animation {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
     .alert {
         text-align: center;
         margin: 20px auto;
