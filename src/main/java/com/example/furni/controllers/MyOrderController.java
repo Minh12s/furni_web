@@ -72,14 +72,7 @@ public class MyOrderController extends BaseController {
         return "redirect:/MyOrder/MyOrder";
     }
 
-    @GetMapping("/Profile")
-    public String Profile(){
-        return "MyOrder/Profile";
-    }
-    @GetMapping("/EditProfile")
-    public String EditProfile(){
-        return "MyOrder/EditProfile";
-    }
+
     @GetMapping("/OrderCancel")
     public String OrderCancel(HttpServletRequest request,
                               Model model,
