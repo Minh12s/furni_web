@@ -21,8 +21,6 @@ public class DashboardService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
-    private OrderCancelRepository orderCancelRepository;
-    @Autowired
     private OrderReturnRepository orderReturnRepository;
 
     // lấy tổng tất cả khách hàng , trừ admin
@@ -55,10 +53,10 @@ public class DashboardService {
         return reviewRepository.findByStatus("pending", pageable);
     }
     // Lấy tất cả order bị huỷ
-    public Page<OrderCancel> getAllOrderCancels(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return orderCancelRepository.findAll(pageable);
-    }
+//    public Page<OrderCancel> getAllOrderCancels(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return orderCancelRepository.findAll(pageable);
+//    }
     // Lấy tất cả order bị huỷ
     public Page<OrderReturn> getAllOrderReturn(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

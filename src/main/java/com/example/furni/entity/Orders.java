@@ -51,8 +51,11 @@ public class Orders {
     private LocalDateTime schedule;
     @Column(name = "order_code", unique = true)
     private String orderCode;
+    @Column(name = "cancel_reason")
+    private String cancelReason;
 
-    public Orders(int id, User user, LocalDateTime orderDate, double totalAmount, String status, String isPaid, String province, String district, String ward, String addressDetail, String fullName, String email, String telephone, String paymentMethod, String shippingMethod, String note, LocalDateTime schedule, String orderCode) {
+
+    public Orders(int id, User user, LocalDateTime orderDate, double totalAmount, String status, String isPaid, String province, String district, String ward, String addressDetail, String fullName, String email, String telephone, String paymentMethod, String shippingMethod, String note, LocalDateTime schedule, String orderCode, String cancelReason) {
         this.id = id;
         this.user = user;
         this.orderDate = orderDate;
@@ -71,6 +74,7 @@ public class Orders {
         this.note = note;
         this.schedule = schedule;
         this.orderCode = orderCode;
+        this.cancelReason = cancelReason;
     }
 
     public int getId() {
@@ -208,6 +212,7 @@ public class Orders {
     public void setSchedule(LocalDateTime schedule) {
         this.schedule = schedule;
     }
+
     public String getOrderCode() {
         return orderCode;
     }
@@ -215,6 +220,15 @@ public class Orders {
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
     }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
     public Orders(){
     }
 

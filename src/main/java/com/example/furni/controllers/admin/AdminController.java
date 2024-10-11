@@ -35,7 +35,7 @@ public class AdminController {
 
         Page<Orders> pendingOrdersPage = dashboardService.getPendingOrders(orderPage, size);
         Page<Review> pendingReviewsPage = dashboardService.getPendingReviews(reviewPage, size);
-        Page<OrderCancel> cancelledOrdersPage = dashboardService.getAllOrderCancels(cancelPage, size);
+//        Page<OrderCancel> cancelledOrdersPage = dashboardService.getAllOrderCancels(cancelPage, size);
         Page<OrderReturn> returnOrdersPage = dashboardService.getAllOrderReturn(returnPage, size);
         Page<Product> outOfStockProductsPage = dashboardService.getOutOfStockProducts(outOfStockPage, size);
 
@@ -45,13 +45,13 @@ public class AdminController {
 
         model.addAttribute("pendingOrders", pendingOrdersPage.getContent());
         model.addAttribute("pendingReviews", pendingReviewsPage.getContent());
-        model.addAttribute("cancelledOrders", cancelledOrdersPage.getContent());
+//        model.addAttribute("cancelledOrders", cancelledOrdersPage.getContent());
         model.addAttribute("returnOrders", returnOrdersPage.getContent());
         model.addAttribute("outOfStockProducts", outOfStockProductsPage.getContent());
 
         model.addAttribute("totalOrderPages", pendingOrdersPage.getTotalPages());
         model.addAttribute("totalReviewPages", pendingReviewsPage.getTotalPages());
-        model.addAttribute("totalOrderCancelPages", cancelledOrdersPage.getTotalPages());
+//        model.addAttribute("totalOrderCancelPages", cancelledOrdersPage.getTotalPages());
         model.addAttribute("totalOrderReturnPages", returnOrdersPage.getTotalPages());
         model.addAttribute("totalOutOfStockPages", outOfStockProductsPage.getTotalPages());
 

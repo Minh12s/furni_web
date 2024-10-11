@@ -1,46 +1,37 @@
 package com.example.furni.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "favorite")
+@IdClass(FavoriteId.class) // Composite key từ lớp FavoriteId
 public class Favorite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "fk_favorite_product"))
     private Product product;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_favorite_user"))
     private User user;
 
-    @Column(name = "product_name")
-    private String productName;
-    @Column(name = "thumbnail", columnDefinition = "LONGTEXT")
-    private String thumbnail;
-    @Column(name = "price")
-    private double price;
+    public Favorite() {
+    }
 
-    public Favorite(int id, Product product, User user, String productName, String thumbnail, double price) {
-        this.id = id;
+    public Favorite(Product product, User user) {
         this.product = product;
         this.user = user;
-        this.productName = productName;
-        this.thumbnail = thumbnail;
-        this.price = price;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    // Getters and setters
     public Product getProduct() {
         return product;
     }
@@ -55,32 +46,5 @@ public class Favorite {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Favorite(){
     }
 }

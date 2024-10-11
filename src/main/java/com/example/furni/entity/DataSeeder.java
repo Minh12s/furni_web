@@ -95,14 +95,14 @@ public class DataSeeder {
     private void seedCategories() {
         if (categoryRepository.count() == 0) {
             List<Category> categories = List.of(
-                    new Category(1,"Corner Sofa", "corner-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
-                    new Category(2,"Sofa Bed", "sofa-bed", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
-                    new Category(3,"Single Sofa", "single-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
-                    new Category(4,"Sleeper Sofa", "sleeper-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
-                    new Category(5,"L-Shaped Sofa", "l-shaped-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
-                    new Category(6,"Bench Sofa", "bench-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
-                    new Category(7,"Recliner Sofa", "recliner-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1)),
-                    new Category(8,"Classic Sofa", "classic-sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1))
+                    new Category(1,"Corner Sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1),"corner-sofa"),
+                    new Category(2,"Sofa Bed",encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1), "sofa-bed"),
+                    new Category(3,"Single Sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1),"single-sofa"),
+                    new Category(4,"Sleeper Sofa",encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1), "sleeper-sofa"),
+                    new Category(5,"L-Shaped Sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1),"l-shaped-sofa"),
+                    new Category(6,"Bench Sofa",encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1), "bench-sofa"),
+                    new Category(7,"Recliner Sofa",encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1), "recliner-sofa"),
+                    new Category(8,"Classic Sofa", encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1), "classic-sofa")
             );
             categoryRepository.saveAll(categories);
         }
