@@ -3,6 +3,7 @@ package com.example.furni.controllers;
 import com.example.furni.controllers.User.BaseController;
 import com.example.furni.entity.OrderProduct;
 import com.example.furni.entity.Orders;
+import com.example.furni.entity.User;
 import com.example.furni.service.CartService;
 import com.example.furni.service.OrderService;
 import com.example.furni.service.myOrderService;
@@ -27,6 +28,8 @@ public class MyOrderController extends BaseController {
     private OrderService orderService;
     @Autowired
     private myOrderService myOrderService;
+    @Autowired
+    private UserService userService;
     @GetMapping("/MyOrder")
     public String myOrder(
             HttpServletRequest request,
@@ -41,6 +44,13 @@ public class MyOrderController extends BaseController {
         // Kiểm tra userId để tránh lỗi NullPointerException
         if (userId == null) {
             return "redirect:/login"; // Điều hướng đến trang login nếu user chưa đăng nhập
+        }
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
         }
 
         // Tạo Pageable với các tham số phân trang và sắp xếp
@@ -87,6 +97,13 @@ public class MyOrderController extends BaseController {
         if (userId == null) {
             return "redirect:/login"; // Điều hướng đến trang login nếu user chưa đăng nhập
         }
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
 
         // Tạo Pageable với các tham số phân trang và sắp xếp
         Sort.Order order = new Sort.Order(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]);
@@ -117,7 +134,13 @@ public class MyOrderController extends BaseController {
         if (userId == null) {
             return "redirect:/login"; // Điều hướng đến trang login nếu user chưa đăng nhập
         }
-
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
         // Tạo Pageable với các tham số phân trang và sắp xếp
         Sort.Order order = new Sort.Order(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(order));
@@ -149,6 +172,13 @@ public class MyOrderController extends BaseController {
         if (userId == null) {
             return "redirect:/login"; // Điều hướng đến trang login nếu user chưa đăng nhập
         }
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
 
         // Tạo Pageable với các tham số phân trang và sắp xếp
         Sort.Order order = new Sort.Order(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]);
@@ -178,7 +208,13 @@ public class MyOrderController extends BaseController {
         if (userId == null) {
             return "redirect:/login"; // Điều hướng đến trang login nếu user chưa đăng nhập
         }
-
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
         // Tạo Pageable với các tham số phân trang và sắp xếp
         Sort.Order order = new Sort.Order(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(order));
@@ -207,6 +243,13 @@ public class MyOrderController extends BaseController {
         // Kiểm tra userId để tránh lỗi NullPointerException
         if (userId == null) {
             return "redirect:/login"; // Điều hướng đến trang login nếu user chưa đăng nhập
+        }
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
         }
 
         // Tạo Pageable với các tham số phân trang và sắp xếp
@@ -238,7 +281,13 @@ public class MyOrderController extends BaseController {
         if (userId == null) {
             return "redirect:/login"; // Điều hướng đến trang login nếu user chưa đăng nhập
         }
-
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
         // Tạo Pageable với các tham số phân trang và sắp xếp
         Sort.Order order = new Sort.Order(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(order));
@@ -255,16 +304,34 @@ public class MyOrderController extends BaseController {
         return "MyOrder/OrderComplete";
     }
     @GetMapping("/OrderReturn")
-    public String OrderReturn(){
+    public String OrderReturn(Model model, HttpSession session){
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
         return "MyOrder/OrderReturn";
     }
     @GetMapping("/OrderDetail/{id}")
-    public String OrderDetail(@PathVariable("id") int id, Model model){
+    public String OrderDetail(@PathVariable("id") int id, Model model , HttpSession session){
         Orders order = orderService.getOrderById(id);
         if (order != null) {
             List<OrderProduct> orderProducts = orderService.getOrderProductsByOrderId(id);
             model.addAttribute("order", order);
             model.addAttribute("orderProducts", orderProducts);
+        }
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
         }
         return "MyOrder/OrderDetail";
     }
@@ -273,11 +340,29 @@ public class MyOrderController extends BaseController {
         return "MyOrder/Review";
     }
     @GetMapping("/RequestRefund")
-    public String RequestRefund(){
+    public String RequestRefund(Model model, HttpSession session){
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
         return "MyOrder/RequestRefund";
     }
     @GetMapping("/ReasonCancel")
-    public String ReasonCancel(){
+    public String ReasonCancel(Model model, HttpSession session){
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
         return "MyOrder/ReasonCancel";
     }
 

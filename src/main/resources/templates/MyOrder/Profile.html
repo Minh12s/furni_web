@@ -40,9 +40,9 @@
     </div>
     <div class="sidebar">
 
-        <img src=""
-             alt="Avatar" class="profile-img">
-        <div class="username">Minh</div>
+        <img th:src="'data:image/jpeg;base64,' + ${user.thumbnail}" alt="Avatar" class="profile-img">
+
+        <div class="username" th:text="${user.fullName}">Minh</div>
 
         <form asp-controller="Page" asp-action="Logout" method="post">
             <button type="submit" class="logout-button" style="background-color: #FFA45C;">Log out</button>
@@ -79,22 +79,22 @@
         <form class="form2" href="/MyOrder/EditProfile">
             <div class="my-profile-item">
                 <h3 class="my-profile-item-title">Full name</h3>
-                <div class="my-profile-item-info">abc</div>
+                <div class="my-profile-item-info" th:text="${user.fullName}">Full Name Placeholder</div>
             </div>
 
             <div class="my-profile-item">
                 <h3 class="my-profile-item-title">Email</h3>
-                <div class="my-profile-item-info">abc@gmail.com</div>
+                <div class="my-profile-item-info" th:text="${user.email}">Email Placeholder</div>
             </div>
 
             <div class="my-profile-item">
                 <h3 class="my-profile-item-title">Telephone</h3>
-                <div class="my-profile-item-info" style="color: #9e9e9e">123456789</div>
+                <div class="my-profile-item-info" th:text="${user.phoneNumber}">Phone Placeholder</div>
             </div>
 
             <div class="my-profile-item">
                 <h3 class="my-profile-item-title">Address</h3>
-                <div class="my-profile-item-info" style="color: #9e9e9e">hanoi</div>
+                <div class="my-profile-item-info" th:text="${user.address}">Address Placeholder</div>
             </div>
 
 

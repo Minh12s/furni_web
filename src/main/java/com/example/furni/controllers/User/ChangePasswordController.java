@@ -27,6 +27,13 @@ public class ChangePasswordController extends BaseController {
             return "redirect:/login";
         }
 
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
         // Hiển thị thông báo thành công hoặc lỗi (nếu có)
         String successMessage = (String) session.getAttribute("successMessage");
         String errorMessage = (String) session.getAttribute("errorMessage");
