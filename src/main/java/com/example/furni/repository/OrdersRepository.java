@@ -16,9 +16,27 @@ import java.util.List;
 public interface OrdersRepository extends JpaRepository<Orders, Integer> {
     List<Orders> findByUserId(int userId);
     Page<Orders> findOderByUserId(int userId, Pageable pageable); // Thêm tham số Pageable
+    // Lấy các đơn hàng theo trạng thái
+    Page<Orders> findByStatus(String status, Pageable pageable);
 
     Page<Orders> findByUserIdAndStatus(Integer userId, String status, Pageable pageable);
 
+    @Query("SELECT o.cancelReason, COUNT(o) FROM Orders o GROUP BY o.cancelReason")
+    List<Object[]> countByReason();
+    // tìm các lý do khác
+    @Query("SELECT o FROM Orders o WHERE o.cancelReason NOT IN :popularReasons")
+    Page<Orders> findByCancelReasonNotIn(@Param("popularReasons") List<String> popularReasons, Pageable pageable);
+
+    @Query("SELECT o FROM Orders o WHERE "
+            + "(:email IS NULL OR o.email LIKE %:email%) AND "
+            + "(:telephone IS NULL OR o.telephone LIKE %:telephone%) AND "
+            + "(:totalAmount IS NULL OR ABS(o.totalAmount - :totalAmount) < 0.01) AND "
+            + "(:search IS NULL OR o.cancelReason LIKE %:search%)")
+    Page<Orders> findByFilters(@Param("email") String email,
+                                    @Param("telephone") String telephone,
+                                    @Param("totalAmount") Double totalAmount,
+                                    @Param("search") String search,
+                                    Pageable pageable);
 
     @Query("SELECT o FROM Orders o WHERE " +
             "(:ShippingMethod IS NULL OR o.shippingMethod LIKE %:ShippingMethod%) AND " +
@@ -38,43 +56,38 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 
 
     // tính tổng total amount tất cả đơn hàng có status là complete
-    @Query("SELECT SUM(o.totalAmount) FROM Orders o WHERE o.status = 'complete'")
+    @Query("SELECT SUM(op.price * op.qty) " +
+            "FROM Orders o " +
+            "JOIN OrderProduct op ON op.order = o " +
+            "WHERE o.status = 'complete' " +
+            "AND op.status = 0")
     Double getTotalAmountOfCompletedOrders();
+
     // Lấy các đơn hàng có status là 'pending'
     @Query("SELECT o FROM Orders o WHERE o.status = 'pending'")
     Page<Orders> findPendingOrders(Pageable pageable);
 
     // thống kê doanh số theo năm
     @Query("SELECT MONTH(o.orderDate), SUM(op.qty) " +
-            "FROM Orders o JOIN OrderProduct op ON o.id = op.order.id " +
-            "WHERE o.status = 'complete' AND YEAR(o.orderDate) = :year " +
+            "FROM Orders o " +
+            "JOIN OrderProduct op ON op.order = o " +
+            "WHERE o.status = 'complete' " +
+            "AND op.status = 0 " +
+            "AND YEAR(o.orderDate) = :year " +
             "GROUP BY MONTH(o.orderDate) " +
             "ORDER BY MONTH(o.orderDate)")
     List<Object[]> findCompletedOrdersByYear(@Param("year") int year);
+
     // thống kê doanh thu theo năm
-    @Query("SELECT MONTH(o.orderDate), SUM(o.totalAmount) " +
+    @Query("SELECT MONTH(o.orderDate), SUM(op.price * op.qty) " +
             "FROM Orders o " +
-            "WHERE o.status = 'complete' AND YEAR(o.orderDate) = :year " +
+            "JOIN OrderProduct op ON op.order = o " +
+            "WHERE o.status = 'complete' " +
+            "AND op.status = 0 " +
+            "AND YEAR(o.orderDate) = :year " +
             "GROUP BY MONTH(o.orderDate) " +
             "ORDER BY MONTH(o.orderDate)")
     List<Object[]> findTotalRevenueByYear(@Param("year") int year);
-    // Thống kê doanh số theo ngày
-    @Query("SELECT o.orderDate, SUM(op.qty) " +
-            "FROM Orders o JOIN OrderProduct op ON o.id = op.order.id " +
-            "WHERE o.status = 'complete' AND o.orderDate BETWEEN :startDate AND :endDate " +
-            "GROUP BY o.orderDate " +
-            "ORDER BY o.orderDate")
-    List<Object[]> findProductsSoldByDate(@Param("startDate") LocalDateTime startDate,
-                                          @Param("endDate") LocalDateTime endDate);
-
-    // Thống kê doanh thu theo ngày
-    @Query("SELECT o.orderDate, SUM(o.totalAmount) " +
-            "FROM Orders o " +
-            "WHERE o.status = 'complete' AND o.orderDate BETWEEN :startDate AND :endDate " +
-            "GROUP BY o.orderDate " +
-            "ORDER BY o.orderDate")
-    List<Object[]> findRevenueByDate(@Param("startDate") LocalDateTime startDate,
-                                     @Param("endDate") LocalDateTime endDate);
     // thống kê biểu đò tròn tính số lượng status order
     @Query("SELECT o.status, COUNT(o) FROM Orders o GROUP BY o.status")
     List<Object[]> countOrdersByStatus();

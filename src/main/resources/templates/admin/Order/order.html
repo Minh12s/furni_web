@@ -1,44 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
   <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
     <ul>
       <li style="margin-left:-50px;">Admin</li>
       <li>Order</li>
     </ul>
-  </div>
-</section>
-<section class="is-hero-bar">
-  <div class="flex flex-col md:flex-row items-center justify-start">
-
-    <div class="col-sm-2" style="margin-right: 5px;">
-      <button onclick="myApp.printTable()" class="btn btn-add">
-        <i class="fas fa-file-pdf"></i>
-        Print PDF
-      </button>
-    </div>
-
-
-    <div class="col-sm-2" style="margin-right: 5px;">
-      <button onclick="exportFacilitiesToExcel()" class="btn btn-add">
-        <i class="fas fa-file-excel"></i>
-        Export Excel
-      </button>
-    </div>
-
-
-    <div class="col-sm-2">
-      <button onclick="exportExcel()" class="btn btn-add">
-        <i class="fas fa-file-excel"></i>
-        Excel Filtered
-      </button>
-    </div>
   </div>
 </section>
 <div id="successAlert" class="alert alert-success" th:if="${successMessage}">
@@ -97,13 +70,18 @@
           <option value="100" th:selected="${size == 100}">100</option>
         </select>
 
-        <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
         <input type="hidden" name="page" th:value="${ordersPage.number}">
       </form>
-
     </header>
+
     <div class="card-content">
-      <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+      <!-- Kiểm tra xem có không có đơn hàng nào -->
+      <div th:if="${#lists.isEmpty(ordersPage.content)}" style="text-align: center; color: red;">
+        No orders available.
+      </div>
+
+      <!-- Hiển thị bảng chỉ khi có dữ liệu -->
+      <table th:if="${!#lists.isEmpty(ordersPage.content)}">
         <thead>
         <tr>
           <th width="10"><input type="checkbox"></th>
@@ -129,14 +107,12 @@
           <td th:text="${order.paymentMethod}"></td>
           <td th:text="${order.isPaid ? 'paid' : 'unpaid'}"></td>
           <td>
-              <span th:text="${order.status}"
-                   th:class="${statusClass[order.status]}">
-             </span>
+            <span th:text="${order.status}"
+                  th:class="${statusClass[order.status]}">
+            </span>
           </td>
-
           <td class="actions-cell">
             <div class="buttons right nowrap">
-
               <a th:href="@{/admin/detailorder/{id}(id=${order.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-eye"></i></span>
               </a>
@@ -145,7 +121,9 @@
         </tr>
         </tbody>
       </table>
-      <div class="table-pagination">
+
+      <!-- Phân trang chỉ hiển thị khi có dữ liệu -->
+      <div class="table-pagination" th:if="${!#lists.isEmpty(ordersPage.content)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
             <!-- Nút về trang đầu tiên với icon -->
@@ -162,7 +140,6 @@
               <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
             </button>
 
-            <!-- Dấu "..." trước nếu cần -->
             <span th:if="${ordersPage.number > 3}">...</span>
 
             <!-- Các nút phân trang -->
@@ -174,7 +151,6 @@
                     th:onclick="|window.location.href='/admin/orders?page=' + ${i} + '&size=' + ${ordersPage.size}|">
             </button>
 
-            <!-- Dấu "..." sau nếu cần -->
             <span th:if="${ordersPage.number < ordersPage.totalPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
@@ -194,7 +170,6 @@
           <small th:text="'Page ' + (${ordersPage.number} + 1) + ' of ' + ${ordersPage.totalPages}"></small>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -319,7 +294,7 @@
 </script>
 
 
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
   <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
     <ul>
@@ -176,7 +176,7 @@
     font-size: 15px;
   }
 </style>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

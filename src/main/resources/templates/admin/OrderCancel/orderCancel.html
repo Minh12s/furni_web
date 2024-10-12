@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
     <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
         <ul>
@@ -40,43 +40,26 @@
             </div>
         </div>
 
-        <!-- Thẻ card cho lý do "Other" nếu tồn tại -->
-        <div th:if="${reasonCounts['Other'] != null ? reasonCounts['Other'] : 0}" class="card">
+        <!-- Thẻ card cho lý do "Other", luôn hiển thị -->
+        <a th:href="@{/admin/orderCancel/otherReasons}" class="card">
             <div class="card-content">
                 <div class="flex items-center justify-between">
                     <div class="widget-label">
                         <h3>Other</h3>
-                        <!-- Hiển thị số lượng lý do "Other" -->
-                        <h1 th:text="${reasonCounts['Other']}"></h1>
+                        <!-- Hiển thị số lượng lý do "Other", nếu không có thì là 0 -->
+                        <h1 th:text="${reasonCounts['Other'] != null ? reasonCounts['Other'] : 0}"></h1>
                     </div>
                     <span>
-                    <span class="icon widget-icon text-green-500">
-                        <i class="mdi mdi-help-circle mdi-48px"></i>
-                    </span>
+                <span class="icon widget-icon text-green-500">
+                    <i class="mdi mdi-help-circle mdi-48px"></i>
                 </span>
+            </span>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 
-    <section class="is-hero-bar">
-    <div class="flex flex-row items-center">
-        <!-- Nút "Print PDF" -->
-        <button onclick="myApp.printTable()" class="btn btn-add ml-2">
-            <i class="fas fa-file-pdf"></i>
-            Print PDF
-        </button>
-        <!-- Nút "Export Excel" -->
-        <button onclick="exportReviewToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
-            <i class="fas fa-file-excel"></i>
-            Export Excel
-        </button>
-        <button onclick="exportExcel()" class="btn btn-add" style="margin-left:10px;">
-            <i class="fas fa-file-excel"></i>
-            Excel Filtered
-        </button>
-    </div>
-</section>
+
     <form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" method="get" action="/admin/orderCancel">
         <div class="input-group input-group-sm" style="margin-right: -23px; margin-bottom: 10px; margin-left: 19px;">
             <input value="" class="form-control" type="text" name="email" placeholder="Email" style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 120px; margin-left: 2px;" />
@@ -116,7 +99,10 @@
             </form>
         </header>
         <div class="card-content">
-            <table>
+            <div th:if="${#lists.isEmpty(ordersCancelPage.content)}" style="text-align: center; color: red;">
+                No cancelled orders available.
+            </div>
+            <table th:if="${!#lists.isEmpty(ordersCancelPage.content)}">
                 <thead>
                 <tr>
                     <th class="checkbox-cell">
@@ -125,34 +111,32 @@
                             <span class="check"></span>
                         </label>
                     </th>
-                    <th>ID</th>
-                    <th>Order code</th>
-                    <th>Full name</th>
+                    <th>Order Code</th>
                     <th>Email</th>
                     <th>Telephone</th>
-                    <th>Total amount</th>
-                    <th>Reason</th>
+                    <th>Total Amount</th>
+                    <th>Cancel Reason</th>
+                    <th>Order Date</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="orderCancel :${ordersCancelPage.content}">
+                <tr th:each="order : ${ordersCancelPage.content}">
                     <td class="checkbox-cell">
                         <label class="checkbox">
                             <input type="checkbox">
                             <span class="check"></span>
                         </label>
                     </td>
-                    <td th:text="${orderCancel.id}"></td>
-                    <td th:text="${orderCancel.order.orderCode != null ? orderCancel.order.orderCode : 'null'}"></td>
-                    <td th:text="${orderCancel.order.fullName}"></td>
-                    <td th:text="${orderCancel.order.email}"></td>
-                    <td th:text="${orderCancel.order.telephone}"></td>
-                    <td th:text="${orderCancel.order.totalAmount}"></td>
-                    <td th:text="${orderCancel.reason}"></td>
+                    <td th:text="${order.orderCode}">Order Code</td>
+                    <td th:text="${order.email}">Email</td>
+                    <td th:text="${order.telephone}">Telephone</td>
+                    <td th:text="${order.totalAmount}">Total Amount</td>
+                    <td th:text="${order.cancelReason}">Cancel Reason</td>
+                    <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
                     <td class="actions-cell">
                         <div class="buttons right nowrap">
-                            <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.order.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+                            <a th:href="@{/admin/detailorder/{id}(id=${order.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                                 <span class="icon"><i class="mdi mdi-eye"></i></span>
                             </a>
                         </div>
@@ -160,7 +144,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="table-pagination">
+            <div class="table-pagination" th:if="${!#lists.isEmpty(ordersCancelPage.content)}">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
                         <!-- Nút về trang đầu tiên với icon -->
@@ -283,7 +267,7 @@
         margin-right: 10px; /* Khoảng cách giữa các nút */
     }
 </style>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

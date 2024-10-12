@@ -58,38 +58,6 @@ public class DataStatisticsController {
 
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/SalesByDateChart")
-    public ResponseEntity<Map<String, Object>> getSalesByDateData(@RequestParam LocalDate startDate,
-                                                                  @RequestParam LocalDate endDate) {
-        // Chuyển đổi LocalDate thành LocalDateTime
-        LocalDateTime startDateTime = startDate.atStartOfDay(); // bắt đầu lúc 00:00
-        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX); // kết thúc lúc 23:59:59
-
-        Map<LocalDateTime, Integer> productsSold = dataStatisticsService.getProductsSoldByDate(startDateTime, endDateTime);
-
-        // Chuyển đổi dữ liệu sang định dạng cho biểu đồ
-        Map<String, Object> response = new HashMap<>();
-        response.put("labels", productsSold.keySet());
-        response.put("productsSold", productsSold.values());
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/RevenueByDateChart")
-    public ResponseEntity<Map<String, Object>> getRevenueByDateData(@RequestParam LocalDate startDate,
-                                                                    @RequestParam LocalDate endDate) {
-        // Chuyển đổi LocalDate thành LocalDateTime
-        LocalDateTime startDateTime = startDate.atStartOfDay();
-        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
-
-        Map<LocalDateTime, Double> revenue = dataStatisticsService.getRevenueByDate(startDateTime, endDateTime);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("labels", revenue.keySet());
-        response.put("revenue", revenue.values());
-
-        return ResponseEntity.ok(response);
-    }
     @GetMapping("/OrderStatusStatistics")
     public ResponseEntity<Map<String, Integer>> getOrderStatusStatistics() {
         Map<String, Integer> statusCounts = dataStatisticsService.getOrderStatusStatistics();

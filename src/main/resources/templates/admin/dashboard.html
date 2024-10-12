@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
     <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <style>
   .image-container {
     margin: 10px; /* Khoảng cách giữa các ảnh */
@@ -142,15 +142,6 @@
   </div>
 </section>
 
-<section class="is-hero-bar">
-  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-    <h1 class="title">
-      Dashboard
-    </h1>
-    <button class="button light">Button</button>
-  </div>
-</section>
-
 <section class="section main-section">
   <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
     <div class="card">
@@ -203,7 +194,11 @@
       </a>
     </header>
     <div class="card-content">
-      <table>
+      <!-- Check if there are no products -->
+      <div th:if="${#lists.isEmpty(outOfStockProducts)}" style="text-align: center; color: red;">
+        No out of stock products available.
+      </div>
+      <table th:if="${!#lists.isEmpty(outOfStockProducts)}">
         <thead>
         <tr>
           <th>ProductId</th>
@@ -218,15 +213,15 @@
         <tbody>
         <tr th:each="product : ${outOfStockProducts}">
           <td th:text="${product.id}">1</td>
-          <td><img th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Thumbnail" width="100"
-                   height="100"></td>
+          <td>
+            <img th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Thumbnail" width="100" height="100">
+          </td>
           <td th:text="${product.productName}">Sample Product 1</td>
           <td th:text="${product.price}">$10</td>
           <td th:text="${product.qty}">$10</td>
           <td th:text="${product.category.categoryName}">Category Name</td>
           <td class="actions-cell">
             <div class="buttons right nowrap">
-
               <a th:href="@{/admin/products/productDetail/{id}(id=${product.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-eye"></i></span>
               </a>
@@ -235,24 +230,26 @@
         </tr>
         </tbody>
       </table>
-      <div class="table-pagination">
+
+      <!-- Pagination controls only displayed if there are products -->
+      <div class="table-pagination" th:if="${!#lists.isEmpty(outOfStockProducts)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
-            <!-- Nút về trang đầu tiên với icon -->
+            <!-- First page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOutOfStockPage == 0}"
                     th:onclick="|window.location='?outOfStockPage=0'|">
               <span class="icon"><i class="mdi mdi-page-first"></i></span>
             </button>
 
-            <!-- Nút sang trang trước với icon -->
+            <!-- Previous page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOutOfStockPage == 0}"
                     th:onclick="|window.location='?outOfStockPage=' + (${currentOutOfStockPage} - 1)|">
               <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
             </button>
 
-            <!-- Các nút phân trang -->
+            <!-- Pagination buttons -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, totalOutOfStockPages - 1)}"
                     th:if="${i == 0 || i == totalOutOfStockPages - 1 || (i >= currentOutOfStockPage - 2 && i <= currentOutOfStockPage + 2)}"
@@ -261,20 +258,20 @@
                     th:onclick="|window.location='?outOfStockPage=' + ${i}|">
             </button>
 
-            <!-- Thêm "..." nếu trang hiện tại cách xa trang đầu tiên -->
+            <!-- Add "..." if the current page is far from the first page -->
             <span th:if="${currentOutOfStockPage > 3}">...</span>
 
-            <!-- Thêm "..." nếu trang hiện tại cách xa trang cuối cùng -->
+            <!-- Add "..." if the current page is far from the last page -->
             <span th:if="${currentOutOfStockPage < totalOutOfStockPages - 4}">...</span>
 
-            <!-- Nút sang trang tiếp theo với icon -->
+            <!-- Next page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOutOfStockPage + 1 == totalOutOfStockPages}"
                     th:onclick="|window.location='?outOfStockPage=' + (${currentOutOfStockPage} + 1)|">
               <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
             </button>
 
-            <!-- Nút tới trang cuối với icon -->
+            <!-- Last page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOutOfStockPage + 1 == totalOutOfStockPages}"
                     th:onclick="|window.location='?outOfStockPage=' + (${totalOutOfStockPages - 1})|">
@@ -284,25 +281,27 @@
           <small>Page [[${currentOutOfStockPage + 1}]] of [[${totalOutOfStockPages}]]</small>
         </div>
       </div>
-
-
     </div>
   </div>
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-cart"></i></span>
-       Order pending
+        Order Pending
       </p>
       <a href="#" class="card-header-icon">
         <span class="icon"><i class="mdi mdi-reload"></i></span>
       </a>
     </header>
     <div class="card-content">
-      <table>
+      <!-- Check if there are no pending orders -->
+      <div th:if="${#lists.isEmpty(pendingOrders)}" style="text-align: center; color: red;">
+        No pending orders available.
+      </div>
+      <table th:if="${!#lists.isEmpty(pendingOrders)}">
         <thead>
         <tr>
-          <th>Order ID</th>
+          <th>Order code</th>
           <th>Full Name</th>
           <th>Email</th>
           <th>Order Date</th>
@@ -313,7 +312,7 @@
         </thead>
         <tbody>
         <tr th:each="order : ${pendingOrders}">
-          <td th:text="${order.id}"></td>
+          <td th:text="${order.orderCode}"></td>
           <td th:text="${order.fullName}"></td>
           <td th:text="${order.email}"></td>
           <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
@@ -321,7 +320,6 @@
           <td th:text="${order.status}"></td>
           <td class="actions-cell">
             <div class="buttons right nowrap">
-
               <a th:href="@{/admin/detailorder/{id}(id=${order.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-eye"></i></span>
               </a>
@@ -330,24 +328,26 @@
         </tr>
         </tbody>
       </table>
-      <div class="table-pagination">
+
+      <!-- Pagination controls only displayed if there are pending orders -->
+      <div class="table-pagination" th:if="${!#lists.isEmpty(pendingOrders)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
-            <!-- Nút về trang đầu tiên với icon -->
+            <!-- First page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOrderPage == 0}"
                     th:onclick="|window.location='?orderPage=0'|">
               <span class="icon"><i class="mdi mdi-page-first"></i></span>
             </button>
 
-            <!-- Nút sang trang trước với icon -->
+            <!-- Previous page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOrderPage == 0}"
                     th:onclick="|window.location='?orderPage=' + (${currentOrderPage} - 1)|">
               <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
             </button>
 
-            <!-- Các nút phân trang -->
+            <!-- Pagination buttons -->
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, totalOrderPages - 1)}"
                     th:if="${i == 0 || i == totalOrderPages - 1 || (i >= currentOrderPage - 2 && i <= currentOrderPage + 2)}"
@@ -356,20 +356,20 @@
                     th:onclick="|window.location='?orderPage=' + ${i}|">
             </button>
 
-            <!-- Thêm "..." nếu trang hiện tại cách xa trang đầu tiên -->
+            <!-- Add "..." if the current page is far from the first page -->
             <span th:if="${currentOrderPage > 3}">...</span>
 
-            <!-- Thêm "..." nếu trang hiện tại cách xa trang cuối cùng -->
+            <!-- Add "..." if the current page is far from the last page -->
             <span th:if="${currentOrderPage < totalOrderPages - 4}">...</span>
 
-            <!-- Nút sang trang tiếp theo với icon -->
+            <!-- Next page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOrderPage + 1 == totalOrderPages}"
                     th:onclick="|window.location='?orderPage=' + (${currentOrderPage} + 1)|">
               <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
             </button>
 
-            <!-- Nút tới trang cuối với icon -->
+            <!-- Last page button with icon -->
             <button type="button" class="button"
                     th:disabled="${currentOrderPage + 1 == totalOrderPages}"
                     th:onclick="|window.location='?orderPage=' + (${totalOrderPages - 1})|">
@@ -379,8 +379,6 @@
           <small>Page [[${currentOrderPage + 1}]] of [[${totalOrderPages}]]</small>
         </div>
       </div>
-
-
     </div>
   </div>
   <div class="card has-table">
@@ -394,7 +392,11 @@
       </a>
     </header>
     <div class="card-content">
-      <table>
+      <!-- Kiểm tra xem có không có đánh giá nào chờ xử lý -->
+      <div th:if="${#lists.isEmpty(pendingReviews)}" style="text-align: center; color: red;">
+        No pending reviews available.
+      </div>
+      <table th:if="${!#lists.isEmpty(pendingReviews)}">
         <thead>
         <tr>
           <th>Review ID</th>
@@ -418,7 +420,9 @@
         </tr>
         </tbody>
       </table>
-      <div class="table-pagination">
+
+      <!-- Phân trang chỉ hiển thị khi có đánh giá chờ xử lý -->
+      <div class="table-pagination" th:if="${!#lists.isEmpty(pendingReviews)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
             <!-- Nút về trang đầu tiên với icon -->
@@ -481,7 +485,11 @@
       </a>
     </header>
     <div class="card-content">
-      <table>
+      <!-- Kiểm tra xem có không có đơn hàng trả nào -->
+      <div th:if="${#lists.isEmpty(returnOrders)}" style="text-align: center; color: red;">
+        No return orders available.
+      </div>
+      <table th:if="${!#lists.isEmpty(returnOrders)}">
         <thead>
         <tr>
           <th>ID</th>
@@ -524,7 +532,9 @@
         </tr>
         </tbody>
       </table>
-      <div class="table-pagination">
+
+      <!-- Phân trang chỉ hiển thị khi có đơn hàng trả -->
+      <div class="table-pagination" th:if="${!#lists.isEmpty(returnOrders)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
             <!-- Nút về trang đầu tiên với icon -->
@@ -587,11 +597,15 @@
       </a>
     </header>
     <div class="card-content">
-      <table>
+      <!-- Kiểm tra xem có không có đơn hàng hủy nào -->
+      <div th:if="${#lists.isEmpty(cancelledOrders)}" style="text-align: center; color: red;">
+        No cancelled orders available.
+      </div>
+
+      <table th:if="${!#lists.isEmpty(cancelledOrders)}">
         <thead>
         <tr>
-          <th>ID</th>
-          <th>Order id</th>
+          <th>Order code</th>
           <th>Full name</th>
           <th>Email</th>
           <th>Telephone</th>
@@ -600,26 +614,26 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="orderCancel : ${cancelledOrders}">
-          <td th:text="${orderCancel.id}"></td>
-          <td th:text="${orderCancel.order.id}"></td>
-          <td th:text="${orderCancel.order.fullName}"></td>
-          <td th:text="${orderCancel.order.email}"></td>
-          <td th:text="${orderCancel.order.telephone}"></td>
-          <td th:text="${orderCancel.order.totalAmount}"></td>
-          <td th:text="${orderCancel.reason}"></td>
+        <tr th:each="order : ${cancelledOrders}">
+          <td th:text="${order.orderCode}"></td>
+          <td th:text="${order.fullName}"></td>
+          <td th:text="${order.email}"></td>
+          <td th:text="${order.telephone}"></td>
+          <td th:text="${order.totalAmount}"></td>
+          <td th:text="${order.cancelReason}"></td>
           <td class="actions-cell">
             <div class="buttons right nowrap">
-              <a th:href="@{/admin/detailorder/{id}(id=${orderCancel.id})}" class="btn btn-primary" style="background-color:green; color:white;">
+              <a th:href="@{/admin/detailorder/{id}(id=${order.id})}" class="btn btn-primary" style="background-color:green; color:white;">
                 <span class="icon"><i class="mdi mdi-eye"></i></span>
               </a>
             </div>
           </td>
-
         </tr>
         </tbody>
       </table>
-      <div class="table-pagination">
+
+      <!-- Phân trang chỉ hiển thị khi có đơn hàng hủy -->
+      <div class="table-pagination" th:if="${!#lists.isEmpty(cancelledOrders)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
             <!-- Nút về trang đầu tiên với icon -->
@@ -668,10 +682,9 @@
           <small>Page [[${currentCancelPage + 1}]] of [[${totalOrderCancelPages}]]</small>
         </div>
       </div>
-
-
     </div>
   </div>
+
 </section>
 <style>
   .btn-primary {
@@ -692,7 +705,7 @@
     padding: 10px 20px; /* Điều chỉnh kích thước theo ý muốn */
   }
 </style>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

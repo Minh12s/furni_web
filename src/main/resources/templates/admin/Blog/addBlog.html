@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
   <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <style>
   .row {
     display: -webkit-box;
@@ -234,6 +234,6 @@
   }
 }</script>
 
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 </body>
 </html>

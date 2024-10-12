@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
     <title>Title</title>
 </head>
 <body>
@@ -128,7 +128,7 @@
         margin-right: 10px; /* Khoảng cách giữa các nút */
     }
 </style>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
         <ul>
@@ -159,29 +159,11 @@
             </div>
         </div>
     </div>
-    <section class="is-hero-bar">
-        <div class="flex flex-row items-center">
-            <!-- Nút "Print PDF" -->
-            <button onclick="myApp.printTable()" class="btn btn-add ml-2">
-                <i class="fas fa-file-pdf"></i>
-                Print PDF
-            </button>
-            <!-- Nút "Export Excel" -->
-            <button onclick="exportReviewToExcel()" class="btn btn-add ml-2" style="margin-left:15px">
-                <i class="fas fa-file-excel"></i>
-                Export Excel
-            </button>
-            <button onclick="exportExcel()" class="btn btn-add" style="margin-left:10px;">
-                <i class="fas fa-file-excel"></i>
-                Excel Filtered
-            </button>
-        </div>
-    </section>
     <div id="successAlert" class="alert alert-success" th:if="${successMessage}">
         <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
         <span th:text="${successMessage}"></span>
     </div>
-    <form style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" method="get" action="/admin/orderReturn">
+    <form style="margin-left:22px;display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;" method="get" action="/admin/orderReturn">
         <div class="input-group input-group-sm" style="margin-right: 5px; margin-bottom: 10px;">
             <select style="height: 45px; font-size: 0.765625rem; padding: 4px 8px; background-color: #F1F1F1; border-radius: 5px; width: 150px; margin-right: -10px;" name="status" class="form-control">
                 <option value="">select status</option>
@@ -217,13 +199,18 @@
                         <option value="50" th:selected="${size == 50}">50</option>
                         <option value="100" th:selected="${size == 100}">100</option>
                     </select>
-
-                    <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
                     <input type="hidden" name="page" th:value="${orderReturnPage.number}">
                 </form>
             </header>
+
             <div class="card-content">
-                <table>
+                <!-- Hiển thị thông báo đỏ nếu không có đơn hàng -->
+                <div th:if="${#lists.isEmpty(orderReturnPage.content)}" style="text-align: center; color: red;">
+                    No return orders available.
+                </div>
+
+                <!-- Bảng hiển thị đơn hàng trả khi có dữ liệu -->
+                <table th:if="${!#lists.isEmpty(orderReturnPage.content)}">
                     <thead>
                     <tr>
                         <th class="checkbox-cell">
@@ -276,31 +263,24 @@
                             </div>
                         </td>
                     </tr>
-
-
                     </tbody>
                 </table>
-                <div class="table-pagination">
+
+                <!-- Phân trang chỉ hiển thị khi có đơn hàng trả -->
+                <div class="table-pagination" th:if="${!#lists.isEmpty(orderReturnPage.content)}">
                     <div class="flex items-center justify-between">
                         <div class="buttons">
-                            <!-- Nút về trang đầu tiên với icon -->
                             <button type="button" class="button"
                                     th:disabled="${orderReturnPage.number == 0}"
                                     th:onclick="|window.location.href='/admin/orderReturn?page=0&size=' + ${orderReturnPage.size}|">
                                 <span class="icon"><i class="mdi mdi-page-first"></i></span>
                             </button>
-
-                            <!-- Nút sang trang trước với icon -->
                             <button type="button" class="button"
                                     th:disabled="${orderReturnPage.number == 0}"
                                     th:onclick="|window.location.href='/admin/orderReturn?page=' + (${orderReturnPage.number} - 1) + '&size=' + ${orderReturnPage.size}|">
                                 <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
                             </button>
-
-                            <!-- Dấu "..." trước nếu cần -->
                             <span th:if="${orderReturnPage.number > 3}">...</span>
-
-                            <!-- Các nút phân trang -->
                             <button type="button" class="button"
                                     th:each="i : ${#numbers.sequence(0, orderReturnPage.totalPages - 1)}"
                                     th:if="${i == 0 || i == orderReturnPage.totalPages - 1 || (i >= orderReturnPage.number - 2 && i <= orderReturnPage.number + 2)}"
@@ -308,18 +288,12 @@
                                     th:classappend="${i == orderReturnPage.number} ? 'active' : ''"
                                     th:onclick="|window.location.href='/admin/orderReturn?page=' + ${i} + '&size=' + ${orderReturnPage.size}|">
                             </button>
-
-                            <!-- Dấu "..." sau nếu cần -->
                             <span th:if="${orderReturnPage.number < orderReturnPage.totalPages - 4}">...</span>
-
-                            <!-- Nút sang trang tiếp theo với icon -->
                             <button type="button" class="button"
                                     th:disabled="${orderReturnPage.number + 1 == orderReturnPage.totalPages}"
                                     th:onclick="|window.location.href='/admin/orderReturn?page=' + (${orderReturnPage.number} + 1) + '&size=' + ${orderReturnPage.size}|">
                                 <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
                             </button>
-
-                            <!-- Nút tới trang cuối với icon -->
                             <button type="button" class="button"
                                     th:disabled="${orderReturnPage.number + 1 == orderReturnPage.totalPages}"
                                     th:onclick="|window.location.href='/admin/orderReturn?page=' + (${orderReturnPage.totalPages - 1}) + '&size=' + ${orderReturnPage.size}|">
@@ -329,10 +303,9 @@
                         <small th:text="'Page ' + (${orderReturnPage.number} + 1) + ' of ' + ${orderReturnPage.totalPages}"></small>
                     </div>
                 </div>
-
-
             </div>
         </div>
+
     </section>
 </section>
 <script>
@@ -349,7 +322,7 @@
         }
     });
 </script>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

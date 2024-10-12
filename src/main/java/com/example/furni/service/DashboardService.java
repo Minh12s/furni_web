@@ -52,12 +52,13 @@ public class DashboardService {
         Pageable pageable = PageRequest.of(page, size);
         return reviewRepository.findByStatus("pending", pageable);
     }
-    // Lấy tất cả order bị huỷ
-//    public Page<OrderCancel> getAllOrderCancels(int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        return orderCancelRepository.findAll(pageable);
-//    }
-    // Lấy tất cả order bị huỷ
+//     Lấy tất cả order bị huỷ
+public Page<Orders> getAllOrderCancels(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    return ordersRepository.findByStatus("cancel", pageable);
+}
+
+    // Lấy tất cả order bị hoan tra
     public Page<OrderReturn> getAllOrderReturn(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return orderReturnRepository.findAll(pageable);

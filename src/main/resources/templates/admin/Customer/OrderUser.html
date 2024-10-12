@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
     <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
         <ul>
             <li>Admin</li>
-            <li>Customer</li>
+            <li>Customer order list</li>
         </ul>
     </div>
 </section>
 
-<section class="is-hero-bar">
-    <h1 style="text-align:center; margin: 20px 0">Purchased order</h1>
-</section>
 <section class="section main-section">
     <div class="card has-table">
+        <header class="card-header">
+            <p class="card-header-title">
+                <span class="icon"><i class="mdi mdi-cancel"></i></span>
+                List Order
+            </p>
+            <a href="#" class="card-header-icon">
+                <span class="icon"><i class="mdi mdi-reload"></i></span>
+            </a>
+        </header>
         <div class="card-content">
             <table class="table table-hover table-bordered" id="sampleTable">
                 <thead>
@@ -88,7 +94,7 @@
         margin-left: 20px;
     }
 </style>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
   <title>Edit Category</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <style>
   .alert {
     padding: 15px;
@@ -164,6 +164,6 @@
     reader.readAsDataURL(input.files[0]);
   }
 }</script>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 </body>
 </html>

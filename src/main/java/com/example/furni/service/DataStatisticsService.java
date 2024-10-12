@@ -47,31 +47,6 @@ public class DataStatisticsService {
 
         return revenue;
     }
-    public Map<LocalDateTime, Integer> getProductsSoldByDate(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        List<Object[]> results = ordersRepository.findProductsSoldByDate(startDateTime, endDateTime);
-        Map<LocalDateTime, Integer> productsSoldMap = new HashMap<>();
-
-        for (Object[] result : results) {
-            LocalDateTime dateTime = (LocalDateTime) result[0];
-            long quantitySold = (long) result[1];
-            productsSoldMap.put(dateTime, (int) quantitySold);
-        }
-
-        return productsSoldMap;
-    }
-
-    public Map<LocalDateTime, Double> getRevenueByDate(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        List<Object[]> results = ordersRepository.findRevenueByDate(startDateTime, endDateTime);
-        Map<LocalDateTime, Double> revenueMap = new HashMap<>();
-
-        for (Object[] result : results) {
-            LocalDateTime dateTime = (LocalDateTime) result[0];
-            double totalAmount = (double) result[1];
-            revenueMap.put(dateTime, totalAmount);
-        }
-
-        return revenueMap;
-    }
     public Map<String, Integer> getOrderStatusStatistics() {
         List<Object[]> results = ordersRepository.countOrdersByStatus();
         Map<String, Integer> statusCounts = new HashMap<>();

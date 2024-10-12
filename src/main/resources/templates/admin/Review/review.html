@@ -1,44 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
   <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
     <ul>
       <li style="margin-left:-50px;">Admin</li>
       <li>Review</li>
     </ul>
-  </div>
-</section>
-<section class="is-hero-bar">
-  <div class="flex flex-col md:flex-row items-center justify-start">
-
-    <div class="col-sm-2" style="margin-right: 5px;">
-      <button onclick="myApp.printTable()" class="btn btn-add">
-        <i class="fas fa-file-pdf"></i>
-        Print PDF
-      </button>
-    </div>
-
-
-    <div class="col-sm-2" style="margin-right: 5px;">
-      <button onclick="exportFacilitiesToExcel()" class="btn btn-add">
-        <i class="fas fa-file-excel"></i>
-        Export Excel
-      </button>
-    </div>
-
-
-    <div class="col-sm-2">
-      <button onclick="exportExcel()" class="btn btn-add">
-        <i class="fas fa-file-excel"></i>
-        Excel Filtered
-      </button>
-    </div>
   </div>
 </section>
 <form action="/admin/reviews" method="GET" style="display: flex; align-items: center; border-radius: 5px; margin-top: 10px; flex-wrap: wrap;">
@@ -80,7 +53,10 @@
       </form>
     </header>
     <div class="card-content">
-      <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+      <div th:if="${#lists.isEmpty(productsPage.content)}" style="text-align: center; color: red;">
+        No review available.
+      </div>
+      <table th:if="${!#lists.isEmpty(productsPage.content)}">
         <thead>
         <tr>
           <th width="10"><input type="checkbox" id="all"></th>
@@ -114,7 +90,7 @@
         </tbody>
 
       </table>
-      <div class="table-pagination">
+      <div class="table-pagination" th:if="${!#lists.isEmpty(productsPage.content)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
             <!-- Nút về trang đầu tiên với icon -->
@@ -228,7 +204,7 @@
     });
   }
 </script>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

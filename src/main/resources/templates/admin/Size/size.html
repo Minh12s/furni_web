@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:insert="/include/fragmentsAdmin :: head"></div>
+    <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
     <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
         <ul>
@@ -55,7 +55,11 @@
             </form>
         </header>
         <div class="card-content">
-            <table>
+            <div th:if="${#lists.isEmpty(sizesPage.content)}" style="text-align: center; color: red;">
+                No size available.
+            </div>
+
+            <table th:if="${!#lists.isEmpty(sizesPage.content)}">
                 <thead>
                 <tr>
                     <th class="checkbox-cell">
@@ -91,7 +95,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="table-pagination">
+            <div class="table-pagination" th:if="${!#lists.isEmpty(sizesPage.content)}">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
                         <!-- Nút về trang đầu tiên với icon -->
@@ -254,7 +258,7 @@
         }
     });
 </script>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>

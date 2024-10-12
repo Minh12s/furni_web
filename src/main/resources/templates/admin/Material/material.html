@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:insert="/include/fragmentsAdmin :: head"></div>
+  <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
   <title>Title</title>
 </head>
 <body>
-<div th:insert="/include/fragmentsAdmin :: navbar"></div>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
 <section class="is-title-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
     <ul>
@@ -44,21 +44,25 @@
           <option value="50" th:selected="${size == 50}">50</option>
           <option value="100" th:selected="${size == 100}">100</option>
         </select>
-
-        <!-- Đảm bảo rằng ${materialsPage.number} được đánh giá đúng -->
         <input type="hidden" name="page" th:value="${materialsPage.number}">
       </form>
-
     </header>
+
     <div class="card-content">
-      <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+      <!-- Thông báo khi không có dữ liệu -->
+      <div th:if="${#lists.isEmpty(materialsPage.content)}" style="text-align: center; color: red;">
+        No materials available.
+      </div>
+
+      <!-- Bảng hiển thị khi có dữ liệu -->
+      <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0"
+             id="sampleTable" th:if="${!#lists.isEmpty(materialsPage.content)}">
         <thead>
         <tr>
           <th width="10"><input type="checkbox" id="all"></th>
           <th>Id</th>
           <th>MaterialName</th>
           <th></th>
-
         </tr>
         </thead>
         <tbody>
@@ -66,25 +70,25 @@
           <td width="10"><input type="checkbox" name="check1" th:value="${material.id}"></td>
           <td th:text="${material.id}"></td>
           <td th:text="${material.materialName}"></td>
-
           <td>
             <div class="button-group">
               <a th:href="@{/admin/editMaterial/{id}(id=${material.id})}" class="btn btn-primary">
                 <span class="icon"><i class="mdi mdi-pencil"></i></span>
               </a>
-              <form th:action="@{/admin/deleteMaterial/{id}(id=${material.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this post?')">
+              <form th:action="@{/admin/deleteMaterial/{id}(id=${material.id})}" method="post"
+                    onsubmit="return confirm('Are you sure you want to delete this post?')">
                 <button type="submit" class="btn btn-danger">
-                  <span class="icon"><i class="mdi mdi-delete"></i></span></button>
+                  <span class="icon"><i class="mdi mdi-delete"></i></span>
+                </button>
               </form>
-
             </div>
           </td>
-
         </tr>
         </tbody>
       </table>
 
-      <div class="table-pagination">
+      <!-- Phân trang hiển thị khi có dữ liệu -->
+      <div class="table-pagination" th:if="${!#lists.isEmpty(materialsPage.content)}">
         <div class="flex items-center justify-between">
           <div class="buttons">
             <!-- Nút về trang đầu tiên với icon -->
@@ -102,7 +106,7 @@
             </button>
 
             <!-- Các nút phân trang -->
-            <span th:if="${materialsPage.number > 3}">...</span> <!-- Dấu "..." trước nếu cần -->
+            <span th:if="${materialsPage.number > 3}">...</span>
             <button type="button" class="button"
                     th:each="i : ${#numbers.sequence(0, materialsPage.totalPages - 1)}"
                     th:if="${i == 0 || i == materialsPage.totalPages - 1 || (i >= materialsPage.number - 2 && i <= materialsPage.number + 2)}"
@@ -110,7 +114,7 @@
                     th:classappend="${i == materialsPage.number} ? 'active' : ''"
                     th:onclick="|window.location.href='/admin/materials?page=' + ${i} + '&size=' + ${materialsPage.size}|">
             </button>
-            <span th:if="${materialsPage.number < materialsPage.totalPages - 4}">...</span> <!-- Dấu "..." sau nếu cần -->
+            <span th:if="${materialsPage.number < materialsPage.totalPages - 4}">...</span>
 
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
@@ -129,7 +133,6 @@
           <small th:text="'Page ' + (${materialsPage.number} + 1) + ' of ' + ${materialsPage.totalPages}"></small>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -232,7 +235,7 @@
     }
   });
 </script>
-<div th:insert="/include/fragmentsAdmin :: script"></div>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 
 </body>
 </html>
