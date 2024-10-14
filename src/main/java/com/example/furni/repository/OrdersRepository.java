@@ -21,7 +21,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 
     Page<Orders> findByUserIdAndStatus(Integer userId, String status, Pageable pageable);
 
-    @Query("SELECT o.cancelReason, COUNT(o) FROM Orders o GROUP BY o.cancelReason")
+    @Query("SELECT o.cancelReason, COUNT(o) FROM Orders o WHERE o.status = 'cancel' GROUP BY o.cancelReason")
     List<Object[]> countByReason();
     // tìm các lý do khác
     @Query("SELECT o FROM Orders o WHERE o.cancelReason NOT IN :popularReasons")
