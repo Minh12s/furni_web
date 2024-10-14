@@ -69,11 +69,23 @@ public class MyOrderController extends BaseController {
         return "MyOrder/MyOrder"; // Trả về tên view để hiển thị
     }
     @PostMapping("/updateStatus")
-    public String updateStatus(@RequestParam("id") int id, @RequestParam("status") String status, HttpSession session) {
+    public String updateStatus(
+            @RequestParam("id") int id,
+            @RequestParam("status") String status,
+            @RequestParam("cancel_reason") String cancelReason,
+            @RequestParam(value = "other_reason", required = false) String otherReason,
+            HttpSession session) {
+
         Orders order = orderService.getOrderById(id);
         if (order != null) {
-            // Kiểm tra và cập nhật trạng thái mới
+            // Nếu người dùng chọn "Other" và nhập lý do cụ thể, sử dụng lý do từ otherReason thay vì "Other"
+            if ("Other".equals(cancelReason) && otherReason != null && !otherReason.trim().isEmpty()) {
+                cancelReason = otherReason; // Thay thế "Other" bằng lý do thực sự
+            }
+
+            // Cập nhật trạng thái và lý do hủy đơn hàng
             order.setStatus(status);
+            order.setCancelReason(cancelReason);
             orderService.saveOrder(order);
 
             // Thêm thông báo thành công vào session
@@ -81,6 +93,7 @@ public class MyOrderController extends BaseController {
         }
         return "redirect:/MyOrder/MyOrder";
     }
+
 
 
     @GetMapping("/OrderCancel")
@@ -352,8 +365,8 @@ public class MyOrderController extends BaseController {
         }
         return "MyOrder/RequestRefund";
     }
-    @GetMapping("/ReasonCancel")
-    public String ReasonCancel(Model model, HttpSession session){
+    @GetMapping("/ReasonCancel/{id}")
+    public String ReasonCancel(@PathVariable("id") int id, Model model, HttpSession session){
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId != null) {

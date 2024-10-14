@@ -72,35 +72,39 @@
         <div style="border-bottom: 1px solid #DDE1EF;" class="content-top">
             <p style="color: black">Do you want to cancel your order? Please tell us why</p>
         </div>
-        <form action="/MyOrder/ReasonCancel" method="post">
+        <form th:action="@{/MyOrder/updateStatus}" method="post">
+            <input type="hidden" name="id" th:value="${id}" />
+            <input type="hidden" name="status" value="cancel" />
+
             <div style="margin-top:20px;">
-                <!-- Các checkbox và lý do huỷ đơn hàng -->
+                <!-- Cancellation reasons -->
                 <div class="cancel-reason">
-                    <input type="checkbox" id="reason1" name="Reason" value="Order takes a long time to confirm">
+                    <input type="radio" id="reason1" name="cancel_reason" value="Order takes a long time to confirm">
                     <label for="reason1">Order takes a long time to confirm</label><br>
                 </div>
                 <div class="cancel-reason">
-                    <input type="checkbox" id="reason2" name="Reason" value="I don't need to buy anymore">
+                    <input type="radio" id="reason2" name="cancel_reason" value="I don't need to buy anymore">
                     <label for="reason2">I don't need to buy anymore</label><br>
                 </div>
                 <div class="cancel-reason">
-                    <input type="checkbox" id="reason3" name="Reason" value="I want to update my shipping address">
+                    <input type="radio" id="reason3" name="cancel_reason" value="I want to update my shipping address">
                     <label for="reason3">I want to update my shipping address</label><br>
                 </div>
                 <div class="cancel-reason">
-                    <input type="checkbox" id="reason4" name="Reason" value="I found a better place to buy (Cheaper, more reputable, faster delivery...)">
+                    <input type="radio" id="reason4" name="cancel_reason" value="I found a better place to buy (Cheaper, more reputable, faster delivery...)">
                     <label for="reason4">I found a better place to buy (Cheaper, more reputable, faster delivery...)</label><br>
                 </div>
                 <div class="cancel-reason">
-                    <input type="checkbox" id="reason5" name="Reason" value="I don't have enough money to buy it">
+                    <input type="radio" id="reason5" name="cancel_reason" value="I don't have enough money to buy it">
                     <label for="reason5">I don't have enough money to buy it</label><br>
                 </div>
                 <div class="cancel-reason">
-                    <input type="checkbox" id="reason6" onchange="toggleOtherReason()">
+                    <input type="radio" id="reason6" name="cancel_reason" value="Other" onchange="toggleOtherReason()">
                     <label for="reason6">Other</label><br>
-                    <textarea type="text" id="otherReason" name="otherReason" style="display: none;"></textarea>
+                    <textarea id="otherReason" name="other_reason" style="display: none;"></textarea>
                 </div>
             </div>
+
             <button style="margin-left:25px;" type="submit" class="btn btn-primary py-3 px-5">Submit</button>
         </form>
     </div>
