@@ -96,14 +96,14 @@
             <!-- Nút về trang đầu tiên với icon -->
             <button type="button" class="button"
                     th:disabled="${productsPage.number == 0}"
-                    th:onclick="|window.location.href='/admin/products?page=0&size=' + ${productsPage.size}|">
+                    th:onclick="|window.location.href='/admin/reviews?page=0&size=' + ${productsPage.size}|">
               <span class="icon"><i class="mdi mdi-page-first"></i></span>
             </button>
 
             <!-- Nút sang trang trước với icon -->
             <button type="button" class="button"
                     th:disabled="${productsPage.number == 0}"
-                    th:onclick="|window.location.href='/admin/products?page=' + (${productsPage.number} - 1) + '&size=' + ${productsPage.size}|">
+                    th:onclick="|window.location.href='/admin/reviews?page=' + (${productsPage.number} - 1) + '&size=' + ${productsPage.size}|">
               <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
             </button>
 
@@ -116,7 +116,7 @@
                     th:if="${i == 0 || i == productsPage.totalPages - 1 || (i >= productsPage.number - 2 && i <= productsPage.number + 2)}"
                     th:text="${i + 1}"
                     th:classappend="${i == productsPage.number} ? 'active' : ''"
-                    th:onclick="|window.location.href='/admin/products?page=' + ${i} + '&size=' + ${productsPage.size}|">
+                    th:onclick="|window.location.href='/admin/reviews?page=' + ${i} + '&size=' + ${productsPage.size}|">
             </button>
 
             <!-- Dấu "..." sau nếu cần -->
@@ -125,14 +125,14 @@
             <!-- Nút sang trang tiếp theo với icon -->
             <button type="button" class="button"
                     th:disabled="${productsPage.number + 1 == productsPage.totalPages}"
-                    th:onclick="|window.location.href='/admin/products?page=' + (${productsPage.number} + 1) + '&size=' + ${productsPage.size}|">
+                    th:onclick="|window.location.href='/admin/reviews?page=' + (${productsPage.number} + 1) + '&size=' + ${productsPage.size}|">
               <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
             </button>
 
             <!-- Nút tới trang cuối với icon -->
             <button type="button" class="button"
                     th:disabled="${productsPage.number + 1 == productsPage.totalPages}"
-                    th:onclick="|window.location.href='/admin/products?page=' + (${productsPage.totalPages - 1}) + '&size=' + ${productsPage.size}|">
+                    th:onclick="|window.location.href='/admin/reviews?page=' + (${productsPage.totalPages - 1}) + '&size=' + ${productsPage.size}|">
               <span class="icon"><i class="mdi mdi-page-last"></i></span>
             </button>
           </div>
