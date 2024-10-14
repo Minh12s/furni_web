@@ -5,17 +5,16 @@ import java.util.Objects;
 
 public class FavoriteId implements Serializable {
 
-    private Long product;
-    private Long user;
+    private Integer product;
+    private Integer user;
 
     public FavoriteId() {
     }
 
-    public FavoriteId(Long product, Long user) {
+    public FavoriteId(Integer product, Integer user) {
         this.product = product;
         this.user = user;
     }
-
     // Phương thức equals và hashCode để xác định composite key
     @Override
     public boolean equals(Object o) {
@@ -31,4 +30,5 @@ public class FavoriteId implements Serializable {
     }
 
     // Getters và setters nếu cần
+
 }

@@ -86,6 +86,8 @@
                 <th style="width:200px;" scope="col">Price</th>
                 <th style="width:200px;" scope="col">Quantity</th>
                 <th style="width:200px;" scope="col">Total</th>
+                <th style="width:200px;" scope="col"></th>
+
             </tr>
             </thead>
             <tbody>
@@ -96,6 +98,12 @@
                 <td th:text="${orderProduct.price}"></td>
                 <td th:text="${orderProduct.qty}"></td>
                 <td th:text="${orderProduct.price * orderProduct.qty}"></td>
+                <td>
+                    <div class="col-sm-2" th:if="${order.status == 'complete'}">
+                        <a class="btn btn-dark" href="">Review</a>
+                    </div>
+                </td>
+
             </tr>
             <!-- Add more rows as needed -->
             </tbody>
