@@ -28,6 +28,7 @@ public class OrderReturnController {
     private JavaMailSender mailSender;
     @Autowired
     private OrderReturnService orderReturnService;
+
     @GetMapping("/orderReturn")
     public String OrderReturn(Model model,HttpSession session,
                               @RequestParam(defaultValue = "0") int page,
@@ -74,21 +75,16 @@ public class OrderReturnController {
                                           RedirectAttributes redirectAttributes,
                                           HttpSession session) {
         try {
-            // Gọi service để cập nhật trạng thái và hồi lại qty nếu cần
+            // Cập nhật trạng thái đơn trả hàng và hồi lại qty
             orderReturnService.updateOrderReturnStatus(orderReturnId, status);
-
             session.setAttribute("successMessage", "Order return status updated successfully.");
-
-            // Nếu trạng thái là "rejected", chuyển hướng tới trang rejectReason
-            if ("rejected".equalsIgnoreCase(status)) {
-                return "redirect:/admin/rejectReason";
-            }
         } catch (Exception e) {
             session.setAttribute("errorMessage", "Unable to update Order return status.");
         }
 
         return "redirect:/admin/orderReturn";
     }
+
 
     @GetMapping("/rejectReason")
     public String RejectReason(){

@@ -1,6 +1,7 @@
 package com.example.furni.service;
 
 import com.example.furni.entity.*;
+import com.example.furni.repository.OrderProductRepository;
 import com.example.furni.repository.OrderReturnRepository;
 import com.example.furni.repository.ProductRepository;
 import com.example.furni.repository.ReturnImagesRepository;
@@ -26,6 +27,8 @@ public class OrderReturnService {
     private ReturnImagesRepository returnImagesRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private OrderProductRepository orderProductRepository;
 
     // Lấy tất cả OrderReturn cùng với ảnh liên quan
     public List<OrderReturn> getAllOrderReturns() {
@@ -71,11 +74,20 @@ public class OrderReturnService {
         OrderReturn orderReturn = orderReturnRepository.findById(orderReturnId)
                 .orElseThrow(() -> new RuntimeException("Order return not found"));
 
-        // Chỉ hồi qty nếu trạng thái mới là "approved"
         if ("approved".equalsIgnoreCase(newStatus) && "pending".equalsIgnoreCase(orderReturn.getStatus())) {
+            // Hồi lại số lượng sản phẩm
             Product product = orderReturn.getProduct();
             product.setQty(product.getQty() + orderReturn.getQty());
             productRepository.save(product);
+
+            // Cập nhật trạng thái trong bảng order_product
+            Optional<OrderProduct> orderProductOpt = orderProductRepository.findByOrderAndProduct(
+                    orderReturn.getOrder(), product);
+            if (orderProductOpt.isPresent()) {
+                OrderProduct orderProduct = orderProductOpt.get();
+                orderProduct.setStatus(1); // Ví dụ: 1 là trạng thái "hoàn trả đã chấp nhận"
+                orderProductRepository.save(orderProduct);
+            }
         }
 
         // Cập nhật trạng thái mới cho order return

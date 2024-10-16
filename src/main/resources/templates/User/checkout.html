@@ -75,30 +75,29 @@
             <div class="w-100"></div>
             <div class="col-md-6">
               <div class="form-group">
-                <label >Province</label>
-                <select name="Province" id="provinces" class="form-control" required>
-                  <option value="">-- select provinces --</option>
+                <label>Province</label>
+                <select name="Province" id="tinh" class="form-control" required>
+                  <option value="0">-- select provinces --</option>
                 </select>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label >District</label>
-                <select name="District" id="districts" class="form-control" required>
-                  <option value="">-- select districts --</option>
+                <label>District</label>
+                <select name="District" id="quan" class="form-control" required>
+                  <option value="0">-- select districts --</option>
                 </select>
               </div>
             </div>
             <div class="w-100"></div>
             <div class="col-md-6">
               <div class="form-group">
-                <label >Ward</label>
-                <select name="Ward" id="wards" class="form-control" required>
-                  <option value="">-- select wards --</option>
+                <label>Ward</label>
+                <select name="Ward" id="phuong" class="form-control" required>
+                  <option value="0">-- select wards --</option>
                 </select>
               </div>
             </div>
-
             <div class="col-md-6">
               <div class="form-group">
                 <label >Phone</label>
@@ -268,57 +267,53 @@
 
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://esgoo.net/scripts/jquery.js"></script>
 <script>
   $(document).ready(function() {
-    // Load Provinces
-    $.getJSON('https://provinces.open-api.vn/api/p/', function(data) {
-      $.each(data, function(key, value) {
-        $('#provinces').append('<option value="' + value.code + '" data-name="' + value.name + '">' + value.name + '</option>');
-      });
-    });
-
-    // Load Districts when Province changes
-    $('#provinces').change(function() {
-      var provinceCode = $(this).val();
-      var provinceName = $('#provinces option:selected').attr('data-name');
-      $('#provinceName').val(provinceName);
-
-      $('#districts').empty().append('<option value="">-- select districts --</option>');
-      $('#wards').empty().append('<option value="">-- select wards --</option>');
-
-      if (provinceCode) {
-        $.getJSON('https://provinces.open-api.vn/api/p/' + provinceCode + '?depth=2', function(data) {
-          $.each(data.districts, function(key, value) {
-            $('#districts').append('<option value="' + value.code + '" data-name="' + value.name + '">' + value.name + '</option>');
-          });
+    // Lấy danh sách tỉnh/thành
+    $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+      if (data_tinh.error == 0) {
+        $.each(data_tinh.data, function(key_tinh, val_tinh) {
+          $('#tinh').append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
         });
       }
     });
 
-    // Load Wards when District changes
-    $('#districts').change(function() {
-      var districtCode = $(this).val();
-      var districtName = $('#districts option:selected').attr('data-name');
-      $('#districtName').val(districtName);
+    // Khi người dùng chọn tỉnh/thành
+    $('#tinh').change(function() {
+      var idtinh = $(this).val();
+      $('#quan').empty().append('<option value="0">-- select districts --</option>');
+      $('#phuong').empty().append('<option value="0">-- select wards --</option>');
 
-      $('#wards').empty().append('<option value="">-- select wards --</option>');
-
-      if (districtCode) {
-        $.getJSON('https://provinces.open-api.vn/api/d/' + districtCode + '?depth=2', function(data) {
-          $.each(data.wards, function(key, value) {
-            $('#wards').append('<option value="' + value.code + '" data-name="' + value.name + '">' + value.name + '</option>');
-          });
+      if (idtinh !== "0") {
+        // Lấy danh sách quận/huyện
+        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
+          if (data_quan.error == 0) {
+            $.each(data_quan.data, function(key_quan, val_quan) {
+              $('#quan').append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+            });
+          }
         });
       }
     });
 
-    // Set ward name
-    $('#wards').change(function() {
-      var wardName = $('#wards option:selected').attr('data-name');
-      $('#wardName').val(wardName);
+    // Khi người dùng chọn quận/huyện
+    $('#quan').change(function() {
+      var idquan = $(this).val();
+      $('#phuong').empty().append('<option value="0">-- select wards --</option>');
+
+      if (idquan !== "0") {
+        // Lấy danh sách phường/xã
+        $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
+          if (data_phuong.error == 0) {
+            $.each(data_phuong.data, function(key_phuong, val_phuong) {
+              $('#phuong').append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+            });
+          }
+        });
+      }
     });
   });
-
 </script>
 <script>
   function updateShippingFee() {
@@ -347,8 +342,6 @@
 
 
 </script>
-
-
 
 </body>
 </html>

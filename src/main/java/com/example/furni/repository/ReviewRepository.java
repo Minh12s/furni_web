@@ -11,9 +11,8 @@ import java.util.Optional;
 import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
-    @Query("SELECT AVG(r.ratingValue) FROM Review r WHERE r.product.id = :productId")
+    @Query("SELECT AVG(r.ratingValue) FROM Review r WHERE r.product.id = :productId AND r.status = 'approved'")
     Optional<Double> findAverageRatingByProductId(@Param("productId") int productId);
-
     @Query("SELECT r FROM Review r WHERE r.product.id = :productId")
     List<Review> findReviewsByProductId(@Param("productId") int productId);
 
