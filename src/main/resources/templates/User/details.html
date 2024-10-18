@@ -74,18 +74,28 @@
         <h3 th:text="${product.productName}">Young Woman Wearing Dress</h3>
         <div class="rating d-flex">
           <p class="text-left mr-4">
-            <a href="#" class="mr-2">5.0</a>
-            <a href="#"><span class="ion-ios-star-outline"></span></a>
-            <a href="#"><span class="ion-ios-star-outline"></span></a>
-            <a href="#"><span class="ion-ios-star-outline"></span></a>
-            <a href="#"><span class="ion-ios-star-outline"></span></a>
-            <a href="#"><span class="ion-ios-star-outline"></span></a>
+            <a href="#" class="mr-2" th:text="${averageRating}">0.0</a>
+
+            <!-- Hiển thị sao đầy khi averageRating > 0 -->
+            <a th:if="${averageRating > 0}" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).floor(averageRating))}">
+              <span class="ion-ios-star star-yellow"></span>
+            </a>
+
+            <!-- Hiển thị nửa sao nếu có -->
+            <a th:if="${averageRating > 0 and averageRating - T(java.lang.Math).floor(averageRating) >= 0.5}">
+              <span class="ion-ios-star-half star-yellow"></span>
+            </a>
+
+            <!-- Hiển thị sao trống nếu averageRating < 5, không hiển thị khi averageRating = 5 -->
+            <a th:if="${averageRating < 5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).floor(averageRating) - (averageRating - T(java.lang.Math).floor(averageRating) >= 0.5 ? 1 : 0))}">
+              <span class="ion-ios-star-outline star-yellow"></span>
+            </a>
           </p>
           <p class="text-left mr-4">
-            <a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
+            <a href="#" class="mr-2" style="color: #000;" th:text="${reviewCount} + ' Reviews'">0 Reviews</a>
           </p>
           <p class="text-left">
-            <a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
+            <a href="#" class="mr-2" style="color: #000;" th:text="${totalSales} + ' Sold'">0 Sold</a>
           </p>
         </div>
         <p class="price"><span th:text="${product.price + '$'}">$120.00</span></p>
@@ -191,6 +201,47 @@
 
     </div>
   </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 ftco-animate">
+        <div class="pt-5 mt-5">
+
+          <h3 class="mb-5">Comments</h3>
+          <ul class="comment-list" th:each="review : ${approvedComments}">
+            <li class="comment">
+              <div class="vcard bio">
+                <img th:src="'data:image/jpeg;base64,' +${review.user.thumbnail}" alt="Image placeholder">
+              </div>
+              <div class="comment-body">
+                <h3 th:text="${review.user.fullName}">User</h3>
+                <div class="meta" th:text="${review.reviewDate}">Date</div>
+                <!-- Hiển thị số sao đánh giá -->
+                <div class="rating d-flex">
+                  <!-- Hiển thị sao đầy khi averageRating > 0 -->
+                  <a th:if="${review.ratingValue > 0}" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).floor(review.ratingValue))}">
+                    <span class="ion-ios-star star-yellow"></span>
+                  </a>
+
+                  <!-- Hiển thị nửa sao nếu có -->
+                  <a th:if="${review.ratingValue > 0 and review.ratingValue - T(java.lang.Math).floor(review.ratingValue) >= 0.5}">
+                    <span class="ion-ios-star-half star-yellow"></span>
+                  </a>
+
+                  <!-- Hiển thị sao trống nếu averageRating < 5, không hiển thị khi averageRating = 5 -->
+                  <a th:if="${review.ratingValue < 5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).floor(review.ratingValue) - (review.ratingValue - T(java.lang.Math).floor(review.ratingValue) >= 0.5 ? 1 : 0))}">
+                    <span class="ion-ios-star-outline star-yellow"></span>
+                  </a>
+                </div>
+                <p th:text="${review.comment}">This is a sample comment.</p>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <script>
@@ -297,6 +348,15 @@
 
 
 <style>
+  .vcard.bio img {
+    width: 50px; /* Chiều rộng của ảnh */
+    height: 50px; /* Chiều cao của ảnh */
+    object-fit: cover; /* Giữ tỉ lệ ảnh và cắt phần thừa nếu cần */
+  }
+  .details-list {
+    list-style-type: none;
+    padding: 0;
+  }
   .details-list {
     list-style-type: none;
     padding: 0;
@@ -500,6 +560,22 @@ setInterval(slideImages, slideInterval); // Gọi hàm sau mỗi khoảng thời
     }
   });
 </script>
+<style>
+  .ion-ios-star,
+  .ion-ios-star-half,
+  .ion-ios-star-outline {
+    color: #FFD700 !important;  }
+  .ion-ios-star-half {
+    position: relative;
+    display: inline-block;
+    width: 10px; /* tùy chỉnh kích thước theo icon của bạn */
+    height: 10px;
+    background: linear-gradient(to right, #FFD700 50%, #E0E0E0 50%);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+</style>
 
 
 </body>

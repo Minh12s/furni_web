@@ -228,15 +228,24 @@
                 <h3><a th:href="@{/product/details/{slug}(slug=${product.slug})}" th:text="${product.productName}">Product Name</a></h3>
                 <div class="d-flex">
                   <div class="pricing">
-                    <p class="price"><span th:text="${product.price}" class="mr-2 price-dc">$120.00</span><span th:text="${product.price}" class="price-sale">$80.00</span></p>
+                    <p class="price"><span th:text="'$'+${product.price}" class="mr-2 price-dc">$120.00</span><span th:text="'$'+${product.price}" class="price-sale">$80.00</span></p>
                   </div>
                   <div class="rating">
                     <p class="text-right">
-                      <a href="#"><span class="ion-ios-star-outline"></span></a>
-                      <a href="#"><span class="ion-ios-star-outline"></span></a>
-                      <a href="#"><span class="ion-ios-star-outline"></span></a>
-                      <a href="#"><span class="ion-ios-star-outline"></span></a>
-                      <a href="#"><span class="ion-ios-star-outline"></span></a>
+                      <!-- Hiển thị sao đầy khi có đánh giá -->
+                      <a th:if="${productRatings[product.id] > 0}" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).floor(productRatings[product.id]))}">
+                        <span class="ion-ios-star star-yellow"></span>
+                      </a>
+
+                      <!-- Hiển thị nửa sao nếu có -->
+                      <a th:if="${productRatings[product.id] > 0 and productRatings[product.id] - T(java.lang.Math).floor(productRatings[product.id]) >= 0.5}">
+                        <span class="ion-ios-star-half star-yellow"></span>
+                      </a>
+
+                      <!-- Hiển thị sao trống nếu đánh giá nhỏ hơn 5, không hiển thị khi đánh giá là 5 -->
+                      <a th:if="${productRatings[product.id] < 5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).floor(productRatings[product.id]) - (productRatings[product.id] - T(java.lang.Math).floor(productRatings[product.id]) >= 0.5 ? 1 : 0))}">
+                        <span class="ion-ios-star-outline star-yellow"></span>
+                      </a>
                     </p>
                   </div>
                 </div>
@@ -382,6 +391,22 @@
 <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<style>
+  .ion-ios-star,
+  .ion-ios-star-half,
+  .ion-ios-star-outline {
+    color: #FFD700 !important;  }
+  .ion-ios-star-half {
+    position: relative;
+    display: inline-block;
+    width: 10px; /* tùy chỉnh kích thước theo icon của bạn */
+    height: 10px;
+    background: linear-gradient(to right, #FFD700 50%, #E0E0E0 50%);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+</style>
 <script>
   var minPriceParam, maxPriceParam; // Biến toàn cục để lưu trữ giá trị phạm vi giá
 

@@ -100,7 +100,7 @@
                 <td th:text="${orderProduct.price * orderProduct.qty}"></td>
                 <td>
                     <div class="col-sm-2" th:if="${order.status == 'complete'}">
-                        <a class="btn btn-dark" href="">Review</a>
+                        <a class="btn btn-dark" th:href="@{'/MyOrder/Review/' + ${orderProduct.product.id}}">Review</a>
                     </div>
                 </td>
 

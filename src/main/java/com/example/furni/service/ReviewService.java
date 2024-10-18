@@ -57,4 +57,29 @@ public class ReviewService {
         }
         return false;
     }
+    public void save(Review review) {
+        reviewRepository.save(review);
+    }
+    public double calculateAverageRating(int productId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+
+        // Lọc ra các đánh giá đã được phê duyệt
+        double average = reviews.stream()
+                .filter(review -> review.getStatus().equals("approved"))
+                .mapToInt(Review::getRatingValue)
+                .average()
+                .orElse(0.0);
+
+        // Làm tròn kết quả tới 1 chữ số thập phân
+        return Math.round(average * 10.0) / 10.0;
+    }
+
+
+
+    public int countReviews(int productId) {
+        return reviewRepository.countByProductId(productId);
+    }
+    public List<Review> getApprovedCommentsByProductId(int productId) {
+        return reviewRepository.findByProductIdAndStatus(productId, "approved");
+    }
 }

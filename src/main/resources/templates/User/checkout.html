@@ -44,9 +44,9 @@
   <div class="container">
     <div class="row justify-content-center">
       <form id="checkoutForm" method="post" th:action="@{/checkout}" enctype="multipart/form-data" class="billing-form">
-        <input type="hidden" id="provinceName" name="ProvinceName">
-        <input type="hidden" id="districtName" name="DistrictName">
-        <input type="hidden" id="wardName" name="WardName">
+        <input type="hidden" id="provinceName" name="ProvinceName" />
+        <input type="hidden" id="districtName" name="DistrictName" />
+        <input type="hidden" id="wardName" name="WardName" />
 
         <div class="col-xl-8 ftco-animate">
           <h3 class="mb-4 billing-heading">Billing Details</h3>
@@ -72,7 +72,9 @@
               </div>
             </div>
 
+
             <div class="w-100"></div>
+
             <div class="col-md-6">
               <div class="form-group">
                 <label>Province</label>
@@ -81,6 +83,7 @@
                 </select>
               </div>
             </div>
+
             <div class="col-md-6">
               <div class="form-group">
                 <label>District</label>
@@ -89,7 +92,9 @@
                 </select>
               </div>
             </div>
+
             <div class="w-100"></div>
+
             <div class="col-md-6">
               <div class="form-group">
                 <label>Ward</label>
@@ -267,6 +272,7 @@
 
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script src="https://esgoo.net/scripts/jquery.js"></script>
 <script>
   $(document).ready(function() {
@@ -274,46 +280,57 @@
     $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
       if (data_tinh.error == 0) {
         $.each(data_tinh.data, function(key_tinh, val_tinh) {
-          $('#tinh').append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+          $('#tinh').append('<option value="' + val_tinh.id + '" data-name="' + val_tinh.full_name + '">' + val_tinh.full_name + '</option>');
         });
       }
     });
 
-    // Khi người dùng chọn tỉnh/thành
+    // Khi chọn tỉnh/thành, lấy quận/huyện
     $('#tinh').change(function() {
       var idtinh = $(this).val();
+      var provinceName = $('#tinh option:selected').attr('data-name'); // Lấy tên tỉnh
+      $('#provinceName').val(provinceName); // Cập nhật trường ẩn cho tên tỉnh
+
       $('#quan').empty().append('<option value="0">-- select districts --</option>');
       $('#phuong').empty().append('<option value="0">-- select wards --</option>');
 
-      if (idtinh !== "0") {
-        // Lấy danh sách quận/huyện
+      if (idtinh) {
         $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
           if (data_quan.error == 0) {
             $.each(data_quan.data, function(key_quan, val_quan) {
-              $('#quan').append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+              $('#quan').append('<option value="' + val_quan.id + '" data-name="' + val_quan.full_name + '">' + val_quan.full_name + '</option>');
             });
           }
         });
       }
     });
 
-    // Khi người dùng chọn quận/huyện
+    // Khi chọn quận/huyện, lấy phường/xã
     $('#quan').change(function() {
       var idquan = $(this).val();
+      var districtName = $('#quan option:selected').attr('data-name'); // Lấy tên quận
+      $('#districtName').val(districtName); // Cập nhật trường ẩn cho tên quận
+
       $('#phuong').empty().append('<option value="0">-- select wards --</option>');
 
-      if (idquan !== "0") {
-        // Lấy danh sách phường/xã
+      if (idquan) {
         $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
           if (data_phuong.error == 0) {
             $.each(data_phuong.data, function(key_phuong, val_phuong) {
-              $('#phuong').append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+              $('#phuong').append('<option value="' + val_phuong.id + '" data-name="' + val_phuong.full_name + '">' + val_phuong.full_name + '</option>');
             });
           }
         });
       }
     });
+
+    // Cập nhật tên phường/xã khi được chọn
+    $('#phuong').change(function() {
+      var wardName = $('#phuong option:selected').attr('data-name'); // Lấy tên phường
+      $('#wardName').val(wardName); // Cập nhật trường ẩn cho tên phường
+    });
   });
+
 </script>
 <script>
   function updateShippingFee() {

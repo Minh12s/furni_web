@@ -97,4 +97,8 @@ public class ProductService {
     public boolean isProductNameExists(String productName, int excludeId) {
         return productRepository.existsByProductNameAndIdNot(productName, excludeId);
     }
+    public int getTotalSales(int productId) {
+        return orderProductRepository.countByProductId(productId);
+    }
+
 }

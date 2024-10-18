@@ -118,9 +118,9 @@ public class CheckOutController extends BaseController {
         order.setFullName(fullName);
         order.setEmail(email);
         order.setAddressDetail(addressDetail);
-        order.setProvince(provinceName);
-        order.setDistrict(districtName);
-        order.setWard(wardName);
+        order.setProvince(provinceName); // Lưu tên tỉnh
+        order.setDistrict(districtName); // Lưu tên quận/huyện
+        order.setWard(wardName); // Lưu tên phường/xã
         order.setTelephone(telephone);
         order.setShippingMethod(shippingMethod);
         order.setPaymentMethod(paymentMethod);

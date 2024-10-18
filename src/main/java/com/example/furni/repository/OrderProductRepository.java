@@ -15,4 +15,6 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
     boolean existsByProductId(int productId);
 
     Optional<OrderProduct> findByOrderAndProduct(Orders order, Product product);
+    int countByProductId(int productId);
+
 }

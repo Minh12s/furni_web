@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -31,7 +29,8 @@ public class UserCategoryController extends BaseController{
     private SizeService sizeService;
     @Autowired
     private BrandService brandService;
-
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping("/category")
     public String category(Model model,
@@ -63,8 +62,16 @@ public class UserCategoryController extends BaseController{
 
         // Lấy tất cả các màu sắc từ toàn bộ sản phẩm, không phụ thuộc vào kết quả lọc
         Set<String> uniqueColors = productService.getAllAvailableColors(); // Hàm này trả về danh sách màu sắc không bị lặp
+        // Tính rating cho mỗi sản phẩm
+        Map<Integer, Double> productRatings = new HashMap<>();
+        for (Product product : filteredProducts) {
+            double averageRating = reviewService.calculateAverageRating(product.getId());
+            productRatings.put(product.getId(), averageRating);
+        }
 
         // Thêm các thuộc tính vào model
+        model.addAttribute("productRatings", productRatings);
+
         model.addAttribute("products", filteredProducts);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
@@ -82,6 +89,8 @@ public class UserCategoryController extends BaseController{
         model.addAttribute("materials", materials);
         model.addAttribute("brands", brands);
 
+
+
         return "User/category";
     }
 
@@ -95,7 +104,15 @@ public class UserCategoryController extends BaseController{
 
             // Lấy 4 sản phẩm cùng danh mục nhưng không bao gồm sản phẩm hiện tại
             Page<Product> relatedProducts = productService.getRelatedProducts(product.getCategory().getId(), product.getId(), 4);
+            // Tính rating cho từng sản phẩm liên quan
+            Map<Integer, Double> relatedProductRatings = new HashMap<>();
+            for (Product relatedProduct : relatedProducts) {
+                double averageRating = reviewService.calculateAverageRating(relatedProduct.getId());
+                relatedProductRatings.put(relatedProduct.getId(), averageRating);
+            }
             model.addAttribute("relatedProducts", relatedProducts.getContent());
+            model.addAttribute("relatedProductRatings", relatedProductRatings);
+
 
             // Lấy thông báo thành công từ session và xóa sau khi lấy
             String successMessage = (String) request.getSession().getAttribute("successMessage");
@@ -110,7 +127,16 @@ public class UserCategoryController extends BaseController{
                 model.addAttribute("errorMessage", errorMessage);
                 request.getSession().removeAttribute("errorMessage");
             }
-
+            // Tính toán các thông tin đánh giá
+            double averageRating = reviewService.calculateAverageRating(product.getId());
+            int reviewCount = reviewService.countReviews(product.getId());
+            int totalSales = productService.getTotalSales(product.getId());
+            List<Review> approvedComments = reviewService.getApprovedCommentsByProductId(product.getId());
+            // Thêm các thông tin vào model
+            model.addAttribute("averageRating", averageRating);
+            model.addAttribute("reviewCount", reviewCount);
+            model.addAttribute("totalSales", totalSales);
+            model.addAttribute("approvedComments", approvedComments);
             return "User/details"; // Trả về view hiển thị chi tiết sản phẩm
         } else {
             return "redirect:/error"; // Chuyển hướng đến trang lỗi nếu không tìm thấy sản phẩm

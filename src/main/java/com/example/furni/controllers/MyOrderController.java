@@ -1,13 +1,8 @@
 package com.example.furni.controllers;
 
 import com.example.furni.controllers.User.BaseController;
-import com.example.furni.entity.OrderProduct;
-import com.example.furni.entity.Orders;
-import com.example.furni.entity.User;
-import com.example.furni.service.CartService;
-import com.example.furni.service.OrderService;
-import com.example.furni.service.myOrderService;
-import com.example.furni.service.UserService;
+import com.example.furni.entity.*;
+import com.example.furni.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -30,6 +26,10 @@ public class MyOrderController extends BaseController {
     private myOrderService myOrderService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private ReviewService reviewService;
     @GetMapping("/MyOrder")
     public String myOrder(
             HttpServletRequest request,
@@ -66,6 +66,12 @@ public class MyOrderController extends BaseController {
         model.addAttribute("totalPages", ordersPage.getTotalPages()); // Tổng số trang
         model.addAttribute("pageSize", size); // Kích thước trang
 
+        String successMessage = (String) request.getSession().getAttribute("reviewMessage");
+        if (successMessage != null) {
+            model.addAttribute("reviewMessage", successMessage);
+            request.getSession().removeAttribute("reviewMessage"); // Remove the message after retrieving
+        }
+
         return "MyOrder/MyOrder"; // Trả về tên view để hiển thị
     }
     @PostMapping("/updateStatus")
@@ -89,7 +95,7 @@ public class MyOrderController extends BaseController {
             orderService.saveOrder(order);
 
             // Thêm thông báo thành công vào session
-            session.setAttribute("successMessage", "Order status updated successfully!");
+            session.setAttribute("reviewMessage", "Order cancel updated successfully!");
         }
         return "redirect:/MyOrder/MyOrder";
     }
@@ -348,9 +354,41 @@ public class MyOrderController extends BaseController {
         }
         return "MyOrder/OrderDetail";
     }
-    @GetMapping("/Review")
-    public String Review(){
-        return "MyOrder/Review";
+    @GetMapping("/Review/{productId}")
+    public String showReviewPage(@PathVariable int productId, Model model) {
+        model.addAttribute("productId", productId);
+        return "MyOrder/Review"; // Trả về trang review
+    }
+
+
+    @PostMapping("/Review/{productId}")
+    public String submitReview(
+            @PathVariable int productId,
+            @RequestParam("RatingValue") int ratingValue,
+            @RequestParam("Comment") String comment,
+            HttpServletRequest request) {
+
+        // Lấy userId từ session
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+
+        // Lấy thông tin user và product
+        User user = userService.findById(userId);  // Sử dụng userId để tìm user
+        Product product = productService.findById(productId);  // Tìm product bằng productId
+
+        // Tạo đối tượng Review
+        Review review = new Review();
+        review.setProduct(product);
+        review.setUser(user);
+        review.setComment(comment);
+        review.setRatingValue(ratingValue);
+        review.setReviewDate(LocalDateTime.now());
+        review.setStatus("pending"); // Trạng thái ban đầu là pending
+
+        // Lưu review vào cơ sở dữ liệu
+        reviewService.save(review);
+        request.getSession().setAttribute("reviewMessage", "Your review has been successfully .");
+
+        return "redirect:/MyOrder/MyOrder"; // Redirect về trang MyOrder sau khi review thành công
     }
     @GetMapping("/RequestRefund")
     public String RequestRefund(Model model, HttpSession session){
