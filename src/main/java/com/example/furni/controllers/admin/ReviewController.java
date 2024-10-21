@@ -29,7 +29,8 @@ public class ReviewController {
                          @RequestParam(required = false) String productName,
                          @RequestParam(required = false) Double priceFrom,
                          @RequestParam(required = false) Double priceTo,
-                         @RequestParam(required = false) Double avgRating) {
+                         @RequestParam(required = false) Double avgRating,
+                         HttpSession session) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productsPage = reviewService.filterProducts(productName, priceFrom, priceTo,avgRating, pageable);
 
@@ -37,7 +38,12 @@ public class ReviewController {
             Optional<Double> averageRating = reviewService.getAverageRatingForProduct(product.getId());
             product.setAverageRating(averageRating.orElse(0.0)); // Set số sao trung bình
         });
-
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
+        String successMessage = (String) session.getAttribute("successMessage");
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
         model.addAttribute("productsPage", productsPage);
         model.addAttribute("size", size);
         return "admin/Review/review";
@@ -64,41 +70,13 @@ public class ReviewController {
 
         return "admin/Review/ListReview";
     }
+    @PostMapping("/updateReviewStatus")
+    public String updateReviewStatus(@RequestParam("id") Long reviewId, @RequestParam("status") String status, HttpSession session) {
+        // Gọi service để update status cho review
+        reviewService.updateStatus(reviewId, status);
 
-    @GetMapping("/detailreview/{reviewId}")
-    public String DetailReview(@PathVariable int reviewId, Model model) {
-        Optional<Review> review = reviewService.getReviewById(reviewId);
-        if (review.isPresent()) {
-            model.addAttribute("review", review.get());
-
-            return "admin/Review/DetailReview";
-        } else {
-            // Xử lý khi không tìm thấy review
-            model.addAttribute("errorMessage", "Review not found");
-            return "admin/Review/ListReview"; // hoặc chuyển hướng về trang danh sách review
-        }
-
-    }
-    @PostMapping("/updateReviewStatus/{reviewId}")
-    public String updateReviewStatus(@PathVariable int reviewId, @RequestParam String status, HttpSession session) {
-        boolean updated = reviewService.updateReviewStatus(reviewId, status);
-
-        if (updated) {
-            session.setAttribute("successMessage", "Review status updated successfully.");
-        } else {
-            session.setAttribute("errorMessage", "Unable to update review status.");
-        }
-
-        // Lấy lại thông tin sản phẩm của review
-        Optional<Review> review = reviewService.getReviewById(reviewId);
-        if (review.isPresent()) {
-            int productId = review.get().getProduct().getId();  // Lấy productId từ review
-            // Sau khi cập nhật trạng thái, chuyển hướng về trang danh sách review của sản phẩm đó
-            return "redirect:/admin/listReview/" + productId;
-        } else {
-            // Nếu review không tồn tại, chuyển hướng về trang danh sách review mặc định
-            return "redirect:/admin/reviews";
-        }
+        session.setAttribute("successMessage", "Successfully updated status review!");
+        return "redirect:/admin/reviews";
     }
 
 }

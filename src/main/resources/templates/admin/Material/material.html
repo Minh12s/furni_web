@@ -29,6 +29,10 @@
   <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
   <span th:text="${successMessage}"></span>
 </div>
+<div id="errorAlert" class="alert alert-danger" th:if="${errorMessage}">
+  <i class="mdi mdi-alert-circle" style="margin-right: 8px;"></i>
+  <span th:text="${errorMessage}"></span>
+</div>
 
 <section class="section main-section">
 
@@ -156,7 +160,11 @@
     border: 1px solid green;
     color: white;
   }
-
+  .alert-danger {
+    background-color: red; /* Màu nền đỏ cho thông báo lỗi */
+    border: 1px solid red;
+    color: white;
+  }
   .alert-show {
     display: block;
   }
@@ -223,17 +231,30 @@
 </style>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    var alert = document.getElementById('successAlert');
-    if (alert) {
-      alert.classList.add('alert-show');
+    var successAlert = document.getElementById('successAlert');
+    var errorAlert = document.getElementById('errorAlert');
+
+    if (successAlert) {
+      successAlert.classList.add('alert-show');
       setTimeout(function() {
-        alert.classList.add('fade-out');
+        successAlert.classList.add('fade-out');
         setTimeout(function() {
-          alert.style.display = 'none';
+          successAlert.style.display = 'none';
+        }, 1000); // match the duration of the fade-out transition
+      }, 3000); // display duration in milliseconds
+    }
+
+    if (errorAlert) {
+      errorAlert.classList.add('alert-show');
+      setTimeout(function() {
+        errorAlert.classList.add('fade-out');
+        setTimeout(function() {
+          errorAlert.style.display = 'none';
         }, 1000); // match the duration of the fade-out transition
       }, 3000); // display duration in milliseconds
     }
   });
+
 </script>
 <div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 

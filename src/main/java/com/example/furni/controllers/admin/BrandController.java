@@ -38,6 +38,12 @@ public class BrandController {
             model.addAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
         }
+        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
         return "admin/brand/brand";
     }
 
@@ -94,11 +100,16 @@ public class BrandController {
         session.setAttribute("successMessage", "Brand updated successfully!");
         return "redirect:/admin/brand";
     }
-
     @PostMapping("/deleteBrand/{id}")
-    public String deleteClassRoom(@PathVariable Integer id, HttpSession session) {
-        brandService.deleteBrand(id);
-        session.setAttribute("successMessage", "Brand deleted successfully!");
+    public String deleteBrand(@PathVariable Integer id, HttpSession session) {
+        try {
+            brandService.deleteBrand(id);
+            session.setAttribute("successMessage", "Brand deleted successfully!");
+        } catch (IllegalStateException e) {
+            session.setAttribute("errorMessage", e.getMessage());
+        } catch (RuntimeException e) {
+            session.setAttribute("errorMessage", "Brand not found.");
+        }
         return "redirect:/admin/brand";
     }
 }

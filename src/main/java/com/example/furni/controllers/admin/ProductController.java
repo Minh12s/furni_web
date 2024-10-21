@@ -248,8 +248,6 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 
-
-
     @PostMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable("id") int id, HttpSession session) {
         if (orderProductService.isProductUsedInOrders(id)) {

@@ -2,6 +2,7 @@ package com.example.furni.service;
 
 import com.example.furni.entity.Category;
 import com.example.furni.repository.CategoryRepository;
+import com.example.furni.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,8 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
@@ -42,7 +45,13 @@ public class CategoryService {
     }
 
     public void deleteCategory(int id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        // Kiểm tra xem có sản phẩm nào liên kết với category không
+        if (productRepository.existsByCategory_Id(id)) {
+            throw new IllegalStateException("The category cannot be deleted because there are already products in the category.");
+        }
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
         categoryRepository.delete(category);
     }
     public boolean isCategoryNameExists(String categoryName) {

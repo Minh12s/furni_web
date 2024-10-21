@@ -1,8 +1,10 @@
 package com.example.furni.service;
 
 import com.example.furni.entity.Brand;
+import com.example.furni.entity.Category;
 import com.example.furni.entity.Material;
 import com.example.furni.repository.BrandRepository;
+import com.example.furni.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,8 @@ import java.util.Optional;
 public class BrandService {
     @Autowired
     private BrandRepository brandRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Brand> getAllBrands() {
         return brandRepository.findAll();
@@ -35,7 +39,13 @@ public class BrandService {
     }
 
     public void deleteBrand(int id) {
-        brandRepository.deleteById(id);
+        if (productRepository.existsByBrand_Id(id)) {
+            throw new IllegalStateException("The brand cannot be deleted because there are already products in the brand.");
+        }
+
+        Brand brand = brandRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Brand not found"));
+        brandRepository.delete(brand);
     }
 
     public boolean isBrandNameExists(String brandName) {

@@ -33,7 +33,10 @@
     </button>
   </div>
 </form>
-
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+  <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+  <span th:text="${successMessage}"></span>
+</div>
 <section class="section main-section">
   <div class="card has-table">
     <header class="card-header">
@@ -146,6 +149,33 @@
 </section>
 
 <style>
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: none;
+    color: #fff; /* Text color */
+    font-weight: bold;
+  }
+
+  .alert-success {
+    background-color: green; /* Blue background color */
+    border: 1px solid green;
+    color: white;
+  }
+
+  .alert-show {
+    display: block;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
   .btn-primary {
     color: rgb(245 157 57);
     background-color: rgb(251 226 197);
@@ -175,34 +205,18 @@
   }
 </style>
 <script>
-  function exportReviewToExcel() {
-    window.location.href = '/Excel/ExportReviewToExcel';
-  }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
-<script>
-  this.exportExcel = function () {
-    var tab = document.getElementById('sampleTable');
-    var excel = new ExcelJS.Workbook();
-    var sheet = excel.addWorksheet('Sheet 1');
-    for (var i = 0; i < tab.rows.length; i++) {
-      var row = sheet.getRow(i + 1);
-      for (var j = 0; j < tab.rows[i].cells.length; j++) {
-        row.getCell(j + 1).value = tab.rows[i].cells[j].innerText;
-      }
+  document.addEventListener('DOMContentLoaded', function() {
+    var alert = document.getElementById('successAlert');
+    if (alert) {
+      alert.classList.add('alert-show');
+      setTimeout(function() {
+        alert.classList.add('fade-out');
+        setTimeout(function() {
+          alert.style.display = 'none';
+        }, 1000); // match the duration of the fade-out transition
+      }, 3000); // display duration in milliseconds
     }
-    excel.xlsx.writeBuffer().then(function (buffer) {
-      var blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-      var url = window.URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = url;
-      a.download = "reviewfiltered.xlsx";
-      a.click();
-      window.URL.revokeObjectURL(url);
-    });
-  }
+  });
 </script>
 <div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 

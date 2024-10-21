@@ -48,7 +48,7 @@
                     <td th:text="${orderReturn.order.id}"></td>
                     <td th:text="${orderReturn.user.id}"></td>
                     <td th:text="${orderReturn.product.id}"></td>
-                    <td th:text="${orderReturn.returnDate}"></td>
+                    <td th:text="${#temporals.format(orderReturn.returnDate, 'dd/MM/yyyy')}"></td>
                     <td th:text="${orderReturn.reason}"></td>
                     <td th:text="${orderReturn.qty}"></td>
                     <td th:text="${orderReturn.description}"></td>
@@ -63,9 +63,37 @@
 
 
     </div>
+    <!-- Modal xác nhận -->
+    <div id="confirmationModal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid #ccc; z-index: 1000; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <h3 id="modalMessage"></h3>
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+            <button id="confirmButton" class="btn-confirm">Confirm</button>
+            <button onclick="closeModal()" class="btn-cancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Overlay để làm mờ nền khi modal hiện -->
+    <div id="modalOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
 
 </section>
 <style>
+    .btn-confirm {
+        background-color: #007BFF; /* Màu xanh nước biển */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background-color: #FF4D4D; /* Màu đỏ */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 16px;
+        cursor: pointer;
+    }
     .text-pending {
         color: orange; /* Màu chữ cho trạng thái "pending" */
     }
@@ -107,7 +135,7 @@
     <div th:if="${orderReturn.status == 'pending'}">
         <form method="post" th:action="@{'/admin/updateOrderReturn/' + ${orderReturn.id}}">
             <input type="hidden" name="status" value="approved" />
-            <button onclick="return confirm('Are you sure you want to update the status to: Approved?')" type="submit" class="btn btn-warning"
+            <button type="button" onclick="openModal('Are you sure you want to update the status to: Approved?', 'approved', this.form)" class="btn btn-warning"
                     style="padding: 5px 10px; border-radius: 5px; background-color: green; color: white;">
                 Approve
             </button>
@@ -117,7 +145,7 @@
     <div th:if="${orderReturn.status == 'pending'}">
         <form method="post" th:action="@{'/admin/updateOrderReturn/' + ${orderReturn.id}}">
             <input type="hidden" name="status" value="rejected" />
-            <button onclick="return confirm('Are you sure you want to update the status to: Rejected?')" type="submit" class="btn btn-danger"
+            <button type="button" onclick="openModal('Are you sure you want to update the status to: Rejected?', 'rejected', this.form)" class="btn btn-danger"
                     style="padding: 5px 10px; border-radius: 5px; background-color: red; color: white;">
                 Reject
             </button>
@@ -131,6 +159,26 @@
         </a>
     </div>
 </div>
+<script>
+    // Hàm để mở modal và thay đổi thông điệp
+    function openModal(message, statusValue, form) {
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('confirmationModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+
+        // Xử lý khi người dùng nhấn "Confirm"
+        document.getElementById('confirmButton').onclick = function() {
+            form.querySelector('input[name="status"]').value = statusValue;
+            form.submit(); // Gửi form sau khi xác nhận
+        };
+    }
+
+    // Hàm để đóng modal
+    function closeModal() {
+        document.getElementById('confirmationModal').style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+</script>
 
 <div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 

@@ -35,6 +35,12 @@ public class SizeController {
             model.addAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
         }
+        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
 
         return "admin/Size/size";
     }
@@ -92,11 +98,16 @@ public class SizeController {
         session.setAttribute("successMessage", "Size updated successfully!");
         return "redirect:/admin/sizes";
     }
-
     @PostMapping("/deleteSize/{id}")
     public String deleteSize(@PathVariable int id,HttpSession session) {
-        sizeService.deleteById(id);
-        session.setAttribute("successMessage", "Size deleted successfully!");
+        try {
+            sizeService.deleteSize(id);
+            session.setAttribute("successMessage", "Size deleted successfully!");
+        } catch (IllegalStateException e) {
+            session.setAttribute("errorMessage", e.getMessage());
+        } catch (RuntimeException e) {
+            session.setAttribute("errorMessage", "Size not found.");
+        }
         return "redirect:/admin/sizes";
     }
 }

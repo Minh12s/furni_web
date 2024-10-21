@@ -34,6 +34,10 @@
     <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
     <span th:text="${successMessage}"></span>
 </div>
+<div id="errorAlert" class="alert alert-danger" th:if="${errorMessage}">
+    <i class="mdi mdi-alert-circle" style="margin-right: 8px;"></i>
+    <span th:text="${errorMessage}"></span>
+</div>
 
 <section class="section main-section">
 
@@ -150,7 +154,37 @@
     </div>
 </section>
 <style>
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: none;
+        color: #fff; /* Text color */
+        font-weight: bold;
+    }
 
+    .alert-success {
+        background-color: green; /* Blue background color */
+        border: 1px solid green;
+        color: white;
+    }
+    .alert-danger {
+        background-color: red; /* Màu nền đỏ cho thông báo lỗi */
+        border: 1px solid red;
+        color: white;
+    }
+    .alert-show {
+        display: block;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
     .btn-primary {
         color: rgb(245 157 57);
         background-color: rgb(251 226 197);
@@ -216,47 +250,33 @@
     .button-group > * {
         margin-right: 10px; /* Khoảng cách giữa các nút */
     }
-    .alert {
-        padding: 15px;
-        margin: 10px 0;
-        border-radius: 4px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 1000;
-        display: none;
-        color: #fff; /* Text color */
-        font-weight: bold;
-    }
-
-    .alert-success {
-        background-color: green; /* Blue background color */
-        border: 1px solid green;
-        color: white;
-    }
-
-    .alert-show {
-        display: block;
-    }
-
-    .fade-out {
-        opacity: 0;
-        transition: opacity 1s ease-out;
-    }
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var alert = document.getElementById('successAlert');
-        if (alert) {
-            alert.classList.add('alert-show');
+        var successAlert = document.getElementById('successAlert');
+        var errorAlert = document.getElementById('errorAlert');
+
+        if (successAlert) {
+            successAlert.classList.add('alert-show');
             setTimeout(function() {
-                alert.classList.add('fade-out');
+                successAlert.classList.add('fade-out');
                 setTimeout(function() {
-                    alert.style.display = 'none';
+                    successAlert.style.display = 'none';
+                }, 1000); // match the duration of the fade-out transition
+            }, 3000); // display duration in milliseconds
+        }
+
+        if (errorAlert) {
+            errorAlert.classList.add('alert-show');
+            setTimeout(function() {
+                errorAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    errorAlert.style.display = 'none';
                 }, 1000); // match the duration of the fade-out transition
             }, 3000); // display duration in milliseconds
         }
     });
+
 </script>
 <div th:insert="~{/include/fragmentsAdmin :: script}"></div>
 

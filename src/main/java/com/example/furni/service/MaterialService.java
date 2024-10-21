@@ -1,7 +1,9 @@
 package com.example.furni.service;
 
+import com.example.furni.entity.Category;
 import com.example.furni.entity.Material;
 import com.example.furni.repository.MaterialRepository;
+import com.example.furni.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,8 @@ public class MaterialService {
 
     @Autowired
     private MaterialRepository materialRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Material> getAllMaterials() {
         return materialRepository.findAll();
@@ -37,9 +41,14 @@ public class MaterialService {
 
         return materialRepository.save(material);
     }
-
     public void deleteMaterial(int id) {
-        Material material = materialRepository.findById(id).orElseThrow(() -> new RuntimeException("Material not found"));
+        // Kiểm tra xem có sản phẩm nào liên kết với category không
+        if (productRepository.existsByMaterial_Id(id)) {
+            throw new IllegalStateException("The material cannot be deleted because there are already products in the material.");
+        }
+
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material not found"));
         materialRepository.delete(material);
     }
     public boolean isMaterialNameExists(String materialName) {

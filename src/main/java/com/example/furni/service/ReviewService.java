@@ -45,17 +45,9 @@ public class ReviewService {
         return reviewRepository.findById(reviewId);
     }
     // Update review status
-    public boolean updateReviewStatus(int reviewId, String status) {
-        Optional<Review> reviewOptional = reviewRepository.findById(reviewId);
-        if (reviewOptional.isPresent()) {
-            Review review = reviewOptional.get();
-            if ("pending".equals(review.getStatus())) {
-                review.setStatus(status);  // Update status to "approved" or "rejected"
-                reviewRepository.save(review);
-                return true;
-            }
-        }
-        return false;
+    public void updateStatus(Long reviewId, String status) {
+        // Cập nhật status cho review bằng repository
+        reviewRepository.updateStatus(reviewId, status);
     }
     public void save(Review review) {
         reviewRepository.save(review);

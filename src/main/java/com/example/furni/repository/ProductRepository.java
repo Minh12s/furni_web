@@ -80,5 +80,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     long count();
     // Phương thức để tìm các sản phẩm hết hàng
     Page<Product> findByQty(int qty, Pageable pageable);
+
+    // check xem có sản phẩm nào chứa khoá ngoại không
+    boolean existsByCategory_Id(int categoryId);
+    boolean existsByBrand_Id(int brandId);
+    boolean existsByMaterial_Id(int materialId);
+    boolean existsBySize_Id(int materialId);
 }
 

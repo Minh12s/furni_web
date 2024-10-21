@@ -25,10 +25,6 @@
         <span class="icon"><i class="mdi mdi-reload"></i></span>
       </a>
     </header>
-    <div id="successAlert" class="alert alert-success" th:if="${successMessage}">
-      <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
-      <span th:text="${successMessage}"></span>
-    </div>
     <div class="card-content">
       <div th:if="${#lists.isEmpty(reviewsPage.content)}" style="text-align: center; color: red;">
         No cancelled orders available.
@@ -39,8 +35,11 @@
           <th width="10"><input type="checkbox" id="all"></th>
           <th>User Id</th>
           <th>Customer name</th>
+          <th>Comment</th>
           <th>Email</th>
           <th>Status</th>
+          <th>Rating Value</th>
+          <th>Date Review</th>
           <th></th>
         </tr>
         </thead>
@@ -49,15 +48,41 @@
           <th width="10"><input type="checkbox"></th>
           <td th:text="${review.id}"></td>
           <td th:text="${review.user.fullName}"></td>
+          <td th:text="${review.comment}">Great product!</td>
           <td th:text="${review.user.email}"></td>
           <td th:text="${review.status}"></td>
+          <td th:text="${review.ratingValue}">5</td>
+          <td th:text="${#temporals.format(review.reviewDate, 'dd/MM/yyyy')}">2023-01-01</td>
           <td class="actions-cell">
             <div class="buttons right nowrap">
-              <a th:href="@{/admin/detailreview/{reviewId}(reviewId=${review.id})}" class="btn btn-primary" style="background-color:green; color:white;">
-                <span class="icon"><i class="mdi mdi-eye"></i></span>
-              </a>
+              <div th:if="${review.status == 'pending'}" style="display: flex; gap: 10px;">
+                <!-- Nút Approve -->
+                <form th:action="@{/admin/updateReviewStatus}" method="post"
+                      style="display:inline-block;">
+                  <input type="hidden" name="id" th:value="${review.id}"/>
+                  <input type="hidden" name="status" value="approved"/>
+                  <input type="hidden" name="_csrf" th:value="${_csrf.token}"/> <!-- CSRF token -->
+                  <button type="button" class="button small green"
+                          th:attr="onclick='openConfirmationModal(' + ${review.id} + ', \'approved\')'">
+                    <span class="icon"><i class="mdi mdi-check"></i></span> Approve
+                  </button>
+                </form>
+                <!-- Nút Reject -->
+                <form th:action="@{/admin/updateReviewStatus}" method="post"
+                      style="display:inline-block;">
+                  <input type="hidden" name="id" th:value="${review.id}"/>
+                  <input type="hidden" name="status" value="rejected"/>
+                  <input type="hidden" name="_csrf" th:value="${_csrf.token}"/> <!-- CSRF token -->
+                  <button type="button" class="button small red"
+                          th:attr="onclick='openConfirmationModal(' + ${review.id} + ', \'rejected\')'">
+                    <span class="icon"><i class="mdi mdi-close"></i></span> Reject
+                  </button>
+                </form>
+              </div>
             </div>
           </td>
+
+
         </tr>
 
         </tbody>
@@ -77,10 +102,76 @@
       </div>
     </div>
   </div>
+  <!-- Modal -->
+  <div class="modal" id="confirmationModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Confirm Action</h3>
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="confirmationMessage">Are you sure you want to perform this action?</p>
+        </div>
+        <div class="modal-footer">
+          <form id="confirmForm" method="post" action="">
+            <input type="hidden" name="id" id="confirmReviewId" />
+            <input type="hidden" name="status" id="confirmReviewStatus" />
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            <button style="margin-left:300px" type="submit" class="button large green modal-btn">Yes</button>
+          </form>
+          <button type="button" class="button large red modal-btn cancel-btn">Cancel</button>
 
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 <style>
-  /* Các lớp CSS cho trạng thái */
+  .modal {
+    display: none; /* Ẩn modal ban đầu */
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+  }
+
+  .modal-dialog {
+    max-width: 500px;
+    margin: 100px auto; /* Để modal hiện ở giữa màn hình */
+  }
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-header, .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-footer {
+    padding-top: 10px;
+  }
+
+  .close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    line-height: 1;
+    cursor: pointer;
+  }
+
   .status-pending {
     color: #FF6347; /* Màu đỏ cam cho pending */
   }
@@ -141,6 +232,39 @@
     background-color: #f0f0f0; /* Màu nền khi hover */
   }
 </style>
+<script>
+  function openConfirmationModal(reviewId, status) {
+    // Cập nhật thông tin vào modal
+    document.getElementById('confirmReviewId').value = reviewId;
+    document.getElementById('confirmReviewStatus').value = status;
+
+    // Cập nhật action cho form
+    var confirmForm = document.getElementById('confirmForm');
+    confirmForm.action = '/admin/updateReviewStatus'; // Đặt URL chính xác ở đây
+
+    // Cập nhật message trong modal
+    var message = status === 'approved' ? 'Are you sure you want to approve this review?' : 'Are you sure you want to reject this review?';
+    document.getElementById('confirmationMessage').textContent = message;
+
+    // Hiển thị modal
+    var modal = document.getElementById('confirmationModal');
+    modal.style.display = 'block'; // Hiển thị modal
+  }
+
+
+  function closeModal() {
+    var modal = document.getElementById('confirmationModal');
+    modal.style.display = 'none'; // Ẩn modal
+  }
+
+  // Thêm sự kiện click cho nút Close
+  document.querySelector('.close').addEventListener('click', closeModal);
+
+  // Thêm sự kiện click cho nút Cancel
+  document.querySelector('.cancel-btn').addEventListener('click', closeModal);
+
+
+</script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var alert = document.getElementById('successAlert');

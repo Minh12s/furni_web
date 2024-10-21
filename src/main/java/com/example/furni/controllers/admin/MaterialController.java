@@ -31,6 +31,12 @@ public class MaterialController {
             model.addAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
         }
+        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
 
         return "admin/Material/material";
     }
@@ -94,11 +100,16 @@ public class MaterialController {
 
         return "redirect:/admin/materials";
     }
-
     @PostMapping("/deleteMaterial/{id}")
     public String deleteMaterial(@PathVariable int id, HttpSession session) {
-        materialService.deleteMaterial(id);
-        session.setAttribute("successMessage", "Material deleted successfully!");
+        try {
+            materialService.deleteMaterial(id);
+            session.setAttribute("successMessage", "Material deleted successfully!");
+        } catch (IllegalStateException e) {
+            session.setAttribute("errorMessage", e.getMessage());
+        } catch (RuntimeException e) {
+            session.setAttribute("errorMessage", "Material not found.");
+        }
         return "redirect:/admin/materials";
     }
 }

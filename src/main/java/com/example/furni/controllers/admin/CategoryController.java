@@ -32,10 +32,17 @@ public class CategoryController {
         model.addAttribute("categoriesPage", categoriesPage);
         model.addAttribute("size", size);
 
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
         String successMessage = (String) session.getAttribute("successMessage");
         if (successMessage != null) {
             model.addAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
+        }
+        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
         }
 
         return "admin/Category/category";
@@ -140,8 +147,15 @@ public class CategoryController {
 
     @PostMapping("/deleteCategory/{id}")
     public String deleteCategory(@PathVariable int id, HttpSession session) {
-        categoryService.deleteCategory(id);
-        session.setAttribute("successMessage", "Category deleted successfully!");
+        try {
+            categoryService.deleteCategory(id);
+            session.setAttribute("successMessage", "Category deleted successfully!");
+        } catch (IllegalStateException e) {
+            session.setAttribute("errorMessage", e.getMessage());
+        } catch (RuntimeException e) {
+            session.setAttribute("errorMessage", "Category not found.");
+        }
         return "redirect:/admin/category";
     }
+
 }
