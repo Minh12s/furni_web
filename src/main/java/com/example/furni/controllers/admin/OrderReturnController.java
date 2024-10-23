@@ -75,8 +75,14 @@ public class OrderReturnController {
                                           RedirectAttributes redirectAttributes,
                                           HttpSession session) {
         try {
-            // Cập nhật trạng thái đơn trả hàng và hồi lại qty
+            // Cập nhật trạng thái đơn trả hàng và hồi lại qty nếu cần
             orderReturnService.updateOrderReturnStatus(orderReturnId, status);
+
+            if ("rejected".equals(status)) {
+                // Nếu trạng thái là "Rejected", chuyển hướng đến trang nhập lý do từ chối
+                return "redirect:/admin/rejectReason?orderId=" + orderReturnId;
+            }
+
             session.setAttribute("successMessage", "Order return status updated successfully.");
         } catch (Exception e) {
             session.setAttribute("errorMessage", "Unable to update Order return status.");
@@ -85,20 +91,20 @@ public class OrderReturnController {
         return "redirect:/admin/orderReturn";
     }
 
-
     @GetMapping("/rejectReason")
-    public String RejectReason(){
+    public String RejectReason(@RequestParam("orderId") int orderId, Model model) {
+        model.addAttribute("orderId", orderId); // Truyền orderId để hiển thị trong form
         return "admin/OrderReturn/rejectReason";
     }
     @PostMapping("/rejectReason")
-    public String handleRejectReason(@RequestParam("rejectreason") String rejectReason, @RequestParam("orderId") Long orderId, Model model) {
+    public String handleRejectReason(@RequestParam("rejectreason") String rejectReason, @RequestParam("orderId") Long orderId, HttpSession session) {
         // Gửi email
         try {
             sendRejectionEmail(rejectReason);
-            model.addAttribute("successMessage", "Rejection email sent successfully!");
+            session.setAttribute("successMessage", "Rejection email sent successfully!.");
         } catch (MessagingException e) {
             e.printStackTrace();
-            model.addAttribute("errorMessage", "Failed to send rejection email.");
+            session.setAttribute("errorMessage", "Failed to send rejection email.");
         }
         return "redirect:/admin/orderReturn";
     }
@@ -107,8 +113,8 @@ public class OrderReturnController {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setFrom(""); // mail người gửi
-        helper.setTo(""); // mail người nhận
+        helper.setFrom("dungprohn1409@gmail.com"); // mail người gửi
+        helper.setTo("dangdunghn1409@gmail.com"); // mail người nhận
         helper.setSubject("Order Rejection Confirmation");
 
         // Tạo nội dung HTML cho email, chèn lý do từ rejectReason
@@ -133,12 +139,34 @@ public class OrderReturnController {
                 "            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n" +
                 "        }\n" +
                 "        .header {\n" +
-                "            text-align: center;\n" +
+                "            text-align: left;\n" +  // Căn chỉnh chữ về phía trái
                 "            margin-bottom: 20px;\n" +
+                "        }\n" +
+                "        .navbar-brand {\n" +
+                "            display: inline-block;\n" +
+                "            padding-top: 0.3125rem;\n" +
+                "            padding-bottom: 0.3125rem;\n" +
+                "            margin-right: 1rem;\n" +
+                "            font-size: 1.25rem;\n" +
+                "            line-height: inherit;\n" +
+                "            white-space: nowrap;\n" +
+                "            margin-top: 22px;\n" +
+                "            margin-left: 20px;\n" +
+                "            font-weight: 800;\n" +
+                "            font-size: 20px;\n" +
+                "            text-transform: uppercase;\n" +
+                "            letter-spacing: 2px;\n" +
+                "        }\n" +
+                "        .navbar-brand:hover, .navbar-brand:focus {\n" +
+                "            text-decoration: none;\n" +
+                "        }\n" +
+                "        .ftco-navbar-light .navbar-brand {\n" +
+                "            color: #000000;\n" +
                 "        }\n" +
                 "        h1 {\n" +
                 "            color: #333;\n" +
                 "            margin-bottom: 10px;\n" +
+                "            text-align: center;\n" +  // Chỉnh lại tiêu đề chính ở giữa
                 "        }\n" +
                 "        p {\n" +
                 "            color: #666;\n" +
@@ -158,8 +186,9 @@ public class OrderReturnController {
                 "<body>\n" +
                 "    <div class=\"container\">\n" +
                 "        <div class=\"header\">\n" +
-                "            <h1>Order Rejection Confirmation</h1>\n" +
+                "            <a class=\"navbar-brand\">Furni</a>\n" +  // Chữ Furni đã được căn trái
                 "        </div>\n" +
+                "        <h1>Order Rejection Confirmation</h1>\n" +
                 "        <p>Dear Valued Customer,</p>\n" +
                 "        <p>We regret to inform you that your refund request could not be processed successfully at this time.</p>\n" +
                 "        <p>Reason for rejection: <strong>" + rejectReason + "</strong></p>\n" +
@@ -168,6 +197,7 @@ public class OrderReturnController {
                 "    </div>\n" +
                 "</body>\n" +
                 "</html>";
+
 
         // Đặt nội dung email vào body
         helper.setText(emailContent, true);  // true để gửi email dưới dạng HTML

@@ -481,7 +481,7 @@ public class MyOrderController extends BaseController {
                                       @RequestParam("RefundAmount") double refundAmount,
                                       @RequestParam("Qty") int qty, // Thêm trường qty
                                       @RequestParam("ImagePath") MultipartFile[] imageFiles,
-                                      HttpSession session) {
+                                      HttpSession session ,  HttpServletRequest request) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
@@ -522,6 +522,7 @@ public class MyOrderController extends BaseController {
 
         // Lưu thông tin vào cơ sở dữ liệu
         orderReturnService.save(orderReturn);
+        request.getSession().setAttribute("successMessage", "Refund request sent successfully.");
         return "redirect:/MyOrder/MyOrder"; // Chuyển hướng về trang đơn hàng của tôi
     }
 

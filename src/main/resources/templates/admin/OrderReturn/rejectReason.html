@@ -32,6 +32,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <form method="post" th:action="@{/admin/rejectReason}" class="bg-white p-5 contact-form">
+                        <input type="hidden" name="orderId" th:value="${orderId}"/>
                         <div class="form-group col-md-6">
                             <label class="control-label">Reason</label>
                             <textarea class="form-control" id="rejectreason" name="rejectreason" rows="3" placeholder="Reason for rejection"></textarea>
