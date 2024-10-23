@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 @Controller
 @RequestMapping("/MyOrder")
@@ -355,8 +357,14 @@ public class MyOrderController extends BaseController {
         return "MyOrder/OrderDetail";
     }
     @GetMapping("/Review/{productId}")
-    public String showReviewPage(@PathVariable int productId, Model model) {
+    public String showReviewPage(@PathVariable int productId, Model model, HttpServletRequest request) {
         model.addAttribute("productId", productId);
+        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+        String errorMessage = (String) request.getSession().getAttribute("ErrorReviewMessage");
+        if (errorMessage != null) {
+            model.addAttribute("ErrorReviewMessage", errorMessage);
+            request.getSession().removeAttribute("ErrorReviewMessage");
+        }
         return "MyOrder/Review"; // Trả về trang review
     }
 
@@ -364,7 +372,7 @@ public class MyOrderController extends BaseController {
     @PostMapping("/Review/{productId}")
     public String submitReview(
             @PathVariable int productId,
-            @RequestParam("RatingValue") int ratingValue,
+            @RequestParam(value = "RatingValue", required = false, defaultValue = "0") int ratingValue, // Mặc định là 0 nếu không có giá trị
             @RequestParam("Comment") String comment,
             HttpServletRequest request) {
 
@@ -374,12 +382,30 @@ public class MyOrderController extends BaseController {
         // Lấy thông tin user và product
         User user = userService.findById(userId);  // Sử dụng userId để tìm user
         Product product = productService.findById(productId);  // Tìm product bằng productId
+        if (ratingValue < 1 || ratingValue > 5) {
+            request.getSession().setAttribute("ErrorReviewMessage", "Please select a valid rating.");
+            return "redirect:/MyOrder/Review/" + productId;
+        }
+
+        // Làm sạch comment để ngăn chặn XSS
+        String sanitizedComment = Jsoup.clean(comment, Safelist.none());
+        // Kiểm tra xem comment đã thay đổi sau khi được làm sạch chưa
+        if (!comment.equals(sanitizedComment)) {
+            // Nếu comment bị thay đổi, thông báo lỗi và không cho gửi bình luận
+            request.getSession().setAttribute("ErrorReviewMessage", "Your review is invalid. Please try again.");
+            return "redirect:/MyOrder/Review/" + productId; // Redirect về trang review
+        }
+        int MAX_COMMENT_LENGTH = 255; // Giới hạn 255 ký tự
+        if (sanitizedComment.length() > MAX_COMMENT_LENGTH) {
+            request.getSession().setAttribute("ErrorReviewMessage", "Your review is too long. Maximum length is " + MAX_COMMENT_LENGTH + " characters.");
+            return "redirect:/MyOrder/Review/" + productId;
+        }
 
         // Tạo đối tượng Review
         Review review = new Review();
         review.setProduct(product);
         review.setUser(user);
-        review.setComment(comment);
+        review.setComment(sanitizedComment);
         review.setRatingValue(ratingValue);
         review.setReviewDate(LocalDateTime.now());
         review.setStatus("pending"); // Trạng thái ban đầu là pending

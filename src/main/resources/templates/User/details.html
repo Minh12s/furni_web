@@ -76,18 +76,18 @@
           <p class="text-left mr-4">
             <a href="#" class="mr-2" th:text="${averageRating}">0.0</a>
 
-            <!-- Hiển thị sao đầy khi averageRating > 0 -->
+            <!-- Hiển thị sao đầy -->
             <a th:if="${averageRating > 0}" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).floor(averageRating))}">
               <span class="ion-ios-star star-yellow"></span>
             </a>
 
-            <!-- Hiển thị nửa sao nếu có -->
-            <a th:if="${averageRating > 0 and averageRating - T(java.lang.Math).floor(averageRating) >= 0.5}">
+            <!-- Hiển thị sao nửa nếu có -->
+            <a th:if="${averageRating - T(java.lang.Math).floor(averageRating) >= 0.5}">
               <span class="ion-ios-star-half star-yellow"></span>
             </a>
 
-            <!-- Hiển thị sao trống nếu averageRating < 5, không hiển thị khi averageRating = 5 -->
-            <a th:if="${averageRating < 5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).floor(averageRating) - (averageRating - T(java.lang.Math).floor(averageRating) >= 0.5 ? 1 : 0))}">
+            <!-- Hiển thị sao trống -->
+            <a th:if="${averageRating < 4.5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).ceil(averageRating))}">
               <span class="ion-ios-star-outline star-yellow"></span>
             </a>
           </p>

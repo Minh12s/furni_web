@@ -242,8 +242,8 @@
                         <span class="ion-ios-star-half star-yellow"></span>
                       </a>
 
-                      <!-- Hiển thị sao trống nếu đánh giá nhỏ hơn 5, không hiển thị khi đánh giá là 5 -->
-                      <a th:if="${productRatings[product.id] < 5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).floor(productRatings[product.id]) - (productRatings[product.id] - T(java.lang.Math).floor(productRatings[product.id]) >= 0.5 ? 1 : 0))}">
+                      <!-- Hiển thị sao trống nếu đánh giá nhỏ hơn 4.5 -->
+                      <a th:if="${productRatings[product.id] < 4.5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).ceil(productRatings[product.id]))}">
                         <span class="ion-ios-star-outline star-yellow"></span>
                       </a>
                     </p>
