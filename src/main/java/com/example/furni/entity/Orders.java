@@ -1,8 +1,8 @@
 package com.example.furni.entity;
 
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -17,45 +17,69 @@ public class Orders {
 
     @Column(name = "order_date")
     private LocalDateTime orderDate;
+
     @Column(name = "total_amount")
     private double totalAmount;
+
     @Column(name = "status")
     private String status;
+
     @Column(name = "is_paid")
     private String isPaid;
+
     @Column(name = "province")
     private String province;
+
     @Column(name = "district")
     private String district;
+
     @Column(name = "ward")
     private String ward;
+
     @Column(name = "address_detail")
     private String addressDetail;
-    public String getFullAddress() {
-        return String.format("%s, %s, %s - %s", province, district, ward, addressDetail);
-    }
 
     @Column(name = "full_name")
     private String fullName;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "telephone")
     private String telephone;
+
     @Column(name = "payment_method")
     private String paymentMethod;
+
     @Column(name = "shipping_method")
     private String shippingMethod;
+
     @Column(name = "note")
     private String note;
+
     @Column(name = "schedule")
     private LocalDateTime schedule;
+
     @Column(name = "order_code", unique = true)
     private String orderCode;
+
     @Column(name = "cancel_reason")
     private String cancelReason;
 
+    // Thêm trường secureToken (UUID)
+    @Column(name = "secure_token", unique = true)
+    private String secureToken;
 
-    public Orders(int id, User user, LocalDateTime orderDate, double totalAmount, String status, String isPaid, String province, String district, String ward, String addressDetail, String fullName, String email, String telephone, String paymentMethod, String shippingMethod, String note, LocalDateTime schedule, String orderCode, String cancelReason) {
+    public Orders() {
+        // Tạo secureToken ngẫu nhiên khi khởi tạo đối tượng
+        this.secureToken = UUID.randomUUID().toString();
+    }
+
+    // Constructor đầy đủ
+    public Orders(int id, User user, LocalDateTime orderDate, double totalAmount, String status, String isPaid,
+                  String province, String district, String ward, String addressDetail, String fullName,
+                  String email, String telephone, String paymentMethod, String shippingMethod, String note,
+                  LocalDateTime schedule, String orderCode, String cancelReason, String secureToken) {
         this.id = id;
         this.user = user;
         this.orderDate = orderDate;
@@ -75,8 +99,10 @@ public class Orders {
         this.schedule = schedule;
         this.orderCode = orderCode;
         this.cancelReason = cancelReason;
+        this.secureToken = secureToken != null ? secureToken : UUID.randomUUID().toString();  // Nếu chưa có token, tạo mới
     }
 
+    // Các getter và setter
     public int getId() {
         return id;
     }
@@ -229,7 +255,16 @@ public class Orders {
         this.cancelReason = cancelReason;
     }
 
-    public Orders(){
+    public String getSecureToken() {
+        return secureToken;
     }
 
+    public void setSecureToken(String secureToken) {
+        this.secureToken = secureToken;
+    }
+
+    // Hàm lấy địa chỉ đầy đủ
+    public String getFullAddress() {
+        return String.format("%s, %s, %s - %s", province, district, ward, addressDetail);
+    }
 }
