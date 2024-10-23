@@ -497,7 +497,7 @@ public class MyOrderController extends BaseController {
         orderReturn.setUser(user);
         orderReturn.setProduct(product);
         orderReturn.setReturnDate(LocalDateTime.now());
-        orderReturn.setStatus("Pending"); // Đặt trạng thái mặc định là "Pending"
+        orderReturn.setStatus("pending"); // Đặt trạng thái mặc định là "Pending"
         orderReturn.setReason(reason);
         orderReturn.setQty(qty); // Lưu số lượng sản phẩm trả về
         orderReturn.setRefundAmount(refundAmount);
