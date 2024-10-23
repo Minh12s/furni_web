@@ -30,6 +30,10 @@ public class OrderReturnService {
     @Autowired
     private OrderProductRepository orderProductRepository;
 
+    public void save(OrderReturn orderReturn) {
+        orderReturnRepository.save(orderReturn);
+    }
+
     // Lấy tất cả OrderReturn cùng với ảnh liên quan
     public List<OrderReturn> getAllOrderReturns() {
         List<OrderReturn> orderReturns = orderReturnRepository.findAll();

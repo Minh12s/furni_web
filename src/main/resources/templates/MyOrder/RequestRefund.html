@@ -73,45 +73,48 @@
         <div style="border-bottom: 1px solid #DDE1EF;" class="content-top">
             <p style="color: black">Do you want to return your product? Please tell us why</p>
         </div>
-        <form action="/MyOrder/RequestRefund" method="post" enctype="multipart/form-data">
-            <div style="margin-top:20px;">
-                <input type="hidden" name="OrderId" value="12345" />
-                <input type="hidden" name="ProductId" value="67890" />
+        <form th:action="@{/MyOrder/RequestRefund}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="OrderId" th:value="${orderId}" />
+            <input type="hidden" name="ProductId" th:value="${productId}" />
+            <input type="hidden" name="Qty" th:value="${qty}" />
 
-                <div class="cancel-reason">
-                    <label for="reason">Reason for cancellation:</label>
-                    <select style="width:310px;" id="reason" name="Reason">
-                        <option value="Missing quantity/accessories">Missing quantity/accessories</option>
-                        <option value="Seller sent wrong item">Seller sent wrong item</option>
-                        <option value="The product cannot be used">The product cannot be used</option>
-                        <option value="Different from description">Different from description</option>
-                        <option value="Counterfeit goods, imitation goods">Counterfeit goods, imitation goods</option>
-                        <option value="The goods are intact but no longer needed">The goods are intact but no longer needed</option>
-                    </select>
-                </div>
 
-                <div class="cancel-reason">
-                    <label for="description">Description:</label><br>
-                    <textarea id="description" name="Description">This is a sample description of the issue.</textarea>
-                </div>
-
-                <div class="cancel-reason">
-                    <div class="Q0r6sy">
-                        <div>Thêm Hình ảnh</div>
-                        <div id="image-counter">(0/4)</div>
-                    </div>
-                    <input type="file" multiple accept="image/*" style="display: none;" id="image-upload" name="ImagePath">
-                    <div id="image-preview"></div>
-                </div>
-
-                <div class="cancel-reason">
-                    <label for="refundAmount" class="refund-label">Refund Amount:</label>
-                    <input style="border: none; font-size: 20px; font-weight: bold;" type="text" name="RefundAmount" id="refundAmount" class="refund-value" value="50.00" />
-                    <br>
-                    <span class="refund-description">Refund to : Furni Account Balance</span>
-                </div>
+            <div class="cancel-reason">
+                <label for="reason">Reason for cancellation:</label>
+                <select style="width:310px;" id="reason" name="Reason">
+                    <option value="Missing quantity/accessories">Missing quantity/accessories</option>
+                    <option value="Seller sent wrong item">Seller sent wrong item</option>
+                    <option value="The product cannot be used">The product cannot be used</option>
+                    <option value="Different from description">Different from description</option>
+                    <option value="Counterfeit goods, imitation goods">Counterfeit goods, imitation goods</option>
+                    <option value="The goods are intact but no longer needed">The goods are intact but no longer needed</option>
+                </select>
             </div>
-            <button style="margin-left:25px;" type="submit" class="btn btn-primary py-3 px-5">Submit</button>
+
+            <div class="cancel-reason">
+                <label for="description">Description:</label><br>
+                <textarea id="description" name="Description" placeholder="Enter the issue description..."></textarea>
+            </div>
+
+
+            <div class="cancel-reason">
+                <div class="Q0r6sy">
+                    <div>Thêm Hình ảnh</div>
+                    <div id="image-counter">(0/4)</div>
+                </div>
+                <input type="file" multiple accept="image/*" id="image-upload" name="ImagePath">
+                <div id="image-preview"></div>
+            </div>
+
+            <div class="cancel-reason">
+                <label for="refundAmount" class="refund-label">Refund Amount:</label>
+                <input type="text" name="RefundAmount" id="refundAmount"
+                       th:value="${refundAmount}" readonly />
+                <br>
+                <span class="refund-description">Refund to : Furni Account Balance</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary py-3 px-5">Submit</button>
         </form>
     </div>
 </div>

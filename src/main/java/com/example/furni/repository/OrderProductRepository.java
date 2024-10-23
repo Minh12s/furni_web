@@ -17,4 +17,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
     Optional<OrderProduct> findByOrderAndProduct(Orders order, Product product);
     int countByProductId(int productId);
 
+    OrderProduct findByOrder_IdAndProduct_Id(int orderId, int productId);
+
+
 }

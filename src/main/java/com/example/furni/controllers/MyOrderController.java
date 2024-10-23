@@ -2,6 +2,7 @@ package com.example.furni.controllers;
 
 import com.example.furni.controllers.User.BaseController;
 import com.example.furni.entity.*;
+import com.example.furni.repository.OrderProductRepository;
 import com.example.furni.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -14,10 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/MyOrder")
@@ -32,6 +37,10 @@ public class MyOrderController extends BaseController {
     private ProductService productService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private OrderReturnService orderReturnService;
+    @Autowired
+    private OrderProductRepository orderProductRepository;
     @GetMapping("/MyOrder")
     public String myOrder(
             HttpServletRequest request,
@@ -417,30 +426,86 @@ public class MyOrderController extends BaseController {
         return "redirect:/MyOrder/MyOrder"; // Redirect về trang MyOrder sau khi review thành công
     }
     @GetMapping("/RequestRefund")
-    public String RequestRefund(Model model, HttpSession session){
+    public String requestRefundForm(@RequestParam("productId") int productId,
+                                    @RequestParam("orderId") int orderId,
+                                    Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId != null) {
-            // Tìm người dùng theo userId
             User user = userService.findById(userId);
             model.addAttribute("user", user);
         } else {
-            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+            return "redirect:/login";
         }
+
+        // Lấy thông tin sản phẩm từ đơn hàng
+        OrderProduct orderProduct = orderProductRepository.findByOrder_IdAndProduct_Id(orderId, productId);
+        double refundAmount = orderProduct.getPrice() * orderProduct.getQty(); // Tính tổng tiền của sản phẩm
+
+        // Gửi thông tin qty về form
+        int qty = orderProduct.getQty(); // Lấy số lượng sản phẩm trong đơn hàng
+
+        model.addAttribute("orderId", orderId); // Gửi orderId đến form
+        model.addAttribute("productId", productId); // Gửi productId đến form
+        model.addAttribute("refundAmount", refundAmount); // Gửi tổng tiền của sản phẩm đến form
+        model.addAttribute("qty", qty); // Gửi số lượng của sản phẩm đến form
+
         return "MyOrder/RequestRefund";
     }
-    @GetMapping("/ReasonCancel/{id}")
-    public String ReasonCancel(@PathVariable("id") int id, Model model, HttpSession session){
+
+
+
+    @PostMapping("/RequestRefund")
+    public String handleRefundRequest(@RequestParam("OrderId") int orderId,
+                                      @RequestParam("ProductId") int productId,
+                                      @RequestParam("Reason") String reason,
+                                      @RequestParam("Description") String description,
+                                      @RequestParam("RefundAmount") double refundAmount,
+                                      @RequestParam("Qty") int qty, // Thêm trường qty
+                                      @RequestParam("ImagePath") MultipartFile[] imageFiles,
+                                      HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
-        if (userId != null) {
-            // Tìm người dùng theo userId
-            User user = userService.findById(userId);
-            model.addAttribute("user", user);
-        } else {
-            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        if (userId == null) {
+            return "redirect:/login";
         }
-        return "MyOrder/ReasonCancel";
+
+        User user = userService.findById(userId);
+        Orders order = orderService.getOrderById(orderId);
+        Product product = productService.findById(productId);
+
+        OrderReturn orderReturn = new OrderReturn();
+        orderReturn.setOrder(order);
+        orderReturn.setUser(user);
+        orderReturn.setProduct(product);
+        orderReturn.setReturnDate(LocalDateTime.now());
+        orderReturn.setStatus("Pending"); // Đặt trạng thái mặc định là "Pending"
+        orderReturn.setReason(reason);
+        orderReturn.setQty(qty); // Lưu số lượng sản phẩm trả về
+        orderReturn.setRefundAmount(refundAmount);
+        orderReturn.setDescription(description);
+
+        // Lưu hình ảnh dưới dạng base64 vào bảng ReturnImages
+        List<ReturnImages> returnImagesList = new ArrayList<>();
+        for (MultipartFile imageFile : imageFiles) {
+            if (!imageFile.isEmpty()) {
+                try {
+                    String base64Image = Base64.getEncoder().encodeToString(imageFile.getBytes());
+                    ReturnImages returnImage = new ReturnImages();
+                    returnImage.setImagePath(base64Image);
+                    returnImage.setOrderReturn(orderReturn);
+                    returnImagesList.add(returnImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        orderReturn.setReturnImages(returnImagesList);
+
+        // Lưu thông tin vào cơ sở dữ liệu
+        orderReturnService.save(orderReturn);
+        return "redirect:/MyOrder/MyOrder"; // Chuyển hướng về trang đơn hàng của tôi
     }
+
 
 }
