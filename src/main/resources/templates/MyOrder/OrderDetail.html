@@ -101,10 +101,10 @@
                 <td>
                     <div style="display:flex;" class="col-sm-2" th:if="${order.status == 'complete'}">
                         <a class="btn btn-dark" th:href="@{'/MyOrder/Review/' + ${orderProduct.product.id}}">Review</a>
-                        <a class="btn btn-dark"
-                           style="background-color: #FFA45C;"
-                           th:href="@{/MyOrder/RequestRefund(productId=${orderProduct.product.id}, orderId=${order.id})}">
-                            refund
+                        <a class="btn btn-dark" style="background-color: #FFA45C;"
+                           th:if="${orderProduct.status != 1}"
+                           th:href="@{/MyOrder/RequestRefund(productId=${orderProduct.product.id}, orderId=${orderProduct.order.id})}">
+                            Refund
                         </a>
                     </div>
                 </td>
