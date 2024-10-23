@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class myOrderService {
 
@@ -14,6 +16,16 @@ public class myOrderService {
     private OrdersRepository ordersRepository;
     public Page<Orders> findOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
         return ordersRepository.findByUserIdAndStatus(userId, status, pageable);
+    }
+    // Phương thức lấy đơn hàng theo ID
+    public Orders getOrderById(int id) {
+        Optional<Orders> orderOpt = ordersRepository.findById(id);
+        return orderOpt.orElse(null);
+    }
+
+    // Phương thức lưu đơn hàng
+    public void saveOrder(Orders order) {
+        ordersRepository.save(order);
     }
 
 }

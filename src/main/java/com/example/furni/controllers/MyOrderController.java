@@ -77,10 +77,10 @@ public class MyOrderController extends BaseController {
         model.addAttribute("totalPages", ordersPage.getTotalPages()); // Tổng số trang
         model.addAttribute("pageSize", size); // Kích thước trang
 
-        String successMessage = (String) request.getSession().getAttribute("reviewMessage");
+        String successMessage = (String) request.getSession().getAttribute("successMessage");
         if (successMessage != null) {
-            model.addAttribute("reviewMessage", successMessage);
-            request.getSession().removeAttribute("reviewMessage"); // Remove the message after retrieving
+            model.addAttribute("successMessage", successMessage);
+            request.getSession().removeAttribute("successMessage"); // Remove the message after retrieving
         }
 
         return "MyOrder/MyOrder"; // Trả về tên view để hiển thị
@@ -333,6 +333,24 @@ public class MyOrderController extends BaseController {
 
         return "MyOrder/OrderComplete";
     }
+    @PostMapping("/updateStatusComplete")
+    public String updateStatusComplete(@RequestParam("id") int id,
+                                       @RequestParam("status") String status,
+                                       HttpServletRequest request) {
+        // Lấy đơn hàng theo ID
+        Orders order = myOrderService.getOrderById(id);
+
+        if (order != null) {
+            // Cập nhật trạng thái
+            order.setStatus(status);
+            myOrderService.saveOrder(order);
+
+            // Lưu thông báo thành công vào session sử dụng request
+            request.getSession().setAttribute("successMessage", "Order status updated successfully.");
+        }
+        // Chuyển hướng về trang quản lý đơn hàng của người dùng
+        return "redirect:/MyOrder/MyOrder";
+    }
     @GetMapping("/OrderReturn")
     public String OrderReturn(Model model, HttpSession session){
         Integer userId = (Integer) session.getAttribute("userId");
@@ -421,7 +439,7 @@ public class MyOrderController extends BaseController {
 
         // Lưu review vào cơ sở dữ liệu
         reviewService.save(review);
-        request.getSession().setAttribute("reviewMessage", "Your review has been successfully .");
+        request.getSession().setAttribute("successMessage", "Your review has been successfully .");
 
         return "redirect:/MyOrder/MyOrder"; // Redirect về trang MyOrder sau khi review thành công
     }

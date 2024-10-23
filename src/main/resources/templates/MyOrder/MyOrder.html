@@ -27,9 +27,9 @@
 </div>
 <div th:insert="/include/fragments :: navbar"></div>
 <!-- END nav -->
-<div id="successAlert" class="alert alert-success" th:if="${reviewMessage}">
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
     <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
-    <span th:text="${reviewMessage}"></span>
+    <span th:text="${successMessage}"></span>
 </div>
 <div class="contain1">
     <div class="title">
