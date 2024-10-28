@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class ContactController extends BaseController{
+public class ContactUserController extends BaseController{
 
     @Autowired
     private ContactService contactService;

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:insert="~{/include/fragmentsAdmin :: head}"></div>
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="~{/include/fragmentsAdmin :: navbar}"></div>
+<section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        <ul>
+            <li>Admin</li>
+            <li>Contact</li>
+        </ul>
+        <a href="https://github.com/justboil/admin-one-tailwind" target="_blank" class="button blue">
+            <span class="icon"><i class="mdi mdi-github-circle"></i></span>
+            <span>GitHub</span>
+        </a>
+    </div>
+</section>
+
+<div id="successAlert" class="alert alert-success" th:if="${successMessage}">
+    <i class="mdi mdi-check-circle" style="margin-right: 8px;"></i>
+    <span th:text="${successMessage}"></span>
+</div>
+<div id="errorAlert" class="alert alert-danger" th:if="${errorMessage}">
+    <i class="mdi mdi-alert-circle" style="margin-right: 8px;"></i>
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<section class="section main-section">
+    <div class="card has-table">
+        <header class="card-header">
+            <p class="card-header-title">Contact</p>
+
+            <form class="card-header-icon" method="get" onchange="this.submit()">
+                <select style="margin-left:-10px; padding: 5px 10px; border: 1px solid #F1F1F1" name="size">
+                    <option value="5" th:selected="${size == 5}">5</option>
+                    <option value="10" th:selected="${size == 10}">10</option>
+                    <option value="20" th:selected="${size == 20}">20</option>
+                    <option value="50" th:selected="${size == 50}">50</option>
+                </select>
+                <input type="hidden" name="page" th:value="${contactsPage.number}">
+            </form>
+        </header>
+
+        <div class="card-content">
+            <!-- Kiểm tra xem có dữ liệu hay không -->
+            <div th:if="${#lists.isEmpty(contactsPage)}" style="text-align: center; color: red;">
+                No contact available.
+            </div>
+
+            <!-- Hiển thị bảng chỉ khi có dữ liệu -->
+            <table th:if="${!#lists.isEmpty(contactsPage)}">
+                <thead>
+                <tr>
+                    <th class="checkbox-cell">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            <span class="check"></span>
+                        </label>
+                    </th>
+                    <th>ID</th>
+                    <th>name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Contact date</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="contact : ${contactsPage.content}">
+                    <td class="checkbox-cell">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            <span class="check"></span>
+                        </label>
+                    </td>
+                    <td th:text="${contact.id}"></td>
+                    <td th:text="${contact.name}"></td>
+                    <td th:text="${contact.email}"></td>
+                    <td th:text="${contact.message}"></td>
+                    <td th:text="${#temporals.format(contact.contactDate, 'dd/MM/yyyy')}"></td>
+<!--                    <td>-->
+<!--                        <div class="button-group">-->
+<!--                            <a th:href="@{/admin/editBrand/{id}(id=${brand.id})}" class="btn btn-primary">-->
+<!--                                <span class="icon"><i class="mdi mdi-pencil"></i></span>-->
+<!--                            </a>-->
+<!--                            <form th:action="@{/admin/deleteBrand/{id}(id=${brand.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this post?')">-->
+<!--                                <button type="submit" class="btn btn-danger">-->
+<!--                                    <span class="icon"><i class="mdi mdi-delete"></i></span>-->
+<!--                                </button>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </td>-->
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Phân trang chỉ hiển thị khi có dữ liệu -->
+            <div class="table-pagination" th:if="${!#lists.isEmpty(contactsPage)}">
+                <div class="flex items-center justify-between">
+                    <div class="buttons">
+                        <!-- Nút về trang đầu tiên với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${contactsPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/contact?page=0&size=' + ${contactsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-first"></i></span>
+                        </button>
+
+                        <!-- Nút sang trang trước với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${contactsPage.number == 0}"
+                                th:onclick="|window.location.href='/admin/contact?page=' + (${contactsPage.number} - 1) + '&size=' + ${contactsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-left"></i></span>
+                        </button>
+
+                        <!-- Các nút phân trang -->
+                        <button type="button" class="button"
+                                th:each="i : ${#numbers.sequence(0, contactsPage.totalPages - 1)}"
+                                th:if="${i == 0 || i == contactsPage.totalPages - 1 || (i >= contactsPage.number - 2 && i <= contactsPage.number + 2)}"
+                                th:text="${i + 1}"
+                                th:classappend="${i == contactsPage.number} ? 'active' : ''"
+                                th:onclick="|window.location.href='/admin/contact?page=' + ${i} + '&size=' + ${contactsPage.size}|">
+                        </button>
+
+                        <!-- Nút sang trang tiếp theo với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${contactsPage.number + 1 == contactsPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/contact?page=' + (${contactsPage.number} + 1) + '&size=' + ${contactsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-chevron-right"></i></span>
+                        </button>
+
+                        <!-- Nút tới trang cuối với icon -->
+                        <button type="button" class="button"
+                                th:disabled="${contactsPage.number + 1 == contactsPage.totalPages}"
+                                th:onclick="|window.location.href='/admin/contact?page=' + (${contactsPage.totalPages - 1}) + '&size=' + ${contactsPage.size}|">
+                            <span class="icon"><i class="mdi mdi-page-last"></i></span>
+                        </button>
+                    </div>
+                    <small th:text="'Page ' + (${contactsPage.number} + 1) + ' of ' + ${contactsPage.totalPages}"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<style>
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: none;
+        color: #fff; /* Text color */
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: green; /* Blue background color */
+        border: 1px solid green;
+        color: white;
+    }
+    .alert-danger {
+        background-color: red; /* Màu nền đỏ cho thông báo lỗi */
+        border: 1px solid red;
+        color: white;
+    }
+    .alert-show {
+        display: block;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
+    .btn-primary {
+        color: rgb(245 157 57);
+        background-color: rgb(251 226 197);
+        border: none;
+        /* border-top-left-radius: 10px !important; */
+        /* border-bottom-right-radius: 10px !important; */
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 5px 20px; /* Điều chỉnh kích thước theo ý muốn */
+    }
+
+    .edit-button {
+        margin-top: 10px; /* Điều chỉnh giá trị margin-top theo ý muốn */
+    }
+
+    .btn-add {
+        color: white;
+        background-color: black;
+        border: none;
+        /* border-top-left-radius: 10px !important; */
+        /* border-bottom-right-radius: 10px !important; */
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 10px 20px; /* Điều chỉnh kích thước theo ý muốn */
+    }
+
+    .btn-danger {
+        color: #FFF;
+        background-color: #dc3545;
+        border-color: #dc3545;
+        border: none;
+        /* border-top-left-radius: 10px !important; */
+        /* border-bottom-right-radius: 10px !important; */
+        border-radius: .357rem;
+        border: none;
+        font-weight: 600;
+        padding: 5px 20px;
+    }
+
+    .btn-danger:hover {
+        color: #FFF;
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .btn-danger:focus, .btn-danger.focus {
+        -webkit-box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+    }
+
+    .btn-danger.disabled, .btn-danger:disabled {
+        color: #FFF;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .button-group {
+        display: flex;
+    }
+
+    .button-group > * {
+        margin-right: 10px; /* Khoảng cách giữa các nút */
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var successAlert = document.getElementById('successAlert');
+        var errorAlert = document.getElementById('errorAlert');
+
+        if (successAlert) {
+            successAlert.classList.add('alert-show');
+            setTimeout(function() {
+                successAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    successAlert.style.display = 'none';
+                }, 1000); // match the duration of the fade-out transition
+            }, 3000); // display duration in milliseconds
+        }
+
+        if (errorAlert) {
+            errorAlert.classList.add('alert-show');
+            setTimeout(function() {
+                errorAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    errorAlert.style.display = 'none';
+                }, 1000); // match the duration of the fade-out transition
+            }, 3000); // display duration in milliseconds
+        }
+    });
+
+</script>
+<div th:insert="~{/include/fragmentsAdmin :: script}"></div>
+
+</body>
+</html>
