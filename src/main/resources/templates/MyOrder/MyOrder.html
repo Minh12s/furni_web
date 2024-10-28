@@ -108,13 +108,13 @@
             <tbody>
             <!-- Sử dụng th:each để lặp qua danh sách orders -->
             <tr th:each="order : ${orders}">
-                <td th:text="${order.id}"></td>
+                <td th:text="${order.orderCode}"></td>
                 <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
                 <td th:text="${order.totalAmount}"></td>
                 <td th:text="${order.fullName}"></td>
                 <td th:text="${order.shippingMethod}"></td>
                 <td th:text="${order.paymentMethod}"></td>
-                <td th:text="${order.isPaid}"></td>
+                <td th:text="${order.isPaid ? 'paid' : 'unpaid'}"></td>
                 <td th:text="${order.status}"></td>
                 <td>
                     <button style="padding: 7px 7px;" class="site-btn">
