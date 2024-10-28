@@ -114,7 +114,7 @@
                 <td th:text="${order.status}"></td>
                 <td>
                     <button style="padding: 7px 7px;" class="site-btn">
-                        <a style="color: white;" th:href="@{/MyOrder/OrderDetail/{id}(id=${order.id})}">Detail</a>
+                        <a style="color: white;" th:href="@{/MyOrder/OrderDetail/{secureToken}(secureToken=${order.secureToken})}">Detail</a>
                     </button>
                 </td>
             </tr>

@@ -87,13 +87,13 @@ public class MyOrderController extends BaseController {
     }
     @PostMapping("/updateStatus")
     public String updateStatus(
-            @RequestParam("id") int id,
+            @RequestParam("secureToken") String secureToken,
             @RequestParam("status") String status,
             @RequestParam("cancel_reason") String cancelReason,
             @RequestParam(value = "other_reason", required = false) String otherReason,
             HttpSession session) {
 
-        Orders order = orderService.getOrderById(id);
+        Orders order = orderService.getOrderBySecureToken(secureToken);
         if (order != null) {
             // Nếu người dùng chọn "Other" và nhập lý do cụ thể, sử dụng lý do từ otherReason thay vì "Other"
             if ("Other".equals(cancelReason) && otherReason != null && !otherReason.trim().isEmpty()) {
@@ -334,11 +334,11 @@ public class MyOrderController extends BaseController {
         return "MyOrder/OrderComplete";
     }
     @PostMapping("/updateStatusComplete")
-    public String updateStatusComplete(@RequestParam("id") int id,
+    public String updateStatusComplete(@RequestParam("secureToken") String secureToken,
                                        @RequestParam("status") String status,
                                        HttpServletRequest request) {
         // Lấy đơn hàng theo ID
-        Orders order = myOrderService.getOrderById(id);
+        Orders order = myOrderService.getOrderBySecureToken(secureToken);
 
         if (order != null) {
             // Cập nhật trạng thái
@@ -364,16 +364,20 @@ public class MyOrderController extends BaseController {
         }
         return "MyOrder/OrderReturn";
     }
-    @GetMapping("/OrderDetail/{id}")
-    public String OrderDetail(@PathVariable("id") int id, Model model , HttpSession session){
-        Orders order = orderService.getOrderById(id);
+    @GetMapping("/OrderDetail/{secureToken}")
+    public String OrderDetail(@PathVariable("secureToken") String secureToken, Model model , HttpSession session){
+        // Tìm đơn hàng theo secureToken
+        Orders order = orderService.getOrderBySecureToken(secureToken);
         if (order != null) {
-            List<OrderProduct> orderProducts = orderService.getOrderProductsByOrderId(id);
+            List<OrderProduct> orderProducts = orderService.getOrderProductsByOrderId(order.getId());
             model.addAttribute("order", order);
             model.addAttribute("orderProducts", orderProducts);
+        } else {
+            // Xử lý trường hợp không tìm thấy đơn hàng
+            return "redirect:/error"; // Ví dụ, chuyển hướng đến trang lỗi
         }
-        Integer userId = (Integer) session.getAttribute("userId");
 
+        Integer userId = (Integer) session.getAttribute("userId");
         if (userId != null) {
             // Tìm người dùng theo userId
             User user = userService.findById(userId);
@@ -383,6 +387,7 @@ public class MyOrderController extends BaseController {
         }
         return "MyOrder/OrderDetail";
     }
+
     @GetMapping("/Review/{productId}")
     public String showReviewPage(@PathVariable int productId, Model model, HttpServletRequest request) {
         model.addAttribute("productId", productId);
@@ -526,5 +531,20 @@ public class MyOrderController extends BaseController {
         return "redirect:/MyOrder/MyOrder"; // Chuyển hướng về trang đơn hàng của tôi
     }
 
+
+    @GetMapping("/ReasonCancel/{secureToken}")
+    public String ReasonCancel(@PathVariable("secureToken") String secureToken, Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+
+        if (userId != null) {
+            // Tìm người dùng theo userId
+            User user = userService.findById(userId);
+            model.addAttribute("user", user);
+        } else {
+            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
+        return "MyOrder/ReasonCancel";
+    }
 
 }

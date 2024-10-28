@@ -73,7 +73,7 @@
             <p style="color: black">Do you want to cancel your order? Please tell us why</p>
         </div>
         <form th:action="@{/MyOrder/updateStatus}" method="post">
-            <input type="hidden" name="id" th:value="${id}" />
+            <input type="hidden" name="secureToken" th:value="${secureToken}" />
             <input type="hidden" name="status" value="cancel" />
 
             <div style="margin-top:20px;">

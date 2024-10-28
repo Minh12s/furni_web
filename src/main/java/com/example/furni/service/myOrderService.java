@@ -17,6 +17,10 @@ public class myOrderService {
     public Page<Orders> findOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
         return ordersRepository.findByUserIdAndStatus(userId, status, pageable);
     }
+
+    public Orders getOrderBySecureToken(String secureToken) {
+        return ordersRepository.findBySecureToken(secureToken).orElse(null);
+    }
     // Phương thức lấy đơn hàng theo ID
     public Orders getOrderById(int id) {
         Optional<Orders> orderOpt = ordersRepository.findById(id);

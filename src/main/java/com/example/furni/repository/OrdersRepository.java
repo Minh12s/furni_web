@@ -11,9 +11,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, Integer> {
+    Optional<Orders> findBySecureToken(String secureToken);
+
     List<Orders> findByUserId(int userId);
     Page<Orders> findOderByUserId(int userId, Pageable pageable); // Thêm tham số Pageable
     // Lấy các đơn hàng theo trạng thái

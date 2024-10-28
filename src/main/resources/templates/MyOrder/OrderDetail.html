@@ -119,8 +119,8 @@
     <div style="float:right; display: flex; gap: 10px;">
 
         <div th:if="${order.status == 'pending'}" style="display: flex; gap: 10px;">
-            <form  th:action="@{/MyOrder/ReasonCancel/{id}(id=${order.id})}" >
-                <button onclick="return confirm('Surely you want to cancel your order')" type="submit" class="btn btn-danger"
+            <form  th:action="@{/MyOrder/ReasonCancel/{secureToken}(secureToken=${order.secureToken})}" >
+                <button type="submit" class="btn btn-danger"
                         style="padding: 5px 10px; border-radius: 5px; height: 47px; background-color: red; color: white;">
                     Cancel
                 </button>
@@ -128,7 +128,7 @@
 
         </div>
         <div th:if="${order.status == 'shipped'}" style="display: flex; gap: 10px;">
-            <form method="post" th:action="@{/MyOrder/updateStatusComplete(id=${order.id}, status='complete')}" th:attr="returnUrl=@{/MyOrder/MyOrder}">
+            <form method="post" th:action="@{/MyOrder/updateStatusComplete(secureToken=${order.secureToken}, status='complete')}" th:attr="returnUrl=@{/MyOrder/MyOrder}">
                 <button type="submit" style="padding: 7px 7px; color: white;" class="site-btn">
                     Complete
                 </button>

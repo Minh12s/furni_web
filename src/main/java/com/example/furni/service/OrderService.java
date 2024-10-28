@@ -36,6 +36,10 @@ public class OrderService {
     public Orders getOrderById(int id) {
         return ordersRepository.findById(id).orElse(null);
     }
+    public Orders getOrderBySecureToken(String secureToken) {
+        return ordersRepository.findBySecureToken(secureToken).orElse(null);
+    }
+
     public Page<Orders> getOrdersPaginated(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ordersRepository.findAll(pageable);
