@@ -28,88 +28,88 @@
     </div>
 </section>
 <section class="section main-section">
-<div class="card mb-6">
-    <header class="card-header">
-        <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-finance"></i></span>
-            Order Status Statistics
-        </p>
-        <a href="#" class="card-header-icon">
-            <span class="icon"><i class="mdi mdi-reload"></i></span>
-        </a>
-    </header>
-    <div class="card-content">
-        <canvas id="orderStatusChart"></canvas>
+    <div class="card mb-6">
+        <header class="card-header">
+            <p class="card-header-title">
+                <span class="icon"><i class="mdi mdi-finance"></i></span>
+                Order Status Statistics
+            </p>
+            <a href="#" class="card-header-icon">
+                <span class="icon"><i class="mdi mdi-reload"></i></span>
+            </a>
+        </header>
+        <div class="card-content">
+            <canvas id="orderStatusChart"></canvas>
+        </div>
     </div>
-</div>
-<div class="card mb-6">
-    <header class="card-header">
-        <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-finance"></i></span>
-            SALES STATISTICS BY YEAR
-        </p>
-        <a href="#" class="card-header-icon">
-            <span class="icon"><i class="mdi mdi-reload"></i></span>
-        </a>
-    </header>
-    <div class="card-content">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="tile">
-                    <form autocomplete="off" class="input-row">
-                        <div class="input-col">
-                            <p style="margin-bottom:-28px;" class="input-label">
-                                Filter by:
-                            </p>
-                            <select style="border: 1px solid black; padding: 5px 10px; margin-left: 70px;" id="yearSelect1" onchange="changeYearProductSold(this.value)" class="dashboard-filter form-control">
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024" selected>2024</option>
-                            </select>
+    <div class="card mb-6">
+        <header class="card-header">
+            <p class="card-header-title">
+                <span class="icon"><i class="mdi mdi-finance"></i></span>
+                SALES STATISTICS BY YEAR
+            </p>
+            <a href="#" class="card-header-icon">
+                <span class="icon"><i class="mdi mdi-reload"></i></span>
+            </a>
+        </header>
+        <div class="card-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="tile">
+                        <form autocomplete="off" class="input-row">
+                            <div class="input-col">
+                                <p style="margin-bottom:-28px;" class="input-label">
+                                    Filter by:
+                                </p>
+                                <select style="border: 1px solid black; padding: 5px 10px; margin-left: 70px;" id="yearSelect1" onchange="changeYearProductSold(this.value)" class="dashboard-filter form-control">
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024" selected>2024</option>
+                                </select>
+                            </div>
+                        </form>
+                        <div class="col-md-12">
+                            <canvas id="productSoldChart"></canvas>
                         </div>
-                    </form>
-                    <div class="col-md-12">
-                        <canvas id="productSoldChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="card mb-6">
-    <header class="card-header">
-        <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-finance"></i></span>
-            REVENUE STATISTICS BY YEAR
-        </p>
-        <a href="#" class="card-header-icon">
-            <span class="icon"><i class="mdi mdi-reload"></i></span>
-        </a>
-    </header>
-    <div class="card-content">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="tile">
-                    <form autocomplete="off" class="input-row">
-                        <div class="input-col">
-                            <p style="margin-bottom:-28px;" class="input-label">
-                                Filter by:
-                            </p>
-                            <select style="border: 1px solid black; padding: 5px 10px; margin-left: 70px;" id="yearSelectRevenue" onchange="changeYearRevenue(this.value)" class="dashboard-filter form-control">
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024" selected>2024</option>
-                            </select>
+    <div class="card mb-6">
+        <header class="card-header">
+            <p class="card-header-title">
+                <span class="icon"><i class="mdi mdi-finance"></i></span>
+                REVENUE STATISTICS BY YEAR
+            </p>
+            <a href="#" class="card-header-icon">
+                <span class="icon"><i class="mdi mdi-reload"></i></span>
+            </a>
+        </header>
+        <div class="card-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="tile">
+                        <form autocomplete="off" class="input-row">
+                            <div class="input-col">
+                                <p style="margin-bottom:-28px;" class="input-label">
+                                    Filter by:
+                                </p>
+                                <select style="border: 1px solid black; padding: 5px 10px; margin-left: 70px;" id="yearSelectRevenue" onchange="changeYearRevenue(this.value)" class="dashboard-filter form-control">
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024" selected>2024</option>
+                                </select>
+                            </div>
+                        </form>
+                        <div class="col-md-12">
+                            <canvas id="revenueChart"></canvas>
                         </div>
-                    </form>
-                    <div class="col-md-12">
-                        <canvas id="revenueChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </section>
 <!-- Script dependencies -->
