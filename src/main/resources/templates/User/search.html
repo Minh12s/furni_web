@@ -46,11 +46,23 @@
                             </div>
                             <div class="rating">
                                 <p class="text-right">
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                    <!-- Hiển thị sao đầy khi có đánh giá -->
+                                    <a th:if="${productRatings[product.id] > 0}"
+                                       th:each="i : ${#numbers.sequence(1, T(java.lang.Math).floor(productRatings[product.id]))}">
+                                        <span class="ion-ios-star star-yellow"></span>
+                                    </a>
+
+                                    <!-- Hiển thị nửa sao nếu có -->
+                                    <a th:if="${productRatings[product.id] > 0
+                       and productRatings[product.id] - T(java.lang.Math).floor(productRatings[product.id]) >= 0.5}">
+                                        <span class="ion-ios-star-half star-yellow"></span>
+                                    </a>
+
+                                    <!-- Hiển thị sao trống nếu đánh giá nhỏ hơn 4.5 -->
+                                    <a th:if="${productRatings[product.id] < 4.5}"
+                                       th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).ceil(productRatings[product.id]))}">
+                                        <span class="ion-ios-star-outline star-yellow"></span>
+                                    </a>
                                 </p>
                             </div>
                         </div>

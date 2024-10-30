@@ -41,9 +41,9 @@
                     <ul class="comment-list">
                         <div class="comment-form-wrap pt-5">
                             <h3 class="mb-5">Leave a review</h3>
-                            <form method="post" th:action="@{'/MyOrder/Review/' + ${productId}}">
-                                <input type="hidden" name="productId" th:value="${productId}" />
-                                <div class="form-group">
+                            <form method="post" th:action="@{'/MyOrder/Review/' + ${product.slug}}">
+
+                            <div class="form-group">
                                     <label for="RatingValue">Rating *</label>
                                     <div class="rating">
                                         <span class="star" data-value="1">&#9733;</span>

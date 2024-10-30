@@ -1,6 +1,7 @@
 package com.example.furni.controllers;
 
 import com.example.furni.controllers.User.BaseController;
+import com.example.furni.service.ReviewService;
 import org.springframework.ui.Model;
 import com.example.furni.entity.Product;
 import com.example.furni.service.HomeService;
@@ -10,13 +11,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
 public class HomeController extends BaseController {
     @Autowired
     private HomeService homeService;
+    @Autowired
+    private ReviewService reviewService;
+
     @GetMapping
     public String Home(){
         return "User/index";
@@ -45,8 +51,18 @@ public class HomeController extends BaseController {
 
     @GetMapping("/search")
     public String search(@RequestParam("searchString") String searchString, Model model) {
+        // Tìm các sản phẩm theo từ khóa
         List<Product> products = homeService.searchProducts(searchString);
         model.addAttribute("products", products);
+
+        // Tính rating cho từng sản phẩm
+        Map<Integer, Double> productRatings = new HashMap<>();
+        for (Product product : products) {
+            double averageRating = reviewService.calculateAverageRating(product.getId());
+            productRatings.put(product.getId(), averageRating);
+        }
+        model.addAttribute("productRatings", productRatings);
+
         return "User/search";
     }
 

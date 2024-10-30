@@ -10,8 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -56,11 +58,20 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByProductId(productId);
 
         // Lọc ra các đánh giá đã được phê duyệt
-        double average = reviews.stream()
+        List<Review> approvedReviews = reviews.stream()
                 .filter(review -> review.getStatus().equals("approved"))
+                .collect(Collectors.toList());
+
+        // Tính tổng điểm đánh giá
+        int totalScore = approvedReviews.stream()
                 .mapToInt(Review::getRatingValue)
-                .average()
-                .orElse(0.0);
+                .sum();
+
+        // Tính tổng số lượng đánh giá
+        int totalReviews = approvedReviews.size();
+
+        // Tránh chia cho 0 và tính số sao trung bình
+        double average = totalReviews > 0 ? (double) totalScore / totalReviews : 0.0;
 
         // Làm tròn kết quả tới 1 chữ số thập phân
         return Math.round(average * 10.0) / 10.0;
@@ -68,10 +79,16 @@ public class ReviewService {
 
 
 
-    public int countReviews(int productId) {
-        return reviewRepository.countByProductId(productId);
+
+    public int countApprovedReviews(int productId) {
+        return reviewRepository.countByProductIdAndStatus(productId, "approved");
     }
+
     public List<Review> getApprovedCommentsByProductId(int productId) {
-        return reviewRepository.findByProductIdAndStatus(productId, "approved");
+        return reviewRepository.findByProductIdAndStatus(productId, "approved")
+                .stream()
+                .sorted(Comparator.comparing(Review::getReviewDate).reversed()) // Sắp xếp theo ngày đánh giá giảm dần
+                .collect(Collectors.toList());
     }
+
 }

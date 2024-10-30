@@ -388,66 +388,62 @@ public class MyOrderController extends BaseController {
         return "MyOrder/OrderDetail";
     }
 
-    @GetMapping("/Review/{productId}")
-    public String showReviewPage(@PathVariable int productId, Model model, HttpServletRequest request) {
-        model.addAttribute("productId", productId);
-        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+    @GetMapping("/Review/{slug}")
+    public String showReviewPage(@PathVariable String slug, Model model, HttpServletRequest request) {
+        Product product = productService.findBySlug(slug);  // Find product by slug
+        model.addAttribute("product", product);
+
+        // Retrieve and clear error message from session
         String errorMessage = (String) request.getSession().getAttribute("ErrorReviewMessage");
         if (errorMessage != null) {
             model.addAttribute("ErrorReviewMessage", errorMessage);
             request.getSession().removeAttribute("ErrorReviewMessage");
         }
-        return "MyOrder/Review"; // Trả về trang review
+        return "MyOrder/Review"; // Return the review page
     }
 
-
-    @PostMapping("/Review/{productId}")
+    @PostMapping("/Review/{slug}")
     public String submitReview(
-            @PathVariable int productId,
-            @RequestParam(value = "RatingValue", required = false, defaultValue = "0") int ratingValue, // Mặc định là 0 nếu không có giá trị
+            @PathVariable String slug,
+            @RequestParam(value = "RatingValue", required = false, defaultValue = "0") int ratingValue,
             @RequestParam("Comment") String comment,
             HttpServletRequest request) {
 
-        // Lấy userId từ session
         Integer userId = (Integer) request.getSession().getAttribute("userId");
+        User user = userService.findById(userId);  // Get user by ID
+        Product product = productService.findBySlug(slug);  // Find product by slug
 
-        // Lấy thông tin user và product
-        User user = userService.findById(userId);  // Sử dụng userId để tìm user
-        Product product = productService.findById(productId);  // Tìm product bằng productId
         if (ratingValue < 1 || ratingValue > 5) {
             request.getSession().setAttribute("ErrorReviewMessage", "Please select a valid rating.");
-            return "redirect:/MyOrder/Review/" + productId;
+            return "redirect:/MyOrder/Review/" + slug;
         }
 
-        // Làm sạch comment để ngăn chặn XSS
         String sanitizedComment = Jsoup.clean(comment, Safelist.none());
-        // Kiểm tra xem comment đã thay đổi sau khi được làm sạch chưa
         if (!comment.equals(sanitizedComment)) {
-            // Nếu comment bị thay đổi, thông báo lỗi và không cho gửi bình luận
             request.getSession().setAttribute("ErrorReviewMessage", "Your review is invalid. Please try again.");
-            return "redirect:/MyOrder/Review/" + productId; // Redirect về trang review
+            return "redirect:/MyOrder/Review/" + slug;
         }
-        int MAX_COMMENT_LENGTH = 255; // Giới hạn 255 ký tự
+
+        int MAX_COMMENT_LENGTH = 255;
         if (sanitizedComment.length() > MAX_COMMENT_LENGTH) {
             request.getSession().setAttribute("ErrorReviewMessage", "Your review is too long. Maximum length is " + MAX_COMMENT_LENGTH + " characters.");
-            return "redirect:/MyOrder/Review/" + productId;
+            return "redirect:/MyOrder/Review/" + slug;
         }
 
-        // Tạo đối tượng Review
         Review review = new Review();
         review.setProduct(product);
         review.setUser(user);
         review.setComment(sanitizedComment);
         review.setRatingValue(ratingValue);
         review.setReviewDate(LocalDateTime.now());
-        review.setStatus("pending"); // Trạng thái ban đầu là pending
+        review.setStatus("pending");
 
-        // Lưu review vào cơ sở dữ liệu
         reviewService.save(review);
-        request.getSession().setAttribute("successMessage", "Your review has been successfully .");
+        request.getSession().setAttribute("reviewMessage", "Your review has been successfully submitted.");
 
-        return "redirect:/MyOrder/MyOrder"; // Redirect về trang MyOrder sau khi review thành công
+        return "redirect:/MyOrder/MyOrder";  // Redirect to MyOrder page after successful review
     }
+
     @GetMapping("/RequestRefund")
     public String requestRefundForm(@RequestParam("productId") int productId,
                                     @RequestParam("orderId") int orderId,

@@ -23,7 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     Page<Review> findByStatus(String status, Pageable pageable);
     List<Review> findByProductId(int productId);
-    int countByProductId(int productId);
+    int countByProductIdAndStatus(int productId, String status);
     List<Review> findByProductIdAndStatus(int productId, String status);
     @Modifying
     @Transactional

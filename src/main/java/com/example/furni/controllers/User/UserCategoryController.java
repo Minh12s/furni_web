@@ -129,7 +129,7 @@ public class UserCategoryController extends BaseController{
             }
             // Tính toán các thông tin đánh giá
             double averageRating = reviewService.calculateAverageRating(product.getId());
-            int reviewCount = reviewService.countReviews(product.getId());
+            int reviewCount = reviewService.countApprovedReviews(product.getId());
             int totalSales = productService.getTotalSales(product.getId());
             List<Review> approvedComments = reviewService.getApprovedCommentsByProductId(product.getId());
             // Thêm các thông tin vào model
