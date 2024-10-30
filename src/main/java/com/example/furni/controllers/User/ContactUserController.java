@@ -34,6 +34,7 @@ public class ContactUserController extends BaseController{
     // Xử lý form contact sau khi người dùng gửi
     @PostMapping("/contact")
     public String submitContactForm(@ModelAttribute("contact") Contact contact, HttpSession session) {
+        contact.setStatus("pending");
         contactService.saveContact(contact);
         session.setAttribute("contactSuccess", "Your message has been sent successfully!");
         return "redirect:/contact";
