@@ -64,6 +64,7 @@
                     <th>name</th>
                     <th>Email</th>
                     <th>Message</th>
+                    <th>Status</th>
                     <th>Contact date</th>
                     <th></th>
                 </tr>
@@ -80,19 +81,19 @@
                     <td th:text="${contact.name}"></td>
                     <td th:text="${contact.email}"></td>
                     <td th:text="${contact.message}"></td>
+                    <td th:text="${contact.status}"
+                        th:classappend="${contact.status == 'pending' ? 'text-warning' : (contact.status == 'processed' ? 'text-success' : '')}">
+                    </td>
+
                     <td th:text="${#temporals.format(contact.contactDate, 'dd/MM/yyyy')}"></td>
-<!--                    <td>-->
-<!--                        <div class="button-group">-->
-<!--                            <a th:href="@{/admin/editBrand/{id}(id=${brand.id})}" class="btn btn-primary">-->
-<!--                                <span class="icon"><i class="mdi mdi-pencil"></i></span>-->
-<!--                            </a>-->
-<!--                            <form th:action="@{/admin/deleteBrand/{id}(id=${brand.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this post?')">-->
-<!--                                <button type="submit" class="btn btn-danger">-->
-<!--                                    <span class="icon"><i class="mdi mdi-delete"></i></span>-->
-<!--                                </button>-->
-<!--                            </form>-->
-<!--                        </div>-->
-<!--                    </td>-->
+                    <td>
+                        <div class="button-group" th:if="${contact.status != 'processed'}">
+                            <a th:href="@{/admin/contactForm/{id}(id=${contact.id})}" class="btn btn-primary">
+                                <span class="icon"><i class="mdi mdi-email"></i></span>
+                            </a>
+                        </div>
+                    </td>
+
                 </tr>
                 </tbody>
             </table>
@@ -146,6 +147,14 @@
 
 </section>
 <style>
+    .text-warning {
+        color: rgb(245 157 57);
+    }
+
+    .text-success {
+        color: green;
+    }
+
     .alert {
         padding: 15px;
         margin: 10px 0;

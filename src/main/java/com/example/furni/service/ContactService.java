@@ -5,11 +5,13 @@ import com.example.furni.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class ContactService {
@@ -21,14 +23,15 @@ public class ContactService {
     private JavaMailSender javaMailSender;
 
     public Page<Contact> getAllContacts(int page, int size) {
-        return contactRepository.findAll(PageRequest.of(page, size));
+        Sort sortByStatusAndDate = Sort.by(Sort.Order.asc("status"), Sort.Order.desc("contactDate"));
+        return contactRepository.findAll(PageRequest.of(page, size, sortByStatusAndDate));
     }
     public void saveContact(Contact contact) {
         contact.setContactDate(LocalDateTime.now());
         contactRepository.save(contact);
 
         // Gửi email với thông tin từ form liên hệ
-        String toEmail = "dangdunghn1409@gmail.com"; // Địa chỉ email mà bạn muốn nhận thông báo liên hệ
+        String toEmail = ""; // Địa chỉ email mà bạn muốn nhận thông báo liên hệ
         String subject = "New Contact Form Submission";
         String body = "Name: " + contact.getName() + "\n" +
                 "Email: " + contact.getEmail() + "\n" +
@@ -46,4 +49,8 @@ public class ContactService {
 
         javaMailSender.send(message);
     }
+    public Optional<Contact> getContactById(int id) {
+        return contactRepository.findById(id);
+    }
+
 }

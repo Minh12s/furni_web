@@ -17,6 +17,8 @@ public class Contact {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "status")
+    private String status;
     @Column(name = "message", nullable = false, length = 500)
     private String message;
 
@@ -24,6 +26,7 @@ public class Contact {
     private LocalDateTime contactDate;
 
     // Getters và setters
+
 
     public int getId() {
         return id;
@@ -47,6 +50,14 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getMessage() {
