@@ -439,7 +439,7 @@ public class MyOrderController extends BaseController {
         review.setStatus("pending");
 
         reviewService.save(review);
-        request.getSession().setAttribute("reviewMessage", "Your review has been successfully submitted.");
+        request.getSession().setAttribute("successMessage", "Your review has been successfully submitted.");
 
         return "redirect:/MyOrder/MyOrder";  // Redirect to MyOrder page after successful review
     }
