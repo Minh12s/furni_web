@@ -103,7 +103,7 @@
                         <a class="btn btn-dark" th:href="@{'/MyOrder/Review/' + ${orderProduct.product.slug}}">Review</a>
                         <a class="btn btn-dark"
                            style="background-color: #FFA45C;"
-                           th:href="@{/MyOrder/RequestRefund(productId=${orderProduct.product.id}, orderId=${order.id})}">
+                           th:href="@{/MyOrder/RequestRefund(productId=${orderProduct.product.id}, secureToken=${order.secureToken})}">
                             refund
                         </a>
                     </div>

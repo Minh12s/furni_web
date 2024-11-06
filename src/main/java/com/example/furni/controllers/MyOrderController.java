@@ -471,7 +471,7 @@ public class MyOrderController extends BaseController {
 
     @GetMapping("/RequestRefund")
     public String requestRefundForm(@RequestParam("productId") int productId,
-                                    @RequestParam("orderId") int orderId,
+                                    @RequestParam("secureToken") String secureToken,
                                     Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
@@ -481,14 +481,18 @@ public class MyOrderController extends BaseController {
         } else {
             return "redirect:/login";
         }
-
-        // Lấy thông tin sản phẩm từ đơn hàng
+        Orders order = orderService.getOrderBySecureToken(secureToken);
+        int orderId = order.getId();
+        // Lấy thông tin sản phẩm từ đơn hàng dựa trên secureToken và productId
         OrderProduct orderProduct = orderProductRepository.findByOrder_IdAndProduct_Id(orderId, productId);
+        if (orderProduct == null) {
+            // Xử lý khi không tìm thấy sản phẩm trong đơn hàng
+            return "redirect:/error";
+        }
+
         double refundAmount = orderProduct.getPrice() * orderProduct.getQty(); // Tính tổng tiền của sản phẩm
-
-        // Gửi thông tin qty về form
         int qty = orderProduct.getQty(); // Lấy số lượng sản phẩm trong đơn hàng
-
+        model.addAttribute("secureToken", secureToken); // Gửi orderId đến form
         model.addAttribute("orderId", orderId); // Gửi orderId đến form
         model.addAttribute("productId", productId); // Gửi productId đến form
         model.addAttribute("refundAmount", refundAmount); // Gửi tổng tiền của sản phẩm đến form
@@ -499,8 +503,9 @@ public class MyOrderController extends BaseController {
 
 
 
+
     @PostMapping("/RequestRefund")
-    public String handleRefundRequest(@RequestParam("OrderId") int orderId,
+    public String handleRefundRequest(@RequestParam("secureToken") String secureToken,
                                       @RequestParam("ProductId") int productId,
                                       @RequestParam("Reason") String reason,
                                       @RequestParam("Description") String description,
@@ -513,9 +518,10 @@ public class MyOrderController extends BaseController {
         if (userId == null) {
             return "redirect:/login";
         }
+        Orders order = orderService.getOrderBySecureToken(secureToken);
+        int orderId = order.getId();
 
         User user = userService.findById(userId);
-        Orders order = orderService.getOrderById(orderId);
         Product product = productService.findById(productId);
 
         OrderReturn orderReturn = new OrderReturn();
