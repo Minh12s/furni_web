@@ -101,35 +101,54 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>Silver Necklace</td>
-                <td><img style="width:100px; height:100px;" src="~/images/product1.jpg" alt="Product Thumbnail" /></td>
-                <td>2023-07-01</td>
-                <td>Defective product</td>
-                <td>Broken clasp</td>
-                <td>$50</td>
-                <td>Returned</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Gold Ring</td>
-                <td><img style="width:100px; height:100px;" src="~/images/product2.jpg" alt="Product Thumbnail" /></td>
-                <td>2023-07-15</td>
-                <td>Wrong size</td>
-                <td>Too small</td>
-                <td>$100</td>
-                <td>Returned</td>
+            <!-- Iterate over the orderReturn list -->
+            <tr th:each="orderReturn : ${orderReturn}">
+                <td th:text="${orderReturn.id}">1</td>
+                <td th:text="${orderReturn.product.productName}">Product Name</td>
+                <td>
+                   <img th:src="'data:image/jpeg;base64,' + ${orderReturn.product.thumbnail}" width="120" />
+                </td>
+                <td th:text="${#temporals.format(orderReturn.returnDate, 'dd/MM/yyyy')}"></td>
+                <td th:text="${orderReturn.description}">Description</td>
+                <td th:text="${orderReturn.reason}">Reason</td>
+                <td th:text="${orderReturn.refundAmount}">$50</td>
+                <td th:text="${orderReturn.status}">Status</td>
             </tr>
             </tbody>
         </table>
+
     </div>
-    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 20px;">
-        <ul class="pagination">
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-        </ul>
+    <div class="row mt-5">
+        <div class="col text-center">
+            <div class="block-27">
+                <ul>
+                    <!-- Nút để quay lại trang trước đó -->
+                    <li th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                        <a th:href="@{/MyOrder/OrderReturn(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <li th:classappend="${i == currentPage} ? 'active' : ''">
+                            <a th:href="@{/MyOrder/OrderReturn(page=${i}, size=${pageSize})}" th:text="${i + 1}"></a>
+                        </li>
+                    </th:block>
+
+                    <!-- Nút để chuyển đến trang tiếp theo -->
+                    <li th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                        <a th:href="@{/MyOrder/OrderReturn(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
     </div>
+
+</div>
 </div>
 
 </div>

@@ -352,17 +352,42 @@ public class MyOrderController extends BaseController {
         return "redirect:/MyOrder/MyOrder";
     }
     @GetMapping("/OrderReturn")
-    public String OrderReturn(Model model, HttpSession session){
-        Integer userId = (Integer) session.getAttribute("userId");
+    public String OrderReturn(HttpServletRequest request,
+                              Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "9") int size,
+                              @RequestParam(defaultValue = "id,desc") String sort) {
+
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
 
         if (userId != null) {
-            // Tìm người dùng theo userId
             User user = userService.findById(userId);
             model.addAttribute("user", user);
         } else {
-            return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+            return "redirect:/login"; // Redirect to login if user is not authenticated
         }
-        return "MyOrder/OrderReturn";
+
+        // Create Pageable with sorting
+        Sort.Order order = new Sort.Order(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+
+        // Retrieve paginated order returns by userId
+        Page<OrderReturn> orderReturnPage = myOrderService.getOderReturnUserId(userId, pageable);
+
+        // Add order returns and pagination details to the model
+        model.addAttribute("orderReturn", orderReturnPage.getContent());
+        model.addAttribute("currentPage", orderReturnPage.getNumber());
+        model.addAttribute("totalPages", orderReturnPage.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        // Check for success message in the session
+        String successMessage = (String) request.getSession().getAttribute("successMessage");
+        if (successMessage != null) {
+            model.addAttribute("successMessage", successMessage);
+            request.getSession().removeAttribute("successMessage");
+        }
+
+        return "MyOrder/OrderReturn"; // Return the view
     }
     @GetMapping("/OrderDetail/{secureToken}")
     public String OrderDetail(@PathVariable("secureToken") String secureToken, Model model , HttpSession session){

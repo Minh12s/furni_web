@@ -13,6 +13,8 @@ import java.util.List;
 
 @Repository
 public interface OrderReturnRepository extends JpaRepository<OrderReturn, Integer> {
+    Page<OrderReturn> findByUserId(int userId, Pageable pageable);
+
     @Query("SELECT o.reason, COUNT(o) FROM OrderReturn o GROUP BY o.reason")
     List<Object[]> countByReason();
     @Query("SELECT o FROM OrderReturn o WHERE "
@@ -23,4 +25,5 @@ public interface OrderReturnRepository extends JpaRepository<OrderReturn, Intege
                                     @Param("refundAmount") Double refundAmount,
                                     @Param("search") String search,
                                     Pageable pageable);
+
 }
