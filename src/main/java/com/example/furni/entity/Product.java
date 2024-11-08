@@ -49,6 +49,9 @@ public class Product {
     private LocalDateTime deletedAt;
     @Transient
     private double averageRating;
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     public Product() {
     }
     public double getAverageRating() {
@@ -58,8 +61,15 @@ public class Product {
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
     }
+    public String getDescription() {
+        return description;
+    }
 
-    public Product(int id, String productName, String slug, double price, String thumbnail, int qty, String color, double weight, double height, double length, Category category, Brand brand, Material material, Size size, LocalDateTime deletedAt, double averageRating) {
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Product(int id, String productName, String slug, double price, String thumbnail, int qty, String color, double weight, double height, double length, Category category, Brand brand, Material material, Size size, LocalDateTime deletedAt, double averageRating, String description) {
         this.id = id;
         this.productName = productName;
         this.slug = slug;
@@ -76,6 +86,8 @@ public class Product {
         this.size = size;
         this.deletedAt = deletedAt;
         this.averageRating = averageRating;
+        this.description = description;
+
     }
 
     public int getId() {

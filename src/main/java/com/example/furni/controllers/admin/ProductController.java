@@ -142,6 +142,7 @@ public class ProductController {
             model.addAttribute("sizes", sizeService.getAllSize());
             return "admin/Product/addProduct";
         }
+        product.setDescription(product.getDescription().trim());
 
         productService.save(product);
         session.setAttribute("successMessage", "Product added successfully!");
@@ -228,6 +229,8 @@ public class ProductController {
             existingProduct.setBrand(product.getBrand());
             existingProduct.setMaterial(product.getMaterial());
             existingProduct.setSize(product.getSize());
+            existingProduct.setDescription(product.getDescription());
+
 
             if (!file.isEmpty()) {
                 existingProduct.setThumbnail(product.getThumbnail());

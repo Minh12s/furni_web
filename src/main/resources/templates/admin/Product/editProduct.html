@@ -97,6 +97,12 @@
                 <option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.sizeName}" th:selected="${size.id == product.size.id}"></option>
               </select>
             </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">Description</label>
+              <textarea class="form-control" th:field="${product.description}" name="description" placeholder="Description"
+                        style="height: 12vh;"
+              />
+            </div>
 
             <button style="margin-top:20px;" class="btn btn-save" type="submit">Save</button>
             <a class="btn btn-cancel" href="/admin/products">Cancel</a>
