@@ -43,6 +43,18 @@ public class DataSeeder {
             "Compact Sofa", "Elegant Sofa", "Adjustable Sofa", "Convertible Sofa", "Tufted Sofa",
             "Luxury Sofa", "Eco-friendly Sofa"
     };
+    private static final String[] DESCRIPTIONS = {
+            "A sectional sofa with a modern and elegant design, perfect for any living space. The soft fabric material offers a cozy feel, ideal for relaxing after a long day of work.",
+            "Crafted from high-quality materials, this sofa is not only durable but also brings a touch of sophistication to your room. With a design that blends classic and modern styles, this piece easily complements various decor themes.",
+            "This versatile sofa can be used in a range of settings, from living rooms to offices. With its sleek design and neutral colors, it’s an ideal choice for those who appreciate minimalism with a hint of elegance.",
+            "Featuring a modern style with refined lines, this sofa is more than just a piece of furniture—it’s a decorative highlight in your living space. The durable material ensures long-lasting use.",
+            "With a compact design and soft cushions, this sofa is the perfect spot to unwind. Made from high-quality fabric, it’s easy to clean and suitable for the whole family.",
+            "Designed for those who value comfort without compromising on style, this sofa features smooth lines and thick padding, making it incredibly comfortable to sit on.",
+            "This European-style sofa combines the charm of classic aesthetics with modern conveniences. With durable fabric and a neutral color palette, it easily fits into various interior designs.",
+            "A sectional sofa with flexible adjustability, perfect for smaller spaces. The smart design and water-resistant fabric make it a durable, low-maintenance option.",
+            "An elegant sofa with a refined appearance, ideal for contemporary living spaces. High-quality materials and thick cushions provide a comfortable seating experience.",
+            "This multi-functional sofa with expandable features is perfect for family use. With a sturdy build and trendy design, it’s an essential piece for your modern living space."
+    };
     private static final String[] COLORS = {
             "Red", "Blue", "Green", "Gray", "Black", "White", "Yellow", "Orange", "Purple", "Brown"
     };
@@ -50,6 +62,7 @@ public class DataSeeder {
     private static final String IMAGE_PATH = "resources/static/images/product-";
     private static final int TOTAL_IMAGES = 50;
     private static final Random RANDOM = new Random();
+
 
     @PostConstruct
     @Transactional
@@ -125,45 +138,48 @@ public class DataSeeder {
     }
 
     private void seedProducts() {
-        if (productRepository.count() == 0) {
-            for (String productName : PRODUCT_NAMES) {
-                String slug = productName.toLowerCase().replaceAll("[^a-z0-9]+", "-");
+        // Xóa điều kiện để đảm bảo seed lại dữ liệu
+        for (String productName : PRODUCT_NAMES) {
+            // Tạo slug, in ra để kiểm tra
+            String slug = productName.toLowerCase().replaceAll("[^a-z0-9]+", "-");
+            System.out.println("Generated Slug: " + slug);
 
-                // In ra slug để kiểm tra
-                System.out.println("Generated Slug: " + slug);
+            double price = roundToNearestFive(100 + RANDOM.nextDouble() * 500);
+            int qty = RANDOM.nextInt(100) + 1;
+            String color = COLORS[RANDOM.nextInt(COLORS.length)];
+            double weight = roundToNearestHalf(RANDOM.nextDouble() * 100);
+            double height = roundToNearestHalf(50 + RANDOM.nextDouble() * 150);
+            double length = roundToNearestHalf(100 + RANDOM.nextDouble() * 300);
+            String thumbnail = encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1);
+            String description = DESCRIPTIONS[RANDOM.nextInt(DESCRIPTIONS.length)];
 
-                double price = roundToNearestFive(100 + RANDOM.nextDouble() * 500);
-                int qty = RANDOM.nextInt(100) + 1;
-                String color = COLORS[RANDOM.nextInt(COLORS.length)];
-                double weight = roundToNearestHalf(RANDOM.nextDouble() * 100);
-                double height = roundToNearestHalf(50 + RANDOM.nextDouble() * 150);
-                double length = roundToNearestHalf(100 + RANDOM.nextDouble() * 300);
-                String thumbnail = encodeImageToBase64(RANDOM.nextInt(TOTAL_IMAGES) + 1);
+            Category category = categoryRepository.findById(RANDOM.nextInt((int) categoryRepository.count()) + 1).orElse(null);
+            Brand brand = brandRepository.findById(RANDOM.nextInt((int) brandRepository.count()) + 1).orElse(null);
+            Material material = materialRepository.findById(RANDOM.nextInt((int) materialRepository.count()) + 1).orElse(null);
+            Size size = sizeRepository.findById(RANDOM.nextInt((int) sizeRepository.count()) + 1).orElse(null);
 
-                Category category = categoryRepository.findById(RANDOM.nextInt((int) categoryRepository.count()) + 1).orElse(null);
-                Brand brand = brandRepository.findById(RANDOM.nextInt((int) brandRepository.count()) + 1).orElse(null);
-                Material material = materialRepository.findById(RANDOM.nextInt((int) materialRepository.count()) + 1).orElse(null);
-                Size size = sizeRepository.findById(RANDOM.nextInt((int) sizeRepository.count()) + 1).orElse(null);
+            Product product = new Product();
+            product.setProductName(productName);
+            product.setSlug(slug);
+            product.setPrice(price);
+            product.setQty(qty);
+            product.setColor(color);
+            product.setWeight(weight);
+            product.setHeight(height);
+            product.setLength(length);
+            product.setThumbnail(thumbnail);
+            product.setCategory(category);
+            product.setBrand(brand);
+            product.setMaterial(material);
+            product.setSize(size);
+            product.setDescription(description);
+            System.out.println("Product Description: " + description);
 
-                Product product = new Product();
-                product.setProductName(productName);
-                product.setSlug(slug);
-                product.setPrice(price);
-                product.setQty(qty);
-                product.setColor(color);
-                product.setWeight(weight);
-                product.setHeight(height);
-                product.setLength(length);
-                product.setThumbnail(thumbnail);
-                product.setCategory(category);
-                product.setBrand(brand);
-                product.setMaterial(material);
-                product.setSize(size);
 
-                productRepository.save(product);
-            }
+            productRepository.save(product);
         }
     }
+
 
     private double roundToNearestFive(double value) {
         return Math.round(value / 5.0) * 5.0;
