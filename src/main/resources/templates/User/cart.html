@@ -2,7 +2,57 @@
 <html lang="en">
 <head>
   <div th:insert="/include/fragments :: head"></div>
+  <style>
+    .btn-custom {
+      background-color: #ffa45c;
+      border-color: #ffa45c;
+      color: white; /* Màu chữ trắng */
+    }
 
+    .btn-custom:hover {
+      background-color: #e6954f; /* Màu khi hover */
+      border-color: #e6954f;
+    }
+    .alert {
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      display: none;
+      color: #fff; /* Text color */
+      font-weight: bold;
+    }
+
+    .alert-success {
+      background-color: green; /* Blue background color */
+      border: 1px solid green;
+      color: white;
+    }
+    .alert-danger {
+      background-color: red; /* Blue background color */
+      border: 1px solid red;
+      color: white;
+    }
+
+    .alert-show {
+      display: block;
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 1s ease-out;
+    }
+    .quantity .btn-update {
+      display: none;
+    }
+
+    .quantity:hover .btn-update {
+      display: inline-block;
+    }
+  </style>
 </head>
 <body class="goto-here">
 <div class="py-1 bg-black">
@@ -53,7 +103,7 @@
             <tr class="text-center">
               <th>&nbsp;</th>
               <th>&nbsp;</th>
-              <th>Product</th>
+              <th>Product name</th>
               <th>Price</th>
               <th>Quantity</th>
               <th>Total</th>
@@ -171,19 +221,6 @@
     </div>
   </div>
 </div>
-<style>
-  .btn-custom {
-    background-color: #ffa45c;
-    border-color: #ffa45c;
-    color: white; /* Màu chữ trắng */
-  }
-
-  .btn-custom:hover {
-    background-color: #e6954f; /* Màu khi hover */
-    border-color: #e6954f;
-  }
-
-</style>
 <!-- Các liên kết tới JavaScript và Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -269,49 +306,6 @@
     });
   });
 </script>
-<style>
-  .quantity .btn-update {
-    display: none;
-  }
-
-  .quantity:hover .btn-update {
-    display: inline-block;
-  }
-</style>
-<style>
-  .alert {
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 4px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
-    display: none;
-    color: #fff; /* Text color */
-    font-weight: bold;
-  }
-
-  .alert-success {
-    background-color: green; /* Blue background color */
-    border: 1px solid green;
-    color: white;
-  }
-  .alert-danger {
-    background-color: red; /* Blue background color */
-    border: 1px solid red;
-    color: white;
-  }
-
-  .alert-show {
-    display: block;
-  }
-
-  .fade-out {
-    opacity: 0;
-    transition: opacity 1s ease-out;
-  }
-</style>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var successAlert = document.getElementById('successAlert');

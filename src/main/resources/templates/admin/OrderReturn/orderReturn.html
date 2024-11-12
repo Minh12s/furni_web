@@ -250,13 +250,6 @@
                         <td th:class="${'status-' + orderReturn.status.toLowerCase()}" th:text="${orderReturn.status}"></td>
                         <td class="actions-cell">
                             <div class="buttons right nowrap">
-                                <a th:href="@{/admin/products/productDetail/{id}(id=${orderReturn.product.id})}" class="btn btn-primary" style="background-color:green; color:white;">
-                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
                                 <a th:href="@{/admin/orderReturnDetails/{id}(id=${orderReturn.id})}" class="btn btn-primary" style="background-color:#FBE2C5; color:#F59D39;">
                                     <span class="icon"><i class="mdi mdi-refresh"></i></span>
                                 </a>
