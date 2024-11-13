@@ -39,12 +39,13 @@
             <div class="col-lg-8 ftco-animate" >
                 <!-- Leave a review title -->
                 <div class="pt-5 mt-5">
-                    <h3 class="mb-5" style="margin-left: 170px;">Leave a review</h3>
+                    <h3 class="mb-5" >Leave a review</h3>
                 </div>
 
                 <!-- Product Information -->
                 <div class="review-list">
                     <table class="table">
+
                         <tbody>
                         <tr class="text-center">
                             <td class="image-prod">
@@ -56,13 +57,15 @@
                                 </h3>
                             </td>
                             <td class="price" th:text="'$'+${product.price}">0.00</td>
+                            <td class="price" th:text="'$'+${product.description}">0.00</td>
+
                         </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Leave a review form -->
-                <div class="comment-form-wrap pt-5" style="margin-left: 170px;">
+                <div class="comment-form-wrap pt-5" >
                     <form method="post" th:action="@{'/MyOrder/Review/' + ${product.slug}}">
                         <div class="form-group">
                             <label for="RatingValue">Rating *</label>

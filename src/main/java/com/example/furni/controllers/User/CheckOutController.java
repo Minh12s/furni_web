@@ -103,9 +103,17 @@ public class CheckOutController extends BaseController {
         List<Cart> cartItems = cartService.getCartItemsByUserId(userId);
 
         if (cartItems.isEmpty()) {
-            model.addAttribute("errorMessage", "Giỏ hàng của bạn đang trống.");
+            model.addAttribute("errorMessage", "Your cart is empty.");
             return "User/checkout";
         }
+
+        // Check if the delivery schedule is set to a past date/time
+        LocalDateTime scheduleDateTime = LocalDateTime.parse(schedule);
+        if (scheduleDateTime.isBefore(LocalDateTime.now())) {
+            model.addAttribute("errorMessage", "Delivery schedule cannot be in the past. Please choose a valid date and time.");
+            return "User/checkout";
+        }
+
 
         double subtotal = cartItems.stream().mapToDouble(Cart::getTotal).sum();
         double tax = subtotal * 0.10;
@@ -126,7 +134,7 @@ public class CheckOutController extends BaseController {
         order.setPaymentMethod(paymentMethod);
         order.setOrderDate(LocalDateTime.now());
         order.setNote(note);
-        LocalDateTime scheduleDateTime = LocalDateTime.parse(schedule);
+        order.setSchedule(scheduleDateTime);
         order.setSchedule(scheduleDateTime);
         order.setStatus("pending");
         // Sinh mã đơn hàng ngẫu nhiên
