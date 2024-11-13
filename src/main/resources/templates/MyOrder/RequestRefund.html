@@ -110,7 +110,8 @@
             <div class="cancel-reason">
                 <label for="refundAmount" class="refund-label">Refund Amount:</label>
                 <input type="text" name="RefundAmount" id="refundAmount"
-                       th:value="${refundAmount}" readonly />
+                       th:value="${#numbers.formatDecimal(refundAmount / 100 * 90, 1, 2)}" readonly />
+
                 <br>
                 <span class="refund-description">Refund to : Furni Account Balance</span>
             </div>

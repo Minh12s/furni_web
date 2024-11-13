@@ -80,7 +80,7 @@
         <table class="order-table">
             <thead>
             <tr>
-                <th style="width:100px;" scope="col">ID</th>
+                <th style="width:100px;" scope="col">No.</th>
                 <th style="width:200px;" scope="col">Thumbnail</th>
                 <th style="width:300px;" scope="col">Name</th>
                 <th style="width:200px;" scope="col">Price</th>
@@ -91,8 +91,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="orderProduct : ${orderProducts}">
-                <td th:text="${orderProduct.product.id}"></td>
+            <tr th:each="orderProduct, stat : ${orderProducts}">
+                <td th:text="${stat.index + 1}"></td>
                 <td><img th:src="'data:image/jpeg;base64,' + ${orderProduct.product.thumbnail}" width="120" /></td>
                 <td th:text="${orderProduct.product.productName}"></td>
                 <td th:text="${orderProduct.price}"></td>
@@ -108,8 +108,8 @@
                         </a>
                     </div>
                 </td>
-
             </tr>
+
             <!-- Add more rows as needed -->
             </tbody>
         </table>
