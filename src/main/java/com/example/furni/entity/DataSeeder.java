@@ -67,13 +67,14 @@ public class DataSeeder {
     @PostConstruct
     @Transactional
     public void seedData() {
-        seedSizes();
-        seedBrands();
-        seedCategories();
-        seedMaterials();
-        seedProducts();
+        if (productRepository.count() == 0) {
+            seedSizes();
+            seedBrands();
+            seedCategories();
+            seedMaterials();
+            seedProducts();
+        }
     }
-
     private void seedSizes() {
         if (sizeRepository.count() == 0) {
             List<Size> sizes = List.of(
@@ -88,7 +89,6 @@ public class DataSeeder {
             sizeRepository.saveAll(sizes);
         }
     }
-
     private void seedBrands() {
         if (brandRepository.count() == 0) {
             List<Brand> brands = List.of(
