@@ -76,6 +76,8 @@ public class OrderController {
             // Kiểm tra và cập nhật trạng thái mới
             order.setStatus(status);
             orderService.saveOrder(order);
+            String message = "Order #" + order.getOrderCode() + " status has been updated to:" + status;
+            orderService.saveNotification(order.getUser(), order, message);
 
             // Thêm thông báo thành công vào session
             session.setAttribute("successMessage", "Order status updated successfully!");

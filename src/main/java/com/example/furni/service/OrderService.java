@@ -1,9 +1,7 @@
 package com.example.furni.service;
 
-import com.example.furni.entity.Cart;
-import com.example.furni.entity.Material;
-import com.example.furni.entity.OrderProduct;
-import com.example.furni.entity.Orders;
+import com.example.furni.entity.*;
+import com.example.furni.repository.NotificationRepository;
 import com.example.furni.repository.OrderProductRepository;
 import com.example.furni.repository.OrdersRepository;
 import jakarta.mail.MessagingException;
@@ -26,6 +24,8 @@ public class OrderService {
     private OrderProductRepository orderProductRepository;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     // Lấy tất cả đơn hàng
     public List<Orders> getAllOrders() {
@@ -55,7 +55,13 @@ public class OrderService {
     public void saveOrder(Orders order) {
         ordersRepository.save(order);
     }
-
+    public void saveNotification(User user, Orders order, String message) {
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setOrder(order);
+        notification.setMessage(message);
+        notificationRepository.save(notification);
+    }
     // lọc đơn hàng theo chỉ tiêu
     public Page<Orders> filterOrders(int page, int size, String ShippingMethod, Double TotalAmount, String PaymentMethod, String IsPaid, String Status, String orderCode) {
         Pageable pageable = PageRequest.of(page, size);
