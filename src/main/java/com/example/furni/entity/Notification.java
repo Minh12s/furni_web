@@ -17,7 +17,8 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "order_id") // Ràng buộc với bảng orders (nếu có)
     private Orders order; // Đơn hàng liên quan
-
+    @Column(nullable = false, length = 255)
+    private String title; // Tiêu đề thông báo
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message; // Nội dung chi tiết của thông báo
 
@@ -48,7 +49,13 @@ public class Notification {
     public void setOrder(Orders order) {
         this.order = order;
     }
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
     public String getMessage() {
         return message;
     }

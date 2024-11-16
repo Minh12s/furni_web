@@ -55,10 +55,11 @@ public class OrderService {
     public void saveOrder(Orders order) {
         ordersRepository.save(order);
     }
-    public void saveNotification(User user, Orders order, String message) {
+    public void saveNotification(User user, Orders order,String title,  String message) {
         Notification notification = new Notification();
         notification.setUser(user);
         notification.setOrder(order);
+        notification.setTitle(title);
         notification.setMessage(message);
         notificationRepository.save(notification);
     }

@@ -76,8 +76,14 @@ public class OrderController {
             // Kiểm tra và cập nhật trạng thái mới
             order.setStatus(status);
             orderService.saveOrder(order);
-            String message = "Order #" + order.getOrderCode() + " status has been updated to:" + status;
-            orderService.saveNotification(order.getUser(), order, message);
+            String title = "Your order has been "+ status;
+            String message;
+            if ("cancel".equalsIgnoreCase(status)) {
+                message = "Hello, we regret to inform you that your order #" + order.getOrderCode() + " has been canceled. If you have any questions, please contact our support team.";
+            } else {
+                message = "Hello, your order #" + order.getOrderCode() + " has been " + status + ". Thank you for shopping at our store!";
+            }
+            orderService.saveNotification(order.getUser(), order,title, message);
 
             // Thêm thông báo thành công vào session
             session.setAttribute("successMessage", "Order status updated successfully!");
