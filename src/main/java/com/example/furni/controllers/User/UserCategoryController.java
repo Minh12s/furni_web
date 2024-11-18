@@ -122,11 +122,12 @@ public class UserCategoryController extends BaseController{
             }
 
             // Lấy thông báo lỗi từ session và xóa sau khi lấy
-            String errorMessage = (String) request.getSession().getAttribute("errorMessage");
+            String errorMessage = (String) request.getSession().getAttribute("errorDetailMessage");
             if (errorMessage != null) {
-                model.addAttribute("errorMessage", errorMessage);
-                request.getSession().removeAttribute("errorMessage");
+                model.addAttribute("errorDetailMessage", errorMessage);
+                request.getSession().removeAttribute("errorDetailMessage");
             }
+
             // Tính toán các thông tin đánh giá
             double averageRating = reviewService.calculateAverageRating(product.getId());
             int reviewCount = reviewService.countApprovedReviews(product.getId());

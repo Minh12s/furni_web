@@ -71,19 +71,33 @@ public class OrderController {
     // Cập nhật trạng thái đơn hàng
     @PostMapping("/updateStatus")
     public String updateStatus(@RequestParam("id") int id, @RequestParam("status") String status, HttpSession session) {
-        Orders order = orderService.getOrderById(id);
+        Orders order = orderService.getOrderById(id)
+                ;
         if (order != null) {
-            // Kiểm tra và cập nhật trạng thái mới
+            // Cập nhật trạng thái mới
             order.setStatus(status);
+
+            // Nếu status là "shipped", cập nhật isPaid thành "1"
+            if ("shipped".equalsIgnoreCase(status)) {
+                order.setIsPaid("1"); // Giả định isPaid là kiểu String
+            }
+
+            // Lưu thay đổi đơn hàng
             orderService.saveOrder(order);
-            String title = "Your order has been "+ status;
+
+            // Tạo thông báo gửi tới người dùng
+            String title = "Your order has been " + status;
             String message;
             if ("cancel".equalsIgnoreCase(status)) {
-                message = "Hello, we regret to inform you that your order #" + order.getOrderCode() + " has been canceled. If you have any questions, please contact our support team.";
+                message = "Hello, we regret to inform you that your order #" + order.getOrderCode() +
+                        " has been canceled. If you have any questions, please contact our support team.";
             } else {
-                message = "Hello, your order #" + order.getOrderCode() + " has been " + status + ". Thank you for shopping at our store!";
+                message = "Hello, your order #" + order.getOrderCode() +
+                        " has been " + status + ". Thank you for shopping at our store!";
             }
-            orderService.saveNotification(order.getUser(), order,title, message);
+
+            // Lưu thông báo
+            orderService.saveNotification(order.getUser(), order, title, message);
 
             // Thêm thông báo thành công vào session
             session.setAttribute("successMessage", "Order status updated successfully!");

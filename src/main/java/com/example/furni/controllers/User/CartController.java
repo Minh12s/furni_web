@@ -49,10 +49,10 @@ public class CartController extends BaseController {
             return "User/details";
         }
 
+
         if (qty > product.getQty()) {
-            model.addAttribute("errorMessage", "The quantity requested exceeds the quantity available in stock.");
-            model.addAttribute("product", product);
-            return "User/details";
+            request.getSession().setAttribute("errorDetailMessage", "The quantity requested exceeds the quantity available in stock.");
+            return "redirect:/product/details/" + (slug != null ? slug : product.getSlug());
         }
 
         double total = product.getPrice() * qty;
