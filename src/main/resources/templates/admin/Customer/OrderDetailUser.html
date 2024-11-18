@@ -14,7 +14,7 @@
                 <div class="details_item">
                     <h3>Order Info</h3>
                     <ul class="list">
-                        <li><a href="#"><span>Order id</span>: <span th:text="${order.id}"></span></a></li>
+                        <li><a href="#"><span>Order code</span>: <span th:text="${order.orderCode}"></span></a></li>
                         <li><a href="#"><span>Date</span>: <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></span></a></li>
                         <li><a href="#"><span>Total</span>: <span th:text="${order.totalAmount}"></span></a></li>
                         <li><a href="#"><span>Payment Method</span>: <span th:text="${order.paymentMethod}"></span></a></li>

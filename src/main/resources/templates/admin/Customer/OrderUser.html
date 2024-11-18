@@ -31,7 +31,7 @@
                 <thead>
                 <tr>
                     <th width="10"><input type="checkbox" id="all"></th>
-                    <th>Order Id</th>
+                    <th>Order Code</th>
                     <th>Order Date</th>
                     <th>Total Amount</th>
                     <th>Full Name</th>
@@ -50,7 +50,7 @@
 
                 <tr th:each="order : ${orders}" th:unless="${#lists.isEmpty(orders)}">
                     <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.orderCode}"></td>
                     <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
                     <td th:text="${order.totalAmount}"></td>
                     <td th:text="${order.fullName}"></td>
