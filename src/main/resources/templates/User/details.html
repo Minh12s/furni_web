@@ -228,7 +228,7 @@
               </div>
               <div class="comment-body">
                 <h3 th:text="${review.user.fullName}">User</h3>
-                <div class="meta" th:text="${review.reviewDate}">Date</div>
+                <div class="meta" th:text="${#temporals.format(review.reviewDate, 'dd/MM/yyyy')}">Date</div>
                 <div class="rating d-flex">
                   <a th:if="${review.ratingValue > 0}" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).floor(review.ratingValue))}">
                     <span class="ion-ios-star star-yellow"></span>

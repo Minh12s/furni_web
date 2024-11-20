@@ -106,7 +106,7 @@ public class MyOrderController extends BaseController {
             orderService.saveOrder(order);
 
             // Thêm thông báo thành công vào session
-            session.setAttribute("reviewMessage", "Order cancel updated successfully!");
+            session.setAttribute("successMessage", "Order cancel updated successfully!");
         }
         return "redirect:/MyOrder/MyOrder";
     }
@@ -117,7 +117,7 @@ public class MyOrderController extends BaseController {
     public String OrderCancel(HttpServletRequest request,
                               Model model,
                               @RequestParam(defaultValue = "0") int page, // Trang mặc định là 0
-                              @RequestParam(defaultValue = "1") int size, // Kích thước mặc định là 9
+                              @RequestParam(defaultValue = "9") int size, // Kích thước mặc định là 9
                               @RequestParam(defaultValue = "id,desc") String sort // Sắp xếp mặc định theo id giảm dần
     ) {
         // Lấy userId từ session
@@ -154,7 +154,7 @@ public class MyOrderController extends BaseController {
             HttpServletRequest request,
             Model model,
             @RequestParam(defaultValue = "0") int page, // Trang mặc định là 0
-            @RequestParam(defaultValue = "1") int size, // Kích thước mặc định là 9
+            @RequestParam(defaultValue = "9") int size, // Kích thước mặc định là 9
             @RequestParam(defaultValue = "id,desc") String sort // Sắp xếp mặc định theo id giảm dần
     ) {
         // Lấy userId từ session
@@ -192,7 +192,7 @@ public class MyOrderController extends BaseController {
             HttpServletRequest request,
             Model model,
             @RequestParam(defaultValue = "0") int page, // Trang mặc định là 0
-            @RequestParam(defaultValue = "1") int size, // Kích thước mặc định là 9
+            @RequestParam(defaultValue = "9") int size, // Kích thước mặc định là 9
             @RequestParam(defaultValue = "id,desc") String sort // Sắp xếp mặc định theo id giảm dần
     ) {
         // Lấy userId từ session
@@ -215,7 +215,7 @@ public class MyOrderController extends BaseController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(order));
 
         // Lấy danh sách đơn hàng trạng thái pending bằng userId với phân trang
-        Page<Orders> ordersPage = myOrderService.findOrdersByUserIdAndStatus(userId, "confirm", pageable);
+        Page<Orders> ordersPage = myOrderService.findOrdersByUserIdAndStatus(userId, "confirmed", pageable);
 
         // Thêm danh sách đơn hàng và thông tin phân trang vào model để hiển thị trên view
         model.addAttribute("orders", ordersPage.getContent()); // Danh sách đơn hàng
@@ -228,7 +228,7 @@ public class MyOrderController extends BaseController {
     public String OrderShipping( HttpServletRequest request,
                                  Model model,
                                  @RequestParam(defaultValue = "0") int page, // Trang mặc định là 0
-                                 @RequestParam(defaultValue = "1") int size, // Kích thước mặc định là 9
+                                 @RequestParam(defaultValue = "9") int size, // Kích thước mặc định là 9
                                  @RequestParam(defaultValue = "id,desc") String sort // Sắp xếp mặc định theo id giảm dần
     ) {
         // Lấy userId từ session
@@ -264,7 +264,7 @@ public class MyOrderController extends BaseController {
     public String OrderShipped( HttpServletRequest request,
                                 Model model,
                                 @RequestParam(defaultValue = "0") int page, // Trang mặc định là 0
-                                @RequestParam(defaultValue = "1") int size, // Kích thước mặc định là 9
+                                @RequestParam(defaultValue = "9") int size, // Kích thước mặc định là 9
                                 @RequestParam(defaultValue = "id,desc") String sort // Sắp xếp mặc định theo id giảm dần
     ) {
         // Lấy userId từ session
@@ -301,7 +301,7 @@ public class MyOrderController extends BaseController {
     public String OrderComplete( HttpServletRequest request,
                                  Model model,
                                  @RequestParam(defaultValue = "0") int page, // Trang mặc định là 0
-                                 @RequestParam(defaultValue = "1") int size, // Kích thước mặc định là 9
+                                 @RequestParam(defaultValue = "9") int size, // Kích thước mặc định là 9
                                  @RequestParam(defaultValue = "id,desc") String sort // Sắp xếp mặc định theo id giảm dần
     ) {
         // Lấy userId từ session

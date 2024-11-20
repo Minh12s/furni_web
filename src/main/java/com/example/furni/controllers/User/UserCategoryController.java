@@ -88,7 +88,7 @@ public class UserCategoryController extends BaseController{
         model.addAttribute("sizes", sizes);
         model.addAttribute("materials", materials);
         model.addAttribute("brands", brands);
-
+        model.addAttribute("hasProducts", !filteredProducts.isEmpty());
 
 
         return "User/category";

@@ -2,6 +2,7 @@ package com.example.furni.controllers.User;
 
 import com.example.furni.entity.User;
 import com.example.furni.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +26,7 @@ public class ProfileController extends BaseController {
     private UserService userService;
 
     @GetMapping("/Profile")
-    public String profile(Model model, HttpSession session) {
+    public String profile(Model model, HttpSession session, HttpServletRequest request) {
         // Lấy userId từ session
         Integer userId = (Integer) session.getAttribute("userId");
 
@@ -35,6 +36,19 @@ public class ProfileController extends BaseController {
             model.addAttribute("user", user);
         } else {
             return "redirect:/login"; // Hoặc trả về trang thông báo lỗi
+        }
+        // Lấy thông báo thành công từ session và xóa sau khi lấy
+        String successMessage = (String) request.getSession().getAttribute("successProfileMessage");
+        if (successMessage != null) {
+            model.addAttribute("successProfileMessage", successMessage);
+            request.getSession().removeAttribute("successProfileMessage");
+        }
+
+        // Lấy thông báo lỗi từ session và xóa sau khi lấy
+        String errorMessage = (String) request.getSession().getAttribute("errorProfileMessage");
+        if (errorMessage != null) {
+            model.addAttribute("errorProfileMessage", errorMessage);
+            request.getSession().removeAttribute("errorProfileMessage");
         }
 
         return "MyOrder/Profile";
@@ -92,7 +106,7 @@ public class ProfileController extends BaseController {
                 user.setThumbnail(base64Image);
             } catch (IOException e) {
                 e.printStackTrace();
-                redirectAttributes.addFlashAttribute("error", "Error uploading image.");
+                redirectAttributes.addFlashAttribute("errorProfileMessage", "Error uploading image.");
                 return "redirect:/MyOrder/EditProfile";
             }
         }
@@ -100,7 +114,7 @@ public class ProfileController extends BaseController {
         // Lưu thay đổi người dùng
         userService.saveUser(user);
 
-        redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
+        redirectAttributes.addFlashAttribute("successProfileMessage", "Profile updated successfully.");
         return "redirect:/MyOrder/Profile";
     }
 

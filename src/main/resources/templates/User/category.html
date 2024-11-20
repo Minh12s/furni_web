@@ -216,9 +216,9 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 col-lg-10 order-md-last">
-        <div  class="row">
-
-          <div th:each="product : ${products}" class="col-sm-6 col-md-6 col-lg-4 ftco-animate">
+        <div class="row">
+          <!-- Hiển thị danh sách sản phẩm nếu có -->
+          <div th:if="${hasProducts}" th:each="product : ${products}" class="col-sm-6 col-md-6 col-lg-4 ftco-animate">
             <div class="product">
               <a th:href="@{/product/details/{slug}(slug=${product.slug})}" class="img-prod"><img class="img-fluid" th:src="'data:image/jpeg;base64,' + ${product.thumbnail}" alt="Colorlib Template">
                 <span class="status">30%</span>
@@ -232,17 +232,12 @@
                   </div>
                   <div class="rating">
                     <p class="text-right">
-                      <!-- Hiển thị sao đầy khi có đánh giá -->
                       <a th:if="${productRatings[product.id] > 0}" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).floor(productRatings[product.id]))}">
                         <span class="ion-ios-star star-yellow"></span>
                       </a>
-
-                      <!-- Hiển thị nửa sao nếu có -->
                       <a th:if="${productRatings[product.id] > 0 and productRatings[product.id] - T(java.lang.Math).floor(productRatings[product.id]) >= 0.5}">
                         <span class="ion-ios-star-half star-yellow"></span>
                       </a>
-
-                      <!-- Hiển thị sao trống nếu đánh giá nhỏ hơn 4.5 -->
                       <a th:if="${productRatings[product.id] < 4.5}" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).ceil(productRatings[product.id]))}">
                         <span class="ion-ios-star-outline star-yellow"></span>
                       </a>
@@ -257,6 +252,10 @@
             </div>
           </div>
 
+          <!-- Hiển thị thông báo nếu không có sản phẩm -->
+          <div th:if="${!hasProducts}" class="col text-center">
+            <h4>No products available</h4>
+          </div>
         </div>
         <div class="row mt-5">
           <div class="col text-center">

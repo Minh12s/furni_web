@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface HomeRepository extends JpaRepository<Product, Integer> {
 
-    @Query("SELECT p FROM Product p WHERE p.productName LIKE %:searchString%")
+    @Query("SELECT p FROM Product p WHERE p.productName LIKE %:searchString% AND p.deletedAt IS NULL")
     List<Product> searchByProductName(@Param("searchString") String searchString);
+
 }

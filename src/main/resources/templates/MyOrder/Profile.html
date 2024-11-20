@@ -27,6 +27,15 @@
 </div>
 <div th:insert="/include/fragments :: navbar"></div>
 <!-- END nav -->
+<div id="successAlert" class="alert alert-success" th:if="${successProfileMessage}">
+    <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+    <span th:text="${successProfileMessage}"></span>
+</div>
+
+<div id="errorAlert" class="alert alert-danger" th:if="${errorProfileMessage}">
+    <i class="fa-solid fa-circle-xmark" style="margin-right: 8px;"></i>
+    <span th:text="${errorProfileMessage}"></span>
+</div>
 
 <div class="contain1">
 
@@ -98,13 +107,14 @@
             </div>
 
 
-                <a href="/MyOrder/EditProfile" type="submit" style="background-color: #FFA45C;" class="btn btn-primary">
-                    Edit profile
-                </a>
+
 
 
 
         </form>
+        <a href="/MyOrder/EditProfile" type="submit" style="background-color: #FFA45C;     margin-left: 24px;" class="btn btn-primary">
+            Edit profile
+        </a>
 
     </div>
 </div>
@@ -307,5 +317,65 @@
         /* margin-left: 350px; */
     }
 </style>
+<style>
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: none;
+        color: #fff; /* Text color */
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: green; /* Blue background color */
+        border: 1px solid green;
+        color: white;
+    }
+    .alert-danger {
+        background-color: red; /* Blue background color */
+        border: 1px solid red;
+        color: white;
+    }
+
+    .alert-show {
+        display: block;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var successAlert = document.getElementById('successAlert');
+        var errorAlert = document.getElementById('errorAlert');
+
+        if (successAlert) {
+            successAlert.classList.add('alert-show');
+            setTimeout(function() {
+                successAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    successAlert.style.display = 'none';
+                }, 1000); // thời gian khớp với hiệu ứng fade-out
+            }, 3000); // thời gian hiển thị thông báo thành công
+        }
+
+        if (errorAlert) {
+            errorAlert.classList.add('alert-show');
+            setTimeout(function() {
+                errorAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    errorAlert.style.display = 'none';
+                }, 1000); // thời gian khớp với hiệu ứng fade-out
+            }, 3000); // thời gian hiển thị thông báo lỗi
+        }
+    });
+</script>
 </body>
 </html>
