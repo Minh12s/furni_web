@@ -26,6 +26,10 @@ public class ContactService {
         Sort sortByStatusAndDate = Sort.by(Sort.Order.asc("status"), Sort.Order.desc("contactDate"));
         return contactRepository.findAll(PageRequest.of(page, size, sortByStatusAndDate));
     }
+    public void saveContactAdmin(Contact contact) {
+        contact.setContactDate(LocalDateTime.now());
+        contactRepository.save(contact);
+    }
     public void saveContact(Contact contact) {
         contact.setContactDate(LocalDateTime.now());
         contactRepository.save(contact);

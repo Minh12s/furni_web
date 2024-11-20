@@ -70,7 +70,7 @@ public class ContactController {
                 contact.setContactDate(LocalDateTime.now());
 
                 // Cập nhật trạng thái trong cơ sở dữ liệu
-                contactService.saveContact(contact);
+                contactService.saveContactAdmin(contact);
 
                 // Gửi email
                 sendContactEmail(contact, message); // Truyền cả `contact` và `message`

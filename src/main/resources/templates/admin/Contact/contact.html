@@ -46,12 +46,12 @@
 
         <div class="card-content">
             <!-- Kiểm tra xem có dữ liệu hay không -->
-            <div th:if="${#lists.isEmpty(contactsPage)}" style="text-align: center; color: red;">
+            <div th:if="${#lists.isEmpty(contactsPage.content)}" style="text-align: center; color: red;">
                 No contact available.
             </div>
 
             <!-- Hiển thị bảng chỉ khi có dữ liệu -->
-            <table th:if="${!#lists.isEmpty(contactsPage)}">
+            <table th:if="${!#lists.isEmpty(contactsPage.content)}">
                 <thead>
                 <tr>
                     <th class="checkbox-cell">
@@ -99,7 +99,7 @@
             </table>
 
             <!-- Phân trang chỉ hiển thị khi có dữ liệu -->
-            <div class="table-pagination" th:if="${!#lists.isEmpty(contactsPage)}">
+            <div class="table-pagination" th:if="${!#lists.isEmpty(contactsPage.content)}">
                 <div class="flex items-center justify-between">
                     <div class="buttons">
                         <!-- Nút về trang đầu tiên với icon -->
