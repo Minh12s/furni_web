@@ -64,6 +64,29 @@
             </a>
           </li>
           <li class="nav-item cta cta-colored">
+            <a href="#" class="nav-link" onclick="toggleNotificationDropdown(event)">
+              <span class="icon-notifications"></span>
+              [<span th:text="${notificationCount}"></span>] <!-- Hiển thị số lượng thông báo -->
+            </a>
+            <!-- Dropdown thông báo -->
+            <div class="notification-dropdown" id="notificationDropdown">
+              <h6>Notifications</h6>
+              <ul>
+                <!-- Nếu không có thông báo -->
+                <li th:if="${#lists.isEmpty(notifications)}">
+                  <p>No notifications</p>
+                </li>
+
+                <!-- Hiển thị thông báo nếu có -->
+                <li th:each="notification : ${notifications}">
+                  <h5 th:text="${notification['title']}"></h5>
+                  <p th:text="${notification['message']}"></p>
+                  <small th:text="${notification['createdAt']}"></small>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item cta cta-colored">
             <a style="font-size:11px;" href="/favorite" class="nav-link">
               <span class="icon-favorite"></span>
               [<span th:text="${favoriteItemCount}">0</span>]
@@ -95,6 +118,86 @@
           language-code="en"
   ></df-messenger>
   <style>
+
+    /* Kiểu dáng cho dropdown */
+    .notification-dropdown {
+      display: none; /* Ẩn mặc định */
+      position: absolute;
+      background-color: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      min-width: 250px;
+      z-index: 100;
+      top: 40px;
+      margin-top: 25px;
+      font-family: Arial, sans-serif;
+    }
+    /* Kiểu dáng cho thời gian */
+    .notification-dropdown ul li .notification-time {
+      display: block;
+      font-size: 12px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .notification-dropdown h6 {
+      font-size: 16px;
+      margin: 0 0 10px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+    }
+    /* Tiêu đề của thông báo */
+    .notification-dropdown ul li .notification-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      display: block;
+      margin-bottom: 4px;
+    }
+    /* Danh sách thông báo */
+    .notification-dropdown ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 300px; /* Chiều cao tối đa */
+      overflow-y: auto; /* Cuộn khi vượt quá chiều cao */
+      scrollbar-width: thin; /* Thanh cuộn mỏng (Firefox) */
+      scrollbar-color: #ddd #f9f9f9; /* Màu thanh cuộn (Firefox) */
+    }
+    .notification-dropdown ul::-webkit-scrollbar {
+      width: 8px; /* Độ rộng thanh cuộn */
+    }
+
+    .notification-dropdown ul::-webkit-scrollbar-thumb {
+      background: #ddd; /* Màu thanh cuộn */
+      border-radius: 4px; /* Bo góc thanh cuộn */
+    }
+
+    .notification-dropdown ul::-webkit-scrollbar-track {
+      background: #f9f9f9; /* Màu nền thanh cuộn */
+    }
+
+
+    .notification-dropdown ul li {
+      margin: 0;
+    }
+
+    .notification-dropdown ul li a {
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+      display: block;
+      transition: color 0.2s ease;
+    }
+
+    /* Khi dropdown mở */
+    .notification-dropdown.show {
+      display: block;
+    }
+
     .cart-dropdown-content {
       display: none;
       position: absolute;
@@ -146,6 +249,22 @@
         }, 50);
       }
     }
+    function toggleNotificationDropdown(event) {
+      event.preventDefault();
+      const dropdown = document.getElementById('notificationDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    // Đóng dropdown khi nhấn ra ngoài
+    document.addEventListener('click', function (event) {
+      const dropdown = document.getElementById('notificationDropdown');
+      const isClickInside = dropdown.contains(event.target);
+
+      if (!isClickInside && !event.target.closest('.nav-link')) {
+        dropdown.classList.remove('show');
+      }
+    });
+
   </script>
 </div>
 <div th:fragment="footer">
